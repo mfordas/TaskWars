@@ -3,11 +3,11 @@ const config = require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Joi = require('@hapi/joi');
-const home = require('./routes/home');
+const home = require('./backend/routes/home');
 const express = require('express');
 const app = express();
 
-require('./startup/prod')(app);
+require('./backend/startup/prod')(app);
 
 app.set('view engine', 'pug');
 app.set('views', './views');
