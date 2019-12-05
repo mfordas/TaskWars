@@ -14,23 +14,28 @@ const {User, validateUser} = require('./backend/models/user');
 const {Inventory, validateInventory} = require('./backend/models/inventory'); 
 //-----------------------------------------------------------
 
+require('./startup/prod')(app);
+
 app.set('view engine', 'pug');
 app.set('views', './views');
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(express.static('public'));
 app.use(helmet());
 app.use('/', home);
 
-if(app.get('env') == 'development') {
+if (app.get('env') == 'development') {
     app.use(morgan('tiny'));
     debug('Morgan enabled...');
 }
 
-//----------------------------------------------
-
-mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://localhost/test', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
     .then(() => console.log('Conneted'))
     .catch(err => console.log("Error"))
 
@@ -48,6 +53,23 @@ mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnified
 
     res.send(req.body);
   });
+app.post('/characters', async (req, res) => {
+    const {
+        error
+    } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let character = await Character.findOne({
+        magical_power: req.body.magical_power
+    });
+    if (character) return res.status(400).send('User already registered.');
+
+    character = new Character(req.body);
+    console.log(character);
+    await character.save();
+
+    res.send(req.body);
+});
 
 app.post('/inventory', async (req, res) => {
     const { error } = validateInventory(req.body);
