@@ -38,7 +38,7 @@ mongoose.connect('mongodb://localhost/test', {
     .then(() => console.log('Conneted'))
     .catch(err => console.log("Error"))
 
-    app.post('/user', async (req, res) => {
+    app.post('/users', async (req, res) => {
     console.log(validateUser);
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -64,7 +64,7 @@ app.post('/characters', async (req, res) => {
     res.send(req.body);
 });
 
-app.post('/inventory', async (req, res) => {
+app.post('/inventories', async (req, res) => {
     const { error } = validateInventory(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
