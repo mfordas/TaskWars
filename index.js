@@ -14,6 +14,7 @@ const {User, validateUser} = require('./backend/models/user');
 const {Character, validateCharacter} = require('./backend/models/character');
 const {Inventory, validateInventory} = require('./backend/models/inventory');
 const {Item, validateItem} = require('./backend/models/item');
+const {Questbook, validateQuestbook} = require('./backend/models/questbook');
 
 //-----------------------------------------------------------
 
@@ -89,6 +90,17 @@ app.post('/inventories', async (req, res) => {
     await item.save();
 
     res.send(item);
+  });
+
+  app.post('/questbooks', async (req, res) => {
+    const { error } = validateQuestbook(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let questbook = new Questbook(req.body);
+    console.log(questbook);
+    await questbook.save();
+
+    res.send(questbook);
   });
 
   //------------------------------------------------

@@ -6,12 +6,12 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const inventorySchema = new mongoose.Schema({
     equipped: {
         type: [ObjectId],
-        ref: "Items",
+        ref: "Item",
         default: []
       },
     backpack: {
       type: [ObjectId],
-      ref: "Items",
+      ref: "Item",
       default: []
     },
     gold: {
