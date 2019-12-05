@@ -3,10 +3,11 @@ const config = require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Joi = require('@hapi/joi');
-const home = require('./routes/home');
+const home = require('./backend/routes/home');
 const express = require('express');
 const app = express();
 
+require('./backend/startup/prod')(app);
 //-----------------------------------------------------------
 const {User, validate} = require('./models/user'); 
 const mongoose = require('mongoose');
