@@ -13,6 +13,8 @@ const mongoose = require('mongoose');
 const {User, validateUser} = require('./backend/models/user');
 const {Character, validateCharacter} = require('./backend/models/character');
 const {Inventory, validateInventory} = require('./backend/models/inventory');
+const {Item, validateItem} = require('./backend/models/item');
+
 //-----------------------------------------------------------
 
 app.set('view engine', 'pug');
@@ -57,7 +59,7 @@ app.post('/characters', async (req, res) => {
     const { error } = validateCharacter(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    character = new Character(req.body);
+    let character = new Character(req.body);
     console.log(character);
     await character.save();
 
@@ -68,11 +70,25 @@ app.post('/inventories', async (req, res) => {
     const { error } = validateInventory(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    inventory = new Inventory(req.body);
+    let inventory = new Inventory(req.body);
     console.log(inventory);
     await inventory.save();
 
     res.send(inventory);
+  });
+
+  app.post('/items', async (req, res) => {
+    const { error } = validateItem(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let item = await Item.findOne({ name: req.body.name });
+    if (item) return res.status(400).send('Item already exists.');
+
+    item = new Item(req.body);
+    console.log(item);
+    await item.save();
+
+    res.send(item);
   });
 
   //------------------------------------------------

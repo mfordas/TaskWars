@@ -33,7 +33,7 @@ const characterSchema = new mongoose.Schema({
     },
     class: {
         type: String,
-        enum: ["", "warrior", "wizzard"],
+        enum: ["", "Warrior", "Hunter", "Mage", "Druid"],
         default: ""
     },
     exp_points: {
@@ -61,7 +61,7 @@ function validateCharacter(character) {
         questbook_id: Joi.objectId().required(),
         name: Joi.string().min(5).max(50).required(),
         level: Joi.number().min(0),
-        class: Joi.valid("warrior", "wizzard"),
+        class: Joi.valid("Warrior", "Hunter", "Mage", "Druid"),
         exp_points: Joi.number().min(0),
         health: Joi.number().min(0),
         physical_power: Joi.number().min(0),
