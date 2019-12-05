@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     },
     character_id: {
       type: ObjectId,
-      ref: 'Characters',
+      ref: 'Character',
       default: null
     }
 });

@@ -4,10 +4,15 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const inventorySchema = new mongoose.Schema({
-    items: {
+    equipped: {
+        type: [ObjectId],
+        ref: "Items",
+        default: []
+      },
+    backpack: {
       type: [ObjectId],
       ref: "Items",
-      def: []
+      default: []
     },
     gold: {
       type: Number,
@@ -19,7 +24,8 @@ const Inventory = mongoose.model('Inventory', inventorySchema);
 
 function validateInventory(inventory) {
     const schema = Joi.object({
-      items: Joi.array().items(Joi.objectId),
+      equipped: Joi.array().items(Joi.objectId),
+      backpack: Joi.array().items(Joi.objectId),
       gold: Joi.number().min(0)
     });
   
