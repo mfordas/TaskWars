@@ -9,11 +9,10 @@ const app = express();
 
 require('./backend/startup/prod')(app);
 //-----------------------------------------------------------
-const {User, validate} = require('./backend/models/user'); 
 const mongoose = require('mongoose');
+const {User, validateUser} = require('./backend/models/user'); 
+const {Inventory, validateInventory} = require('./backend/models/inventory'); 
 //-----------------------------------------------------------
-
-require('./startup/prod')(app);
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -35,9 +34,9 @@ mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnified
     .then(() => console.log('Conneted'))
     .catch(err => console.log("Error"))
 
-
-app.post('/user', async (req, res) => {
-    const { error } = validate(req.body);
+    app.post('/user', async (req, res) => {
+    console.log(validateUser);
+    const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
   
     let user = await User.findOne({ email: req.body.email });
@@ -48,6 +47,17 @@ app.post('/user', async (req, res) => {
     await user.save();
 
     res.send(req.body);
+  });
+
+app.post('/inventory', async (req, res) => {
+    const { error } = validateInventory(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    inventory = new Inventory(req.body);
+    console.log(inventory);
+    await inventory.save();
+
+    res.send(inventory);
   });
 
   //------------------------------------------------
