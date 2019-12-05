@@ -42,7 +42,7 @@ mongoose.connect('mongodb://localhost/test', {
     .catch(err => console.log("Error"))
 
 
-app.post('/user', async (req, res) => {
+app.post('./models/user', async (req, res) => {
     const {
         error
     } = validate(req.body);
@@ -72,7 +72,7 @@ mongoose.connect('mongodb://localhost/test', {
     .catch(err => console.log("Error"))
 
 
-app.post('/characters', async (req, res) => {
+app.post('./models/characters', async (req, res) => {
     const {
         error
     } = validateCharacter(req.body);
