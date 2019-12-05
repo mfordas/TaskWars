@@ -9,7 +9,7 @@ const app = express();
 
 require('./backend/startup/prod')(app);
 //-----------------------------------------------------------
-const {User, validate} = require('./models/user'); 
+const {User, validate} = require('./backend/models/user'); 
 const mongoose = require('mongoose');
 //-----------------------------------------------------------
 
