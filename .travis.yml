@@ -3,7 +3,7 @@ node_js:
 - "10"
 
 install:
-- "node install"
+- "npm install"
 
 script: 
  - "node start"
