@@ -9,13 +9,8 @@ const app = express();
 
 //-----------------------------------------------------------
 const {
-    User,
-    validate
-} = require('./models/user');
-const {
-    Character,
-    validate
-} = require('./models/characters');
+    User, validate } = require('./models/user');
+const {Character, validateCharacter } = require('./models/characters');
 const mongoose = require('mongoose');
 //-----------------------------------------------------------
 
@@ -80,7 +75,7 @@ mongoose.connect('mongodb://localhost/test', {
 app.post('/characters', async (req, res) => {
     const {
         error
-    } = validate(req.body);
+    } = validateCharacter(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     let character = await Character.findOne({
