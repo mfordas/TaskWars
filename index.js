@@ -10,11 +10,10 @@ const app = express();
 require('./backend/startup/prod')(app);
 //-----------------------------------------------------------
 const mongoose = require('mongoose');
-const {User, validateUser} = require('./backend/models/user'); 
-const {Inventory, validateInventory} = require('./backend/models/inventory'); 
+const {User, validateUser} = require('./backend/models/user');
+const {Character, validateCharacter} = require('./backend/models/character');
+const {Inventory, validateInventory} = require('./backend/models/inventory');
 //-----------------------------------------------------------
-
-require('./startup/prod')(app);
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -53,16 +52,10 @@ mongoose.connect('mongodb://localhost/test', {
 
     res.send(req.body);
   });
-app.post('/characters', async (req, res) => {
-    const {
-        error
-    } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
 
-    let character = await Character.findOne({
-        magical_power: req.body.magical_power
-    });
-    if (character) return res.status(400).send('User already registered.');
+app.post('/characters', async (req, res) => {
+    const { error } = validateCharacter(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     character = new Character(req.body);
     console.log(character);

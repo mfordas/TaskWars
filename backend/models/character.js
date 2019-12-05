@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -21,6 +21,7 @@ const characterSchema = new mongoose.Schema({
         ref: 'Questbook'
     },
     name: {
+        type: String,
         required: true,
         trim: true,
         minlength: 5,
@@ -31,7 +32,7 @@ const characterSchema = new mongoose.Schema({
         default: 1
     },
     class: {
-        enum: [warrior, wizzard]
+        enum: ["warrior", "wizzard"]
     },
     exp_points: {
         type: Number,
@@ -74,4 +75,4 @@ function validateCharacter(character) {
 const Character = mongoose.model('Character', characterSchema);
 
 exports.Character = Character;
-exports.validate = validateCharacter;
+exports.validateCharacter = validateCharacter;
