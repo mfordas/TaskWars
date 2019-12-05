@@ -7,9 +7,10 @@ const home = require('./routes/home');
 const express = require('express');
 const app = express();
 
-const {User, validate} = require('./models/user'); //
+//-----------------------------------------------------------
+const {User, validate} = require('./models/user'); 
 const mongoose = require('mongoose');
-
+//-----------------------------------------------------------
 
 require('./startup/prod')(app);
 
@@ -27,11 +28,13 @@ if(app.get('env') == 'development') {
     debug('Morgan enabled...');
 }
 
+//----------------------------------------------
+
 mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log('Conneted'))
     .catch(err => console.log("Error"))
 
-//
+
 app.post('/user', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -46,7 +49,7 @@ app.post('/user', async (req, res) => {
     res.send(req.body);
   });
 
-  //
+  //------------------------------------------------
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
