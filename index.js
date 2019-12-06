@@ -8,20 +8,138 @@ const express = require('express');
 const app = express();
 
 require('./backend/startup/prod')(app);
+//-----------------------------------------------------------
+const mongoose = require('mongoose');
+const {User, validateUser} = require('./backend/models/user');
+const {Character, validateCharacter} = require('./backend/models/character');
+const {Inventory, validateInventory} = require('./backend/models/inventory');
+const {Item, validateItem} = require('./backend/models/item');
+const {Questbook, validateQuestbook} = require('./backend/models/questbook');
+const {Creature, validateCreature} = require('./backend/models/creature');
+const {Guild, validateGuild} = require('./backend/models/guild');
+const {Task, validateTask} = require('./backend/models/task');
+
+//-----------------------------------------------------------
 
 app.set('view engine', 'pug');
 app.set('views', './views');
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(express.static('public'));
 app.use(helmet());
 app.use('/', home);
 
-if(app.get('env') == 'development') {
+if (app.get('env') == 'development') {
     app.use(morgan('tiny'));
     debug('Morgan enabled...');
 }
+
+mongoose.connect('mongodb://localhost/test', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => console.log('Conneted'))
+    .catch(err => console.log("Error"))
+
+    app.post('/users', async (req, res) => {
+    console.log(validateUser);
+    const { error } = validateUser(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+  
+    let user = await User.findOne({ email: req.body.email });
+    if (user) return res.status(400).send('User already registered.');
+  
+    user = new User(req.body);
+    console.log(user);
+    await user.save();
+
+    res.send(req.body);
+  });
+
+app.post('/characters', async (req, res) => {
+    const { error } = validateCharacter(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let character = new Character(req.body);
+    console.log(character);
+    await character.save();
+
+    res.send(req.body);
+});
+
+app.post('/inventories', async (req, res) => {
+    const { error } = validateInventory(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let inventory = new Inventory(req.body);
+    console.log(inventory);
+    await inventory.save();
+
+    res.send(inventory);
+  });
+
+  app.post('/items', async (req, res) => {
+    const { error } = validateItem(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let item = await Item.findOne({ name: req.body.name });
+    if (item) return res.status(400).send('Item already exists.');
+
+    item = new Item(req.body);
+    console.log(item);
+    await item.save();
+
+    res.send(item);
+  });
+
+  app.post('/questbooks', async (req, res) => {
+    const { error } = validateQuestbook(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let questbook = new Questbook(req.body);
+    console.log(questbook);
+    await questbook.save();
+
+    res.send(questbook);
+  });
+
+  app.post('/creatures', async (req, res) => {
+    const { error } = validateCreature(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let creature = new Creature(req.body);
+    console.log(creature);
+    await creature.save();
+
+    res.send(creature);
+  });
+
+  app.post('/guilds', async (req, res) => {
+    const { error } = validateGuild(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let guild = new Guild(req.body);
+    console.log(guild);
+    await guild.save();
+
+    res.send(guild);
+  });
+
+  app.post('/tasks', async (req, res) => {
+    const { error } = validateTask(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let task = new Task(req.body);
+    console.log(task);
+    await task.save();
+
+    res.send(task);
+  });
+
+  //------------------------------------------------
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
