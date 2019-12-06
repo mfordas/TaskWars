@@ -1,26 +1,27 @@
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 
 const characterSchema = new mongoose.Schema({
-    _id: {
-        type: Number
-    },
-    guild_id: {
-        type: ObjectId,
-        ref: 'Guild'
+    guilds: {
+        type: [ObjectId],
+        ref: 'Guild',
+        default: []
     },
     inventory_id: {
         type: ObjectId,
-        ref: 'Inventory'
+        ref: 'Inventory',
+        required: true,
     },
     questbook_id: {
         type: ObjectId,
-        ref: 'Questbook'
+        ref: 'Questbook',
+        required: true
     },
     name: {
+        type: String,
         required: true,
         trim: true,
         minlength: 5,
@@ -31,13 +32,15 @@ const characterSchema = new mongoose.Schema({
         default: 1
     },
     class: {
-        enum: [warrior, wizzard]
+        type: String,
+        enum: ["", "Warrior", "Hunter", "Mage", "Druid"],
+        default: ""
     },
     exp_points: {
         type: Number,
         default: 0
     },
-    hit_points: {
+    health: {
         type: Number,
         default: 0
     },
@@ -48,24 +51,21 @@ const characterSchema = new mongoose.Schema({
     magical_power: {
         type: Number,
         default: 0,
-        required: true
     },
-
 });
 
 function validateCharacter(character) {
     const schema = Joi.object({
-        name: Joi.string().min(5).max(50).required(),
-        guild_id: Joi.objectId(),
+        guilds: Joi.array().items(Joi.objectId()),
+        inventory_id: Joi.objectId().required(),
         questbook_id: Joi.objectId().required(),
-        inventory_id: Joi.number().min(0).required(),
-        level: Joi.number().min(0).required(),
-        class: Joi.enum(),
-        exp_points: Joi.number().min(0).required(),
-        hit_points: Joi.number().min(0).required(),
-        physical_power: Joi.number().min(0).required(),
-        magical_power: Joi.number().min(0).required(),
-
+        name: Joi.string().min(5).max(50).required(),
+        level: Joi.number().min(0),
+        class: Joi.valid("Warrior", "Hunter", "Mage", "Druid"),
+        exp_points: Joi.number().min(0),
+        health: Joi.number().min(0),
+        physical_power: Joi.number().min(0),
+        magical_power: Joi.number().min(0),
     });
 
     return schema.validate(character);
