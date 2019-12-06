@@ -15,6 +15,9 @@ const {Character, validateCharacter} = require('./backend/models/character');
 const {Inventory, validateInventory} = require('./backend/models/inventory');
 const {Item, validateItem} = require('./backend/models/item');
 const {Questbook, validateQuestbook} = require('./backend/models/questbook');
+const {Creature, validateCreature} = require('./backend/models/creature');
+const {Guild, validateGuild} = require('./backend/models/guild');
+const {Task, validateTask} = require('./backend/models/task');
 
 //-----------------------------------------------------------
 
@@ -101,6 +104,39 @@ app.post('/inventories', async (req, res) => {
     await questbook.save();
 
     res.send(questbook);
+  });
+
+  app.post('/creatures', async (req, res) => {
+    const { error } = validateCreature(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let creature = new Creature(req.body);
+    console.log(creature);
+    await creature.save();
+
+    res.send(creature);
+  });
+
+  app.post('/guilds', async (req, res) => {
+    const { error } = validateGuild(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let guild = new Guild(req.body);
+    console.log(guild);
+    await guild.save();
+
+    res.send(guild);
+  });
+
+  app.post('/tasks', async (req, res) => {
+    const { error } = validateTask(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let task = new Task(req.body);
+    console.log(task);
+    await task.save();
+
+    res.send(task);
   });
 
   //------------------------------------------------
