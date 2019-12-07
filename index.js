@@ -128,7 +128,7 @@ app.post('/inventories', async (req, res) => {
     res.send(guild);
   });
 
-  app.post('/tasks', async (req, res) => {
+  app.post('/task', async (req, res) => {
     const { error } = validateTask(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -138,7 +138,7 @@ app.post('/inventories', async (req, res) => {
 
     res.send(task);
   });
-
+ 
   //------------------------------------------------
 
 const port = process.env.PORT || 3000;
