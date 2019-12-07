@@ -16,7 +16,6 @@ const Questbook = mongoose.model('Questbook', questbookSchema);
 
 function validateQuestbook(questbook) {
     const schema = Joi.object({
-      complited: Joi.array().items(Joi.objectId),
       tasks: Joi.array().items(Joi.objectId),
     });
   
