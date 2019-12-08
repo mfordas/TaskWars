@@ -42,8 +42,9 @@ const creatureSchema = new mongoose.Schema({
         default: 0
     },
     task_to_dmg: {
-        type: Number,
-        default: 0
+        type: ObjectId,
+        ref: "Task",
+        default: null
     }
 });
 
@@ -59,7 +60,7 @@ function validateCreature(creature) {
         magical_power: Joi.number().min(0),
         magical_resistence: Joi.number().min(0),
         reward: Joi.number().min(0),
-        task_to_dmg: Joi.number().min(0),
+        task_to_dmg: Joi.objectId(),
     });
 
     return schema.validate(creature);
