@@ -15,11 +15,19 @@ const {Character, validateCharacter} = require('./backend/models/character');
 const {Inventory, validateInventory} = require('./backend/models/inventory');
 const {Item, validateItem} = require('./backend/models/item');
 const {Questbook, validateQuestbook} = require('./backend/models/questbook');
+const {Creature, validateCreature} = require('./backend/models/creature');
+const {Guild, validateGuild} = require('./backend/models/guild');
+const {Task, validateTask} = require('./backend/models/task');
+
+const authorization = require('./backend/middleware/authorization');
+const validateObjectId = require('./backend/middleware/validateObjectId');
 
 //-----------------------------------------------------------
 
 app.set('view engine', 'pug');
 app.set('views', './views');
+mongoose.set('useFindAndModify', false);
+
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -34,9 +42,12 @@ if (app.get('env') == 'development') {
     debug('Morgan enabled...');
 }
 
+//--------------------------------------------------
+
 mongoose.connect('mongodb://localhost/test', {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false
     })
     .then(() => console.log('Conneted'))
     .catch(err => console.log("Error"))
@@ -103,6 +114,104 @@ app.post('/inventories', async (req, res) => {
     res.send(questbook);
   });
 
+  app.post('/creatures', async (req, res) => {
+    const { error } = validateCreature(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let creature = new Creature(req.body);
+    console.log(creature);
+    await creature.save();
+
+    res.send(creature);
+  });
+
+  app.post('/guilds', async (req, res) => {
+    const { error } = validateGuild(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let guild = new Guild(req.body);
+    console.log(guild);
+    await guild.save();
+
+    res.send(guild);
+  });
+
+  app.post('/tasks', async (req, res) => {
+    const { error } = validateTask(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let task = new Task(req.body);
+    console.log(task);
+    await task.save();
+
+    res.send(task);
+  });
+
+  app.get('/creatures', /*authorization,*/ async (req, res) => {
+    const creatures = await Creature.find().sort({'level' : 1 , 'name' : 1 })
+    res.send(creatures);
+  })
+
+  app.get('/creatures/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
+    const creature = await Creature.findById(req.params.id);
+    if(!creature) return res.status(404).send('The creature with given ID was not found')
+
+    // Not tested
+    // const user = User.findById(req.user.id);
+    // const character = Character.findById(user.character_id);
+    // const guild = Guild.find({current_fight: creature._id});
+
+    // if(character.guilds.indexOf(guild._id) === -1) return res.status(401).send("Access denied");
+
+    res.send(creature);
+  })
+
+  app.put('/creatures/:id/task/:task_id', /*[authorization,*/ [validateObjectId], async (req, res) => {
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(404).send('Invalid Task.');
+
+    const { error } = validateCreature(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const task = await Task.findById(req.params.task_id);
+    if(!task) return res.status(404).send('The task with given ID was not found');
+
+    let creature = await Creature.findById(req.params.id);
+    if(!creature) return res.status(404).send('The creature with given ID was not found');
+
+      // Not tested
+    // const user = User.findById(req.user.id);
+    // const character = Character.findById(user.character_id);
+    // const guild = Guild.find({current_fight: creature._id});
+
+    // if(guild.leader !== character._id) return res.status(401).send("Access denied");
+
+    creature = await Creature.findByIdAndUpdate(req.params.id, {task_to_dmg: req.params.task_id}, {new: true});
+
+    res.send(creature);
+  })
+
+  app.put('/creatures/:id/duration/:duration', /*[authorization,*/ [validateObjectId], async (req, res) => {
+
+    const { error } = validateCreature(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let creature = await Creature.findById(req.params.id);
+    if(!creature) return res.status(404).send('The creature with given ID was not found');
+
+      // Not tested
+    // const user = User.findById(req.user.id);
+    // const character = Character.findById(user.character_id);
+    // const guild = Guild.find({current_fight: creature._id});
+
+    // if(guild.leader !== character._id) return res.status(401).send("Access denied");
+
+    creature = await Creature.findByIdAndUpdate(req.params.id, {duration: req.params.duration}, {new: true});
+
+    res.send(creature);
+  })
+
+ 
   //------------------------------------------------
 
 const port = process.env.PORT || 3000;
