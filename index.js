@@ -157,41 +157,39 @@ app.post('/inventories', async (req, res) => {
     if(!creature) return res.status(404).send('The creature with given ID was not found')
 
     // Not tested
-    // const user = User.findById(req.user.id);
-    // const character = Character.findById(user.character_id);
-    // const guild = Guild.find({current_fight: creature._id});
+    // const user = await User.findById(req.user.id);
+    // const character = await Character.findById(user.character_id);
+    // const guild = await Guild.find({current_fight: creature._id});
 
     // if(character.guilds.indexOf(guild._id) === -1) return res.status(401).send("Access denied");
 
     res.send(creature);
   })
 
-  app.put('/creatures/:id/task/:task_id', /*[authorization,*/ [validateObjectId], async (req, res) => {
-
-    if (!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(404).send('Invalid Task.');
+  app.put('/creatures/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (req, res) => {
 
     const { error } = validateCreature(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const task = await Task.findById(req.params.task_id);
+    const task = await Task.findById(req.body.task_to_dmg);
     if(!task) return res.status(404).send('The task with given ID was not found');
 
     let creature = await Creature.findById(req.params.id);
     if(!creature) return res.status(404).send('The creature with given ID was not found');
 
       // Not tested
-    // const user = User.findById(req.user.id);
-    // const character = Character.findById(user.character_id);
-    // const guild = Guild.find({current_fight: creature._id});
+    // const user = await User.findById(req.user.id);
+    // const character = await Character.findById(user.character_id);
+    // const guild = await Guild.find({current_fight: creature._id});
 
     // if(guild.leader !== character._id) return res.status(401).send("Access denied");
 
-    creature = await Creature.findByIdAndUpdate(req.params.id, {task_to_dmg: req.params.task_id}, {new: true});
+    creature = await Creature.findByIdAndUpdate(req.params.id, {task_to_dmg: req.body.task_to_dmg}, {new: true});
 
     res.send(creature);
   })
 
-  app.put('/creatures/:id/duration/:duration', /*[authorization,*/ [validateObjectId], async (req, res) => {
+  app.put('/creatures/:id/duration', /*[authorization,*/ [validateObjectId], async (req, res) => {
 
     const { error } = validateCreature(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -200,17 +198,36 @@ app.post('/inventories', async (req, res) => {
     if(!creature) return res.status(404).send('The creature with given ID was not found');
 
       // Not tested
-    // const user = User.findById(req.user.id);
-    // const character = Character.findById(user.character_id);
-    // const guild = Guild.find({current_fight: creature._id});
+    // const user = await User.findById(req.user.id);
+    // const character = await Character.findById(user.character_id);
+    // const guild = await Guild.find({current_fight: creature._id});
 
     // if(guild.leader !== character._id) return res.status(401).send("Access denied");
 
-    creature = await Creature.findByIdAndUpdate(req.params.id, {duration: req.params.duration}, {new: true});
+    creature = await Creature.findByIdAndUpdate(req.params.id, {duration: req.body.duration}, {new: true});
 
     res.send(creature);
   })
 
+  app.put('/tasks/:id/status', /*[authorization,*/ [validateObjectId], async (req, res) => {
+
+    const { error } = validateTask(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let task = await Task.findById(req.params.id);
+    if(!task) return res.status(404).send('The task with given ID was not found');
+
+      // Not tested
+    // const user = await User.findById(req.user.id);
+    // const character = await Character.findById(user.character_id);
+    // const questbook = await Questbook.find({character.questbook_id});
+
+    // if(questbook.tasks.indexOf(req.param.id) === -1) return res.status(401).send("Access denied");
+
+    task = await Task.findByIdAndUpdate(req.params.id, {status: req.body.status}, {new: true});
+
+    res.send(task);
+  })
  
   //------------------------------------------------
 

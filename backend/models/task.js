@@ -29,6 +29,11 @@ const taskSchema = new mongoose.Schema({
         enum: ["", "Daily", "Weekly", "Monthly", "Events"],
         default: ""
     },
+    status: {
+        type: String,
+        enum: ["", "in_progress", "completed", "failed"],
+        default: ""
+    },
     duration: {
         type: Number,
         default: 1
@@ -56,6 +61,7 @@ function validateTask(task) {
         description: Joi.string().min(5).max(50).required(),
         type: Joi.valid("Physical", "Mental", "Utility"),
         category: Joi.valid("Daily", "Weekly", "Monthly", "Events"),
+        status: Joi.valid("in_progress", "completed", "failed"),
         duration: Joi.number().min(0),
         reward: Joi.object().min(0),
         penalty: Joi.number().min(0)
