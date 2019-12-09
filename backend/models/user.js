@@ -42,7 +42,7 @@ function validateUser(user) {
       character_id: Joi.objectId()
     });
   
-    return schema.validate(user);
+    return Joi.validate(user);
   }
   
   exports.User = User; 
