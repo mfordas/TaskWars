@@ -3,33 +3,38 @@ Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-
 const taskSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 5,
-        maxlength: 255
-    },
-    description: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 5,
-        maxlength: 255
-    },
-    type: {
-        type: String,
-        enum: ["", "Physical", "Mental", "Utility"],
-        default: ""
-    },
-    category: {
-        type: String,
-        enum: ["", "Daily", "Weekly", "Monthly", "Events"],
-        default: ""
-    },
-    duration: {
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 5,
+    maxlength: 255,
+  },
+  description: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 5,
+    maxlength: 255,
+  },
+  type: {
+    type: String,
+    enum: ['', 'Physical', 'Mental', 'Utility'],
+    default: '',
+  },
+  category: {
+    type: String,
+    enum: ['', 'Daily', 'Weekly', 'Monthly', 'Events'],
+    default: '',
+  },
+  duration: {
+    type: Number,
+    default: 1,
+  },
+  reward: [
+    {
+      exp: {
         type: Number,
         default: 1
     },
@@ -45,8 +50,14 @@ const taskSchema = new mongoose.Schema({
         },
     penalty: {
         type: Number,
-        default: 1
+        default: 0,
+      },
     },
+  ],
+  penalty: {
+    type: Number,
+    default: 1,
+  },
 });
 
 function validateTask(task) {
@@ -60,7 +71,7 @@ function validateTask(task) {
         penalty: Joi.number().min(0)
     });
 
-    return schema.validate(task);
+  return schema.validate(task);
 }
 
 const Task = mongoose.model('Task', taskSchema);
