@@ -73,7 +73,7 @@ function validateCharacter(character) {
   return schema.validate(character);
 }
 
-const Character = mongoose.model('Character', characterSchema);
+//const Character = mongoose.model('Character', characterSchema);
 
-exports.Character = Character;
+exports.character = characterSchema;
 exports.validateCharacter = validateCharacter;

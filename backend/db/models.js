@@ -1,4 +1,4 @@
-const character = require('../models/character');
+const { character } = require('../models/character');
 const creature = require('../models/creature');
 const guild = require('../models/guild');
 const inventory = require('../models/inventory');

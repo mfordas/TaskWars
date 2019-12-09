@@ -25,18 +25,18 @@ const createModelBatch = async (model, data) => {
 const arrayWithCount = count => fn => [...Array(count).keys()].map(fn);
 
 ///Tu zaczynacie pisać
-const createDivisions = async (prefix, count, models) => {
-  const divisionData = arrayWithCount(count)(x => {
+const createCharacters = async (prefix, count, models) => {
+  const characterData = arrayWithCount(count)(x => {
     return {
-      name: prefix + 'Division_' + x,
+      name: prefix + 'Character_' + x,
     };
   });
-  return await createModelBatch(models.Division, divisionData);
+  return await createModelBatch(models.Character, characterData);
 };
 
-const createDivision = async (prefix, models) => {
-  const divisions = await createDivisions(prefix, 1, models);
-  return divisions[0];
+const createCharacter = async (prefix, models) => {
+  const characters = await createCharacters(prefix, 1, models);
+  return characters[0];
 };
 
 const createUsers = async (prefix, count, division, models) => {
@@ -152,9 +152,9 @@ const teamInitializer = async models => {
   }
 };
 
-const divisionInitializer = async models => {
-  const prefix = 'Division_';
-  await createDivision(prefix, models);
+const characterInitializer = async models => {
+  const prefix = 'Character_';
+  await createCharacter(prefix, models);
 };
 
 const leagueInitializer = async models => {
@@ -181,9 +181,9 @@ const matchInitializer = async models => {
 };
 
 const defaultInitializers = new Map([
+  ['Character', characterInitializer],
   ['User', userInitializer],
   ['Team', teamInitializer],
-  ['Division', divisionInitializer],
   ['League', leagueInitializer],
   ['Match', matchInitializer],
 ]);
