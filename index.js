@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const Joi = require('@hapi/joi');
 const home = require('./backend/routes/home');
+const users = require('./backend/routes/users');
+const auth = require('./backend/routes/auth');
 const express = require('express');
 const app = express();
 
@@ -17,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(helmet());
 app.use('/', home);
+app.use('/api/users', users);
+app.use('/api/auth', auth);
 
 if(app.get('env') == 'development') {
     app.use(morgan('tiny'));
