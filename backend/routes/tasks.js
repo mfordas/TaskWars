@@ -1,24 +1,10 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
 const router = express.Router();
-
-require('./backend/startup/prod')(app);
-//-----------------------------------------------------------
-const mongoose = require('mongoose');
-const {User, validateUser} = require('./backend/models/user');
-const {Character, validateCharacter} = require('./backend/models/character');
-const {Inventory, validateInventory} = require('./backend/models/inventory');
-const {Item, validateItem} = require('./backend/models/item');
-const {Questbook, validateQuestbook} = require('./backend/models/questbook');
-const {Creature, validateCreature} = require('./backend/models/creature');
-const {Guild, validateGuild} = require('./backend/models/guild');
-const {Task, validateTask} = require('./backend/models/task');
-
-//-----------------------------------------------------------
-
+const {Task, validateTask} = require('../models/task');
 
 //add new task
-app.post('/task', async (req, res) => {
+router.post('/tasks', async (req, res) => {
     const { error } = validateTask(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -30,14 +16,14 @@ app.post('/task', async (req, res) => {
   });
 
 //get all tasks
-  app.get('/tasks', async (req, res) => {
+router.get('/tasks', async (req, res) => {
     const tasks = await Task.find().sort('name');
     res.send(tasks);
   });
 
 
 //get task by id  
-app.get('/tasks/:id', (req, res) => {
+router.get('/tasks/:id', (req, res) => {
     getTasks(Task, req.params.id).then(result => {
       if (!result) {
         res.status(404).send(`Task with this id: ${req.params.id} not found`);
@@ -49,7 +35,7 @@ app.get('/tasks/:id', (req, res) => {
 
   //change task duration
 
-  app.put('/tasks/:id/duration', (req, res) => {
+  router.put('/tasks/:id/duration', (req, res) => {
     
     getTasks(Task, req.params.id).then(result => {
       if (!result) {
@@ -92,3 +78,6 @@ app.get('/tasks/:id', (req, res) => {
         );
     }
   }
+
+
+  module.exports = router;
