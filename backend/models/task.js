@@ -33,7 +33,7 @@ const taskSchema = new mongoose.Schema({
         type: Number,
         default: 1
     },
-    reward: [
+    reward: 
          {exp:{
             type: Number,
             default: 0
@@ -43,11 +43,11 @@ const taskSchema = new mongoose.Schema({
             default:0
         }
         },
-    ],
+    
     penalty: {
         type: Number,
         default: 1
-    },
+    }
 });
 
 function validateTask(task) {
@@ -57,7 +57,7 @@ function validateTask(task) {
         type: Joi.valid("Physical", "Mental", "Utility"),
         category: Joi.valid("Daily", "Weekly", "Monthly", "Events"),
         duration: Joi.number().min(0),
-        reward: Joi.array().min(0),
+        reward: Joi.object().min(0),
         penalty: Joi.number().min(0)
     });
 
