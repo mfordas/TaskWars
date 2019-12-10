@@ -31,9 +31,10 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  equipped: { Type: Boolean, default: false }
 });
 
-const Item = mongoose.model('Item', itemSchema);
+// const Item = mongoose.model('Item', itemSchema);
 
 function validateItem(item) {
   const schema = Joi.object({
@@ -46,10 +47,11 @@ function validateItem(item) {
     effect: Joi.string(),
     effect_value: Joi.number(),
     price: Joi.number(),
+    equipped: Joi.boolean(false)
   });
 
   return schema.validate(item);
 }
 
-exports.Item = Item;
+exports.item = itemSchema;
 exports.validateItem = validateItem;

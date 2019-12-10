@@ -73,7 +73,7 @@ function validateCreature(creature) {
   return schema.validate(creature);
 }
 
-const Creature = mongoose.model('Creature', creatureSchema);
+//const Creature = mongoose.model('Creature', creatureSchema);
 
-exports.Creature = Creature;
+exports.creature = creatureSchema;
 exports.validateCreature = validateCreature;
