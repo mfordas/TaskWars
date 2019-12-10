@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const validateObjectId = require('../middleware/validateObjectId');
-// const {User, validateUser} = require('../backend/models/user');
+const {Creature, validateCreature} = require('../models/creature');
+// const {User, validateUser} = require('../models/user');
 // const {Character, validateCharacter} = require('../models/character');
-// const {Giuld, validateGuild} = require('../models/guild');
+// const {Guild, validateGuild} = require('../models/guild');
 // const authorization = require('../middleware/authorization');
 
 router.get('/', /*authorization,*/ async (req, res) => {

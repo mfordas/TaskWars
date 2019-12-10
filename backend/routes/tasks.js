@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const validateObjectId = require('../middleware/validateObjectId');
+const {Task, validateTask} = require('../models/task');
 // const {User, validateUser} = require('../models/user');
 // const {Character, validateCharacter} = require('../models/character');
 // const {Questbook, validateQuestbook} = require('../models/questbook');
