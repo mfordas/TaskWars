@@ -4,28 +4,23 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const questbookSchema = new mongoose.Schema({
-  complited: {
-    type: [ObjectId],
-    ref: 'Task',
-    default: [],
-  },
-  tasks: {
-    type: [ObjectId],
-    ref: 'Task',
-    default: [],
-  },
+    tasks: {
+      type: [ObjectId],
+      ref: "Task",
+      done: { Type: Boolean, default: false},
+      default: []
+    },
 });
 
 const Questbook = mongoose.model('Questbook', questbookSchema);
 
 function validateQuestbook(questbook) {
-  const schema = Joi.object({
-    complited: Joi.array().items(Joi.objectId),
-    tasks: Joi.array().items(Joi.objectId),
-  });
-
-  return schema.validate(questbook);
-}
-
-exports.Questbook = Questbook;
-exports.validateQuestbook = validateQuestbook;
+    const schema = Joi.object({
+      tasks: Joi.array().items(Joi.objectId),
+    });
+  
+    return schema.validate(questbook);
+  }
+  
+  exports.Questbook = Questbook;
+  exports.validateQuestbook = validateQuestbook;
