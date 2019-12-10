@@ -46,6 +46,7 @@ const taskSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  done: { Type: Boolean, default: false }
 });
 
 function validateTask(task) {
@@ -63,12 +64,13 @@ function validateTask(task) {
     duration: Joi.number().min(0),
     reward: Joi.object().min(0),
     penalty: Joi.number().min(0),
+    done: Joi.boolean(false)
   });
 
   return schema.validate(task);
 }
 
-const Task = mongoose.model('Task', taskSchema);
+// const Task = mongoose.model('Task', taskSchema);
 
-exports.Task = Task;
+exports.task = taskSchema;
 exports.validateTask = validateTask;

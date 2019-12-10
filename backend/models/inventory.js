@@ -7,8 +7,7 @@ const inventorySchema = new mongoose.Schema({
   backpack: {
     type: [ObjectId],
     ref: 'Item',
-    equipped: { Type: Boolean, default: false },
-    default: [],
+    default: []
   },
   gold: {
     type: Number,
@@ -16,7 +15,7 @@ const inventorySchema = new mongoose.Schema({
   },
 });
 
-const Inventory = mongoose.model('Inventory', inventorySchema);
+// const Inventory = mongoose.model('Inventory', inventorySchema);
 
 function validateInventory(inventory) {
   const schema = Joi.object({
@@ -27,5 +26,7 @@ function validateInventory(inventory) {
   return schema.validate(inventory);
 }
 
-exports.Inventory = Inventory;
+
+
+exports.inventory = inventorySchema;
 exports.validateInventory = validateInventory;
