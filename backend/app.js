@@ -1,3 +1,4 @@
+const config = require('config');
 const debug = require('debug')('app:startup');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -7,6 +8,12 @@ const users = require('./routes/users');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
+
+if(!config.get('jwtPrivateKey')) {
+  console.error('FATAL ERROR: jwtPrivateKey is not definded.');
+  process.exit(1);
+  // set TaskWars_jwtPrivateKey=mySecureKey
+}
 
 const main = async () => {
   const app = express();
@@ -48,5 +55,6 @@ const main = async () => {
   // const port = process.env.PORT || 8080;
   // app.listen(port, host, () => console.log(`Listening on http://${host}:${port}`));
 };
-
+console.log('cls');
 main();
+

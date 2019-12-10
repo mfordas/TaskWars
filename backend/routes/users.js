@@ -1,3 +1,7 @@
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const bcrypt = require('bcryptjs');
+const _ = require('lodash');
 const {User, validateUser} = require('../models/user');
 const mongoose = require('mongoose');
 const express = require('express');
@@ -10,14 +14,15 @@ router.post('/', async (req, res) => {
   let user = await User.findOne({email: req.body.email});
   if (user) return res.status(400).send('User already registered.');
 
-  user = new User({
-      email: req.body.email,
-      password: req.body.password
-  })
-
+  user = new User(_.pick(req.body, ['email', 'password']));
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
   await user.save();
   
-  res.send(user);
+  const token = user.generateAuthToken();
+  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'email']));
 });
 
 module.exports = router;
+
+  // "name": "Task Wars"

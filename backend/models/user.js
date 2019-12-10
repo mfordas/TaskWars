@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     type: ObjectId,
     ref: 'Character',
     default: null,
-  },
+  }
 });
 
 userSchema.methods.generateAuthToken = function() {
