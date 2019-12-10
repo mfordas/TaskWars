@@ -64,7 +64,7 @@ function validateTask(task) {
     duration: Joi.number().min(0),
     reward: Joi.object().min(0),
     penalty: Joi.number().min(0),
-    done: Joi.boolean(false)
+    done: Joi.boolean()
   });
 
   return schema.validate(task);
