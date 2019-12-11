@@ -37,6 +37,9 @@ router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (re
   const { error } = validateCreature(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  const creature = await Creature.findById(req.params.id);
+  if(!creature) return res.status(404).send('The creature with given ID was not found')
+
   const task = await Task.findById(req.body.task_to_dmg);
   if(!task) return res.status(404).send('The task with given ID was not found');
 
