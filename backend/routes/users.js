@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
-const { User, validate } = require('../models/user');
+const { User, validateUser } = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/authorization');
 const express = require('express');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const { error } = validate(req.body);
+  const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.body.email });
@@ -25,35 +25,24 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const users = await User.find().sort('_id');
-  res.send(_.pick(users, ['_id', 'name', 'email']));
+  const users = await User.find().select('_id email').sort('email');
+
+  res.send(users);
 });
 
 router.get('/:id', async (req, res) => {
-  const user = await User.findById(req.params.id);
+  var user;
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    user = await User.findById(req.params.id);
+  }
 
   if (!user) return res.status(404).send('The user with the given ID was not found.');
 
-  res.send(_.pick(user, ['_id', 'name', 'email']));
-});
-
-router.put('/:id/password', async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const salt = await bcrypt.genSalt(10);
-  const newPassword = await bcrypt.hash(req.body.password, salt);
-
-  const user = await User.findByIdAndUpdate(req.params.id, { password: newPassword }, {
-    new: true
-  });
-  if (!user) return res.status(404).send('The user with the given ID was not found.');
-
-  res.send(_.pick(user, ['_id', 'name', 'email']));
+  res.send(_.pick(user, ['_id', 'email']));
 });
 
 router.put('/me/password', auth, async (req, res) => {
-  const { error } = validate(req.body);
+  const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const salt = await bcrypt.genSalt(10);
@@ -64,7 +53,25 @@ router.put('/me/password', auth, async (req, res) => {
   });
   if (!user) return res.status(404).send('The user with the given ID was not found.');
 
-  res.send(_.pick(user, ['_id', 'name', 'email']));
+  res.send(_.pick(user, ['_id', 'email']));
 });
+
+router.put('/:id/password', async (req, res) => {
+  const { error } = validateUser(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const salt = await bcrypt.genSalt(10);
+  const newPassword = await bcrypt.hash(req.body.password, salt);
+
+  var user;
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    user = await User.findByIdAndUpdate(req.params.id, { password: newPassword }, {new: true});
+  }
+
+  if (!user) return res.status(404).send('The user with the given ID was not found.');
+
+  res.send(_.pick(user, ['_id', 'email']));
+});
+
 
 module.exports = router;
