@@ -34,7 +34,7 @@ const itemSchema = new mongoose.Schema({
   equipped: { Type: Boolean, default: false }
 });
 
-// const Item = mongoose.model('Item', itemSchema);
+const Item = mongoose.model('Item', itemSchema);
 
 function validateItem(item) {
   const schema = Joi.object({
@@ -53,5 +53,6 @@ function validateItem(item) {
   return schema.validate(item);
 }
 
+exports.Item = Item;
 exports.item = itemSchema;
 exports.validateItem = validateItem;

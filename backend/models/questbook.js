@@ -11,7 +11,7 @@ const questbookSchema = new mongoose.Schema({
   },
 });
 
-// const Questbook = mongoose.model('Questbook', questbookSchema);
+const Questbook = mongoose.model('Questbook', questbookSchema);
 
 function validateQuestbook(questbook) {
   const schema = Joi.object({
@@ -21,5 +21,6 @@ function validateQuestbook(questbook) {
   return schema.validate(questbook);
 }
 
+exports.Questbook = Questbook;
 exports.questbook = questbookSchema;
 exports.validateQuestbook = validateQuestbook;
