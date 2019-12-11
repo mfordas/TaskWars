@@ -3,17 +3,18 @@ const debug = require('debug')('app:startup');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
+const guilds = require('./routes/guilds');
 const home = require('./routes/home');
 const users = require('./routes/users');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
 
-if(!config.get('jwtPrivateKey')) {
-  console.error('FATAL ERROR: jwtPrivateKey is not definded.');
-  process.exit(1);
-  // set TaskWars_jwtPrivateKey=mySecureKey
-}
+// if(!config.get('jwtPrivateKey')) {
+//   console.error('FATAL ERROR: jwtPrivateKey is not definded.');
+//   process.exit(1);
+//   // set TaskWars_jwtPrivateKey=mySecureKey
+// }
 
 const main = async () => {
   const app = express();
@@ -46,6 +47,7 @@ const main = async () => {
   //Routes
   app.use('/', home);
   app.use('/api/users', users);
+  app.use('/api/guilds', guilds);
 
   const port = process.env.PORT || 3000;
   app.listen(port, () => console.log(`Listening on port ${port}...`));
