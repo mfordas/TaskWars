@@ -2,6 +2,7 @@ const debug = require('debug')('app:startup');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const home = require('./routes/home');
+const item = require('./routes/item');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
@@ -24,6 +25,7 @@ const main = async () => {
 
   db.register(app, connection, models);
 
+
   //Middlewares
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -32,6 +34,7 @@ const main = async () => {
 
   //Routes
   app.use('/', home);
+  app.use('/item', item);
 
   //Listening
   const host = process.env.HOST || '127.0.0.1';
