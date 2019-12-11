@@ -70,7 +70,8 @@ function validateTask(task) {
   return schema.validate(task);
 }
 
-// const Task = mongoose.model('Task', taskSchema);
+ const Task = mongoose.model('Task', taskSchema);
 
+ exports.Task = Task;
 exports.task = taskSchema;
 exports.validateTask = validateTask;
