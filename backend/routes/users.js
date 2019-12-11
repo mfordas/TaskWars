@@ -31,6 +31,15 @@ router.get('/', async (req, res) => {
   res.send(users);
 });
 
+router.get('/me', auth, async (req, res) => {
+  const User = res.locals.models.user;
+
+  const user = await User.findById(req.user._id);
+  if (!user) return res.status(404).send('The user with the given ID was not found.');
+
+  res.send(_.pick(user, ['_id', 'email']));
+});
+
 router.get('/:id', async (req, res) => {
   const User = res.locals.models.user;
   let user;
