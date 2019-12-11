@@ -2,6 +2,7 @@ const debug = require('debug')('app:startup');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const home = require('./routes/home');
+const creatures = require('./routes/creatures');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
@@ -32,6 +33,7 @@ const main = async () => {
 
   //Routes
   app.use('/', home);
+  app.use('/api/creatures', creatures);
 
   //Listening
   const host = process.env.HOST || '127.0.0.1';

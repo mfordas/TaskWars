@@ -6,6 +6,6 @@ const register = require('./register');
 module.exports = {
   connect,
   load,
-  // initialize,
+  initialize,
   register,
 };
