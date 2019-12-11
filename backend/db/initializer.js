@@ -182,10 +182,13 @@ const matchInitializer = async models => {
 
 const defaultInitializers = new Map([
   ['Character', characterInitializer],
-  ['User', userInitializer],
-  ['Team', teamInitializer],
-  ['League', leagueInitializer],
-  ['Match', matchInitializer],
+  ['Creature', creatureInitializer],
+  ['Guild', guildInitializer],
+  ['Inventory', inventoryInitializer],
+  ['Item', itemInitializer],
+  ['Questbook', questbookInitializer],
+  ['Task', taskInitializer],
+  ['User', userInitializer]
 ]);
 
 //To zostawiacie bez zmian

@@ -1,70 +1,72 @@
 const express = require('express');
 const router = express.Router();
-const validateObjectId = require('../backend/middleware/validateObjectId');
-// const {User, validateUser} = require('../backend/models/user');
-// const {Character, validateCharacter} = require('../backend/models/character');
-// const authorization = require('../backend/middleware/authorization');
+const validateObjectId = require('../middleware/validateObjectId');
+const {Creature, validateCreature} = require('../models/creature');
+// const {User, validateUser} = require('../models/user');
+// const {Character, validateCharacter} = require('../models/character');
+// const {Guild, validateGuild} = require('../models/guild');
+// const authorization = require('../middleware/authorization');
 
 router.get('/', /*authorization,*/ async (req, res) => {
     const creatures = await Creature.find().sort({'level' : 1 , 'name' : 1 })
     res.send(creatures);
   })
 
-  router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
-    const creature = await Creature.findById(req.params.id);
-    if(!creature) return res.status(404).send('The creature with given ID was not found')
+router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
+  const creature = await Creature.findById(req.params.id);
+  if(!creature) return res.status(404).send('The creature with given ID was not found')
+
+  // Not tested
+  // const user = await User.findById(req.user.id);
+  // const character = await Character.findById(user.character_id);
+  // const guild = await Guild.find({current_fight: creature._id});
+
+  // if(character.guilds.indexOf(guild._id) === -1) return res.status(401).send("Access denied");
+
+  res.send(creature);
+})
+
+router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (req, res) => {
+
+  const { error } = validateCreature(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const task = await Task.findById(req.body.task_to_dmg);
+  if(!task) return res.status(404).send('The task with given ID was not found');
+
+  let creature = await Creature.findById(req.params.id);
+  if(!creature) return res.status(404).send('The creature with given ID was not found');
 
     // Not tested
-    // const user = await User.findById(req.user.id);
-    // const character = await Character.findById(user.character_id);
-    // const guild = await Guild.find({current_fight: creature._id});
+  // const user = await User.findById(req.user.id);
+  // const character = await Character.findById(user.character_id);
+  // const guild = await Guild.find({current_fight: creature._id});
 
-    // if(character.guilds.indexOf(guild._id) === -1) return res.status(401).send("Access denied");
+  // if(guild.leader !== character._id) return res.status(401).send("Access denied");
 
-    res.send(creature);
-  })
+  creature = await Creature.findByIdAndUpdate(req.params.id, {task_to_dmg: req.body.task_to_dmg}, {new: true});
 
- router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (req, res) => {
+  res.send(creature);
+})
 
-    const { error } = validateCreature(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.put('/:id/duration', /*[authorization,*/ [validateObjectId], async (req, res) => {
 
-    const task = await Task.findById(req.body.task_to_dmg);
-    if(!task) return res.status(404).send('The task with given ID was not found');
+  const { error } = validateCreature(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-    let creature = await Creature.findById(req.params.id);
-    if(!creature) return res.status(404).send('The creature with given ID was not found');
+  let creature = await Creature.findById(req.params.id);
+  if(!creature) return res.status(404).send('The creature with given ID was not found');
 
-      // Not tested
-    // const user = await User.findById(req.user.id);
-    // const character = await Character.findById(user.character_id);
-    // const guild = await Guild.find({current_fight: creature._id});
+    // Not tested
+  // const user = await User.findById(req.user.id);
+  // const character = await Character.findById(user.character_id);
+  // const guild = await Guild.find({current_fight: creature._id});
 
-    // if(guild.leader !== character._id) return res.status(401).send("Access denied");
+  // if(guild.leader !== character._id) return res.status(401).send("Access denied");
 
-    creature = await Creature.findByIdAndUpdate(req.params.id, {task_to_dmg: req.body.task_to_dmg}, {new: true});
+  creature = await Creature.findByIdAndUpdate(req.params.id, {duration: req.body.duration}, {new: true});
 
-    res.send(creature);
-  })
+  res.send(creature);
+})
 
-  router.put('/:id/duration', /*[authorization,*/ [validateObjectId], async (req, res) => {
-
-    const { error } = validateCreature(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    let creature = await Creature.findById(req.params.id);
-    if(!creature) return res.status(404).send('The creature with given ID was not found');
-
-      // Not tested
-    // const user = await User.findById(req.user.id);
-    // const character = await Character.findById(user.character_id);
-    // const guild = await Guild.find({current_fight: creature._id});
-
-    // if(guild.leader !== character._id) return res.status(401).send("Access denied");
-
-    creature = await Creature.findByIdAndUpdate(req.params.id, {duration: req.body.duration}, {new: true});
-
-    res.send(creature);
-  })
-
-  module.exports = router;
+module.exports = router;

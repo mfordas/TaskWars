@@ -2,6 +2,7 @@ const debug = require('debug')('app:startup');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const home = require('./routes/home');
+const creatures = require('./routes/creatures');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
@@ -19,7 +20,7 @@ const main = async () => {
   const models = db.load(connection);
   if (process.env.TEST_ENV || process.env.NODE_ENV) {
     await connection.dropDatabase();
-    await db.initialize(models);
+    // await db.initialize(models);
   }
 
   db.register(app, connection, models);
@@ -32,6 +33,7 @@ const main = async () => {
 
   //Routes
   app.use('/', home);
+  app.use('/api/creatures', creatures);
 
   //Listening
   const host = process.env.HOST || '127.0.0.1';
