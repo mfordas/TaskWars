@@ -48,8 +48,8 @@ function validateGuild(guild) {
   return schema.validate(guild);
 }
 
-const Guild = mongoose.model('Guild', guildSchema);
+// const Guild = mongoose.model('Guild', guildSchema);
 
-exports.Guild = Guild;
+// exports.Guild = Guild;
 exports.guild = guildSchema;
 exports.validateGuild = validateGuild;
