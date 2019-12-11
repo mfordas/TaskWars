@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {Character, validateCharacter} = require('../models/character');
-
+const {character, validateCharacter} = require('../models/character');
+const mongoose = require('mongoose');
+const Character = mongoose.model('characters', character);
 
 router.post('/', async (req, res) => {
     const {error} = validateCharacter(req.body);

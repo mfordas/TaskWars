@@ -35,7 +35,7 @@ const main = async () => {
   //Routes
   app.use('/', home);
   app.use('/api/creatures', creatures);
-  app.use('/api/characters', characters);
+  app.use('/characters', characters);
 
   //Listening
   const host = process.env.HOST || '127.0.0.1';
