@@ -1,18 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const validateObjectId = require('../middleware/validateObjectId');
-const {Creature, validateCreature} = require('../models/creature');
+const { validateCreature } = require('../models/creature');
 // const {User, validateUser} = require('../models/user');
 // const {Character, validateCharacter} = require('../models/character');
 // const {Guild, validateGuild} = require('../models/guild');
 // const authorization = require('../middleware/authorization');
 
 router.get('/', /*authorization,*/ async (req, res) => {
+  const Creature = res.locals.models.creature;
+  
     const creatures = await Creature.find().sort({'level' : 1 , 'name' : 1 })
     res.send(creatures);
   })
 
 router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
+  const Creature = res.locals.models.creature;
+
   const creature = await Creature.findById(req.params.id);
   if(!creature) return res.status(404).send('The creature with given ID was not found')
 
@@ -27,9 +31,14 @@ router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
 })
 
 router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (req, res) => {
+  const Creature = res.locals.models.creature;
+  const Task = res.locals.models.task;
 
   const { error } = validateCreature(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+
+  const creature = await Creature.findById(req.params.id);
+  if(!creature) return res.status(404).send('The creature with given ID was not found')
 
   const task = await Task.findById(req.body.task_to_dmg);
   if(!task) return res.status(404).send('The task with given ID was not found');
@@ -50,6 +59,7 @@ router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (re
 })
 
 router.put('/:id/duration', /*[authorization,*/ [validateObjectId], async (req, res) => {
+  const Creature = res.locals.models.creature;
 
   const { error } = validateCreature(req.body);
   if (error) return res.status(400).send(error.details[0].message);

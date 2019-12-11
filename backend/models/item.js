@@ -53,5 +53,6 @@ function validateItem(item) {
   return schema.validate(item);
 }
 
+// exports.Item = Item;
 exports.item = itemSchema;
 exports.validateItem = validateItem;

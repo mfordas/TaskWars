@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const validateObjectId = require('../middleware/validateObjectId');
-const {Task, validateTask} = require('../models/task');
+const { validateTask } = require('../models/task');
 // const {User, validateUser} = require('../models/user');
 // const {Character, validateCharacter} = require('../models/character');
 // const {Questbook, validateQuestbook} = require('../models/questbook');
 // const authorization = require('../middleware/authorization');
 
 router.put('/:id/status', /*[authorization,*/ [validateObjectId], async (req, res) => {
-
+    const Task = res.locals.models.task;
+  
     const { error } = validateTask(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
