@@ -107,7 +107,8 @@ const createTask = async (/*prefix,*/ count, /*division,*/ models) => {
   const taskData = arrayWithCount(count)(x => {
     return {
       name: "defaultTask",
-      description: "defaultDescription"
+      description: "defaultDescription",
+      status: ""
     };
   });
   return await createModelBatch(models.task, taskData);

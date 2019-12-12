@@ -5,6 +5,7 @@ const home = require('./routes/home');
 const creatures = require('./routes/creatures');
 const item = require('./routes/item');
 const inventory = require('./routes/inventory');
+const tasks = require('./routes/tasks');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
@@ -39,6 +40,7 @@ const main = async () => {
   app.use('/api/creatures', creatures);
   app.use('/item', item);
   app.use('/inventory', inventory);
+  app.use('/tasks', tasks);
 
   //Listening
   const host = process.env.HOST || '127.0.0.1';

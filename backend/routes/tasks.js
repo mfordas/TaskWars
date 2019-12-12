@@ -1,10 +1,12 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
 const router = express.Router();
-const {Task, validateTask} = require('../models/task');
+const {validateTask} = require('../models/task');
+
 
 //add new task
-router.post('/tasks', async (req, res) => {
+router.post('/', async (req, res) => {
+  const Task = res.locals.models.task;
     const { error } = validateTask(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -16,14 +18,17 @@ router.post('/tasks', async (req, res) => {
   });
 
 //get all tasks
-router.get('/tasks', async (req, res) => {
+router.get('/', async (req, res) => {
+  const Task = res.locals.models.task;
     const tasks = await Task.find().sort('name');
     res.send(tasks);
   });
 
 
 //get task by id  
-router.get('/tasks/:id', (req, res) => {
+router.get('/:id', (req, res) => {
+  const Task = res.locals.models.task;
+
     getTasks(Task, req.params.id).then(result => {
       if (!result) {
         res.status(404).send(`Task with this id: ${req.params.id} not found`);
@@ -35,8 +40,8 @@ router.get('/tasks/:id', (req, res) => {
 
   //change task duration
 
-  router.put('/tasks/:id/duration', (req, res) => {
-    
+  router.put('/:id/duration', (req, res) => {
+    const Task = res.locals.models.task;
     getTasks(Task, req.params.id).then(result => {
       if (!result) {
         res.status(404).send(`Task with this id: ${req.params.id} not found`);
@@ -56,6 +61,33 @@ router.get('/tasks/:id', (req, res) => {
       }
     });
   });
+
+
+  //change task status
+
+  router.put('/:id/status', (req, res) => {
+    const Task = res.locals.models.task;
+    getTasks(Task, req.params.id).then(result => {
+      if (!result) {
+        res.status(404).send(`Task with this id: ${req.params.id} not found`);
+      } else {
+        // console.log(result);
+        Task.findByIdAndUpdate(req.params.id, {
+          status: req.body.status
+        }, { new: true }).then(
+          r => {
+            res.send(`Staus updated for task: ${r.name}:\n${r}`);
+          },
+          err => {
+            console.log(err.errmsg);
+            res.status(403).send('Bad request!');
+          },
+        );
+      }
+    });
+  });
+
+  
 
   async function getTasks(Task, id) {
     if (id) {
