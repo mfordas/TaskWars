@@ -72,5 +72,6 @@ function validateTask(task) {
 
 // const Task = mongoose.model('Task', taskSchema);
 
+// exports.Task = Task
 exports.task = taskSchema;
 exports.validateTask = validateTask;
