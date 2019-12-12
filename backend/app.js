@@ -19,11 +19,12 @@ const main = async () => {
   }
 
   // Database configuration
+
   const connection = await db.connect();
   const models = db.load(connection);
   if (process.env.TEST_ENV || process.env.NODE_ENV) {
-    await connection.dropDatabase();
-    await db.initialize(models);
+    //await connection.dropDatabase();
+    // await db.initialize(models);
   }
 
   db.register(app, connection, models);
