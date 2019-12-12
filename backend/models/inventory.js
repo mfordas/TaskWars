@@ -26,7 +26,6 @@ function validateInventory(inventory) {
   return schema.validate(inventory);
 }
 
-
-
+// exports.Inventory = Inventory;
 exports.inventory = inventorySchema;
 exports.validateInventory = validateInventory;

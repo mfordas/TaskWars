@@ -21,5 +21,6 @@ function validateQuestbook(questbook) {
   return schema.validate(questbook);
 }
 
+// exports.Questbook = Questbook;
 exports.questbook = questbookSchema;
 exports.validateQuestbook = validateQuestbook;

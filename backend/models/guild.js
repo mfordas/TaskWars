@@ -50,5 +50,6 @@ function validateGuild(guild) {
 
 // const Guild = mongoose.model('Guild', guildSchema);
 
+// exports.Guild = Guild;
 exports.guild = guildSchema;
 exports.validateGuild = validateGuild;
