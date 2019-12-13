@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const home = require('./routes/home');
 const creatures = require('./routes/creatures');
+const characters = require('./routes/characters');
 const item = require('./routes/item');
 const inventory = require('./routes/inventory');
 const tasks = require('./routes/tasks');
@@ -19,6 +20,7 @@ const main = async () => {
   }
 
   // Database configuration
+
   const connection = await db.connect();
   const models = db.load(connection);
   if (process.env.TEST_ENV || process.env.NODE_ENV) {
@@ -38,6 +40,7 @@ const main = async () => {
   //Routes
   app.use('/', home);
   app.use('/api/creatures', creatures);
+  app.use('/characters', characters);
   app.use('/item', item);
   app.use('/inventory', inventory);
   app.use('/tasks', tasks);
