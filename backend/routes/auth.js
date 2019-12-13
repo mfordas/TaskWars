@@ -4,6 +4,7 @@ const Joi = require('@hapi/joi');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const { User } = require('../models/user');
+const Verifier = require("email-verifier");
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
@@ -17,6 +18,10 @@ router.post('/', async (req, res) => {
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid email or password.');
+
+  if(!user.confirmed) {
+    throw new Error('Please confirm your email to login');
+  }
 
   const token = user.generateAuthToken();
 

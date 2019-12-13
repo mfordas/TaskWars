@@ -1,6 +1,6 @@
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     trim: true,
   },
+  confirmed: {
+    type: Boolean,
+    default: false,
+  },
   character_id: {
     type: ObjectId,
     ref: 'Character',
@@ -37,7 +41,8 @@ userSchema.methods.generateAuthToken = function() {
   return token;
 };
 
-//const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+
 function validateUser(user) {
   const schema = Joi.object({
     email: Joi.string()
@@ -59,5 +64,5 @@ function validateUser(user) {
 }
 
 // exports.User = User;
-exports.user = userSchema;
+exports.User = User;
 exports.validateUser = validateUser;

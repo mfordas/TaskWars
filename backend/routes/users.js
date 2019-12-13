@@ -1,15 +1,16 @@
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
-const { validateUser } = require('../models/user');
+const {User, validateUser} = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/authorization');
 const admin = require('../middleware/admin');
+const Verifier = require("email-verifier");
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const User = res.locals.models.user;
-  const { error } = validateUser(req.body);
+  const { error } = validateUser(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({email: req.body.email});
@@ -20,8 +21,13 @@ router.post('/', async (req, res) => {
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
 
-  const token = user.generateAuthToken();
-  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+  // let verifier = new Verifier("your_email_verification_api_key");
+  // verifier.verify(user.email, (err, data) => {
+  //   if (err) throw err;
+  //   console.log(data);
+  // });
+  
+  res.send(_.pick(user, ['_id', 'email']));
 });
 
 router.get('/', async (req, res) => {
@@ -86,7 +92,4 @@ router.put('/:id/password', [auth, admin], async (req, res) => {
   res.send(_.pick(user, ['_id', 'email']));
 });
 
-
 module.exports = router;
-
-  // "name": "Task Wars"
