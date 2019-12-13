@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
+const defaultCreatures = require('./defaultObjects/defaultCreatures')
 
 const transactional = initializer => async (model, models, previousCollection) => {
   let result;
@@ -80,18 +81,22 @@ const createGuilds = async (prefix, count,  models, creatureCatalog) => {
 
 const createCreatures = async (prefix, count, models, taskCatalog) => {
   const creatureData = arrayWithCount(count)(x => {
-    return {
-      name: prefix + x,
-      level: 10 + x,
-      health: 10*x,
-      physical_power: 15 + x,
-      physical_resistance: 10 + x,
-      magical_power: 20 + x,
-      magical_resistance: 25 + x,
-      reward: 50+x,
-      duration: x+6,
-      task_to_dmg: taskCatalog[x],
-    };
+    if(defaultCreatures[x] !== undefined) {
+      return defaultCreatures[x];
+    } else {
+      return {
+        name: prefix + x,
+        level: 10 + x,
+        health: 10*x,
+        physical_power: 15 + x,
+        physical_resistance: 10 + x,
+        magical_power: 20 + x,
+        magical_resistance: 25 + x,
+        reward: 50+x,
+        duration: x+6,
+        task_to_dmg: taskCatalog[x],
+      };
+    }
   });
   return await createModelBatch(models.creature, creatureData);
 };
