@@ -1,3 +1,5 @@
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
@@ -16,23 +18,27 @@ router.post('/', async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid email or password.');
 
-  res.send(true);
+  const token = user.generateAuthToken();
+
+  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'email']));
 });
 
 function validate(req) {
-  const schema = {
+  const schema = Joi.object({
     email: Joi.string()
-      .min(5)
-      .max(255)
+      .min(8)
+      .max(26)
       .required()
-      .email(),
+      .email()
+      .trim(),
     password: Joi.string()
-      .min(5)
-      .max(255)
-      .required(),
-  };
+      .min(8)
+      .max(26)
+      .required()
+      .trim(),
+  });
 
-  return Joi.validate(req, schema);
+  return schema.validate(req);
 }
 
 module.exports = router;

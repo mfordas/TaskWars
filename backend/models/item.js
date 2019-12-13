@@ -47,7 +47,7 @@ function validateItem(item) {
     effect: Joi.string(),
     effect_value: Joi.number(),
     price: Joi.number(),
-    equipped: Joi.boolean()
+    equipped: Joi.boolean(false)
   });
 
   return schema.validate(item);
