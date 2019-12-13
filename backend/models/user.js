@@ -26,15 +26,18 @@ const userSchema = new mongoose.Schema({
     ref: 'Character',
     default: null,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
 });
 
 userSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.JWTPRIVATEKEY);
   return token;
 };
 
-// const User = mongoose.model('User', userSchema);
-
+//const User = mongoose.model('User', userSchema);
 function validateUser(user) {
   const schema = Joi.object({
     email: Joi.string()
@@ -49,9 +52,10 @@ function validateUser(user) {
       .required()
       .trim(),
     character_id: Joi.objectId(),
+    isAdmin: Joi.boolean()
   });
 
-  return schema.validate(user);
+  return Joi.validate(user, schema);
 }
 
 // exports.User = User;

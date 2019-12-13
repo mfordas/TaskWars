@@ -46,7 +46,11 @@ const taskSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  done: { Type: Boolean, default: false }
+  status: {
+    type: String,
+    enum: ["", "in_progress", "completed", "failed"],
+    default: ""
+}
 });
 
 function validateTask(task) {
@@ -64,14 +68,15 @@ function validateTask(task) {
     duration: Joi.number().min(0),
     reward: Joi.object().min(0),
     penalty: Joi.number().min(0),
-    done: Joi.boolean()
+    status: Joi.valid("","in_progress", "completed", "failed")
   });
 
   return schema.validate(task);
 }
 
-// const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model('Task', taskSchema);
 
 // exports.Task = Task
 exports.task = taskSchema;
+exports.Task = Task;
 exports.validateTask = validateTask;
