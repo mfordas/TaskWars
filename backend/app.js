@@ -5,6 +5,7 @@ const home = require('./routes/home');
 const creatures = require('./routes/creatures');
 const characters = require('./routes/characters');
 const item = require('./routes/item');
+const guilds = require('./routes/guilds');
 const inventory = require('./routes/inventory');
 const tasks = require('./routes/tasks');
 const express = require('express');
@@ -44,7 +45,7 @@ const main = async () => {
   app.use('/item', item);
   app.use('/inventory', inventory);
   app.use('/tasks', tasks);
-
+  app.use('/api/guilds', guilds);
   //Listening
   const host = process.env.HOST || '127.0.0.1';
   const port = process.env.PORT || 8080;
