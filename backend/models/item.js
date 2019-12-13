@@ -47,12 +47,26 @@ function validateItem(item) {
     effect: Joi.string(),
     effect_value: Joi.number(),
     price: Joi.number(),
-    equipped: Joi.boolean(false)
+    equipped: Joi.boolean()
   });
 
+  return schema.validate(item);
+}
+function validateItemID(item) {
+  const schema = Joi.object({
+    _id: Joi.objectId(),
+  });
+  return schema.validate(item);
+}
+function validateItemEquipped(item) {
+  const schema = Joi.object({
+    equipped: Joi.boolean(),
+  });
   return schema.validate(item);
 }
 
 // exports.Item = Item;
 exports.item = itemSchema;
 exports.validateItem = validateItem;
+exports.validateItemID = validateItemID;
+exports.validateItemEquipped = validateItemEquipped;
