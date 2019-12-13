@@ -41,13 +41,13 @@ const main = async () => {
 
   //Routes
   app.use('/', home);
-  app.use('/creatures', creatures);
-  app.use('/characters', characters);
-  app.use('/item', item);
-  app.use('/inventory', inventory);
-  app.use('/tasks', tasks);
-  app.use('/guilds', guilds);
-  app.use('/questbook', questbook);
+  app.use('/api/creatures', creatures);
+  app.use('/api/characters', characters);
+  app.use('/api/item', item);
+  app.use('/api/inventory', inventory);
+  app.use('/api/tasks', tasks);
+  app.use('/api/guilds', guilds);
+  app.use('/api/questbook', questbook);
 
   //Listening
   const host = process.env.HOST || '127.0.0.1';
