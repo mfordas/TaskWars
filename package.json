@@ -29,6 +29,7 @@
   "dependencies": {
     "@hapi/joi": "^16.1.8",
     "bcrypt": "^3.0.7",
+    "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "config": "^3.2.4",
     "css-loader": "^3.2.0",
