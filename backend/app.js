@@ -2,6 +2,7 @@ const debug = require('debug')('app:startup');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const home = require('./routes/home');
+const users = require('./routes/users');
 const creatures = require('./routes/creatures');
 const characters = require('./routes/characters');
 const item = require('./routes/item');
@@ -41,6 +42,7 @@ const main = async () => {
 
   //Routes
   app.use('/', home);
+  app.use('/api/users', users);
   app.use('/api/creatures', creatures);
   app.use('/api/characters', characters);
   app.use('/api/item', item);
