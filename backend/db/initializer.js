@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const defaultCreatures = require('./defaultObjects/defaultCreatures')
+const defaultTasks = require('./defaultObjects/defaultTasks')
+
 
 const transactional = initializer => async (model, models, previousCollection) => {
   let result;
@@ -132,7 +134,6 @@ const createItem = async (prefix, count, models) => {
 
 const createQuestbook = async (count, models, taskCatalog) => {
   const questbookData = arrayWithCount(count)(x => {
-    console.log(x);
     return {
       tasks: [
         taskCatalog[x*1],
@@ -146,18 +147,22 @@ const createQuestbook = async (count, models, taskCatalog) => {
 
 const createTask = async (prefix, count, models) => {
   const taskData = arrayWithCount(count)(x => {
-    return {
-      name: prefix + x,
-      description: "Opis taska" + x,
-      type: "Utility",
-      category: "Daily",
-      duration: (x+1),
-      reward: {
-        exp: (100+x),
-        gold: (50+x)
-      },
-      penalty: (5+x),
-      done: false
+    if(defaultTasks[x] !== undefined) {
+      return defaultTasks[x];
+    } else {
+      return {
+        name: prefix + x,
+        description: "Opis taska" + x,
+        type: "Utility",
+        category: "Daily",
+        duration: (x+1),
+        reward: {
+          exp: (100+x),
+          gold: (50+x)
+        },
+        penalty: (5+x),
+        done: false
+      }
     };
   });
   return await createModelBatch(models.task, taskData);
