@@ -37,6 +37,7 @@ const createCharacters = async (prefix, count, models) => {
       physical_power: 15 + x,
       magical_power: 20 + x, 
       class: "Druid",
+      avatar: "default",
       questbook_id: "5de953c6291e7d14b4e2be3" + x,
       inventory_id: "5de953c6291e7d14b4e2be2" + x,
       guilds: [
