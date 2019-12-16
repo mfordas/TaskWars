@@ -6,7 +6,8 @@
   "scripts": {
     "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\"",
     "start": "node -r dotenv/config ./backend/app.js",
-    "mon": "nodemon -r dotenv/config ./backend/app.js"
+    "mon": "nodemon -r dotenv/config ./backend/app.js",
+    "dev": "concurrently -n react,express -k \"cd frontend && npm run start\" \"npm run mon\""
   },
   "engines": {
     "node": "^10.16.3"
@@ -24,7 +25,8 @@
     "node-sass": "^4.13.0",
     "prettier": "1.18.2",
     "sass-loader": "^8.0.0",
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.3",
+    "concurrently": "^4.1.2"
   },
   "dependencies": {
     "@hapi/joi": "^16.1.8",
