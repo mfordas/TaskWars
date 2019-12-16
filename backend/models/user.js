@@ -29,8 +29,8 @@ const userSchema = new mongoose.Schema({
   },
   isAdmin: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 userSchema.methods.generateAuthToken = function() {
@@ -53,7 +53,7 @@ function validateUser(user) {
       .required()
       .trim(),
     character_id: Joi.objectId(),
-    isAdmin: Joi.boolean()
+    isAdmin: Joi.boolean(),
   });
 
   return Joi.validate(user, schema);

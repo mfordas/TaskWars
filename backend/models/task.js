@@ -48,9 +48,9 @@ const taskSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["", "in_progress", "completed", "failed"],
-    default: ""
-}
+    enum: ['', 'in_progress', 'completed', 'failed'],
+    default: '',
+  },
 });
 
 function validateTask(task) {
@@ -68,7 +68,7 @@ function validateTask(task) {
     duration: Joi.number().min(0),
     reward: Joi.object().min(0),
     penalty: Joi.number().min(0),
-    status: Joi.valid("","in_progress", "completed", "failed")
+    status: Joi.valid('', 'in_progress', 'completed', 'failed'),
   });
 
   return schema.validate(task);

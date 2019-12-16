@@ -7,7 +7,7 @@ const inventorySchema = new mongoose.Schema({
   backpack: {
     type: [ObjectId],
     ref: 'Item',
-    default: []
+    default: [],
   },
   gold: {
     type: Number,

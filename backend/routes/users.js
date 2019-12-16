@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne({email: req.body.email});
+  let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send('User already registered.');
 
   user = new User(_.pick(req.body, ['email', 'password']));
@@ -26,7 +26,9 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const User = res.locals.models.user;
-  const users = await User.find().select('_id email').sort('email');
+  const users = await User.find()
+    .select('_id email')
+    .sort('email');
 
   res.send(users);
 });
@@ -60,9 +62,13 @@ router.put('/me/password', auth, async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const newPassword = await bcrypt.hash(req.body.password, salt);
 
-  const user = await User.findByIdAndUpdate(req.user._id, { password: newPassword }, {
-    new: true
-  });
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { password: newPassword },
+    {
+      new: true,
+    },
+  );
   if (!user) return res.status(404).send('The user with the given ID was not found.');
 
   res.send(_.pick(user, ['_id', 'email']));
@@ -78,7 +84,7 @@ router.put('/:id/password', [auth, admin], async (req, res) => {
 
   let user;
   if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-    user = await User.findByIdAndUpdate(req.params.id, { password: newPassword }, {new: true});
+    user = await User.findByIdAndUpdate(req.params.id, { password: newPassword }, { new: true });
   }
 
   if (!user) return res.status(404).send('The user with the given ID was not found.');
@@ -86,7 +92,6 @@ router.put('/:id/password', [auth, admin], async (req, res) => {
   res.send(_.pick(user, ['_id', 'email']));
 });
 
-
 module.exports = router;
 
-  // "name": "Task Wars"
+// "name": "Task Wars"

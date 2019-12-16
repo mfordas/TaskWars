@@ -29,25 +29,21 @@ const arrayWithCount = count => fn => [...Array(count).keys()].map(fn);
 const createCharacters = async (prefix, count, models) => {
   const characterData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb1"+ x,
+      _id: '5df2fc8275cf270f44fabb1' + x,
       name: prefix + x,
       level: 10 + x,
-      health: 10*x,
-      exp_points: 100*x,
+      health: 10 * x,
+      exp_points: 100 * x,
       physical_power: 15 + x,
-      magical_power: 20 + x, 
-      class: "Druid",
-      questbook_id: "5de953c6291e7d14b4e2be3" + x,
-      inventory_id: "5de953c6291e7d14b4e2be2" + x,
-      guilds: [
-        "5df2fc8275cf270f44fabb4"+ x,
-        "5df2fc8275cf270f44fabb5"+ (x+2),
-      ]
+      magical_power: 20 + x,
+      class: 'Druid',
+      questbook_id: '5de953c6291e7d14b4e2be3' + x,
+      inventory_id: '5de953c6291e7d14b4e2be2' + x,
+      guilds: ['5df2fc8275cf270f44fabb4' + x, '5df2fc8275cf270f44fabb5' + (x + 2)],
     };
   });
   return await createModelBatch(models.character, characterData);
 };
-
 
 // const createCharacter = async (prefix, models) => {
 //   const characters = await createCharacters(prefix, 3, models);
@@ -58,11 +54,11 @@ const createUsers = async (prefix, count, models) => {
   const password = await hashPassword('Task-Wars-Admin');
   const userData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb0" + x,
+      _id: '5df2fc8275cf270f44fabb0' + x,
       email: prefix + x + '@email.com',
       password,
-      character_id: "5df2fc8275cf270f44fabb1" + x,
-      isAdmin: false
+      character_id: '5df2fc8275cf270f44fabb1' + x,
+      isAdmin: false,
     };
   });
   return await createModelBatch(models.user, userData);
@@ -71,33 +67,31 @@ const createUsers = async (prefix, count, models) => {
 const createCreatures = async (prefix, count, models) => {
   const creatureData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb5"+ x,
+      _id: '5df2fc8275cf270f44fabb5' + x,
       name: prefix + x,
       level: 10 + x,
-      health: 10*x,
+      health: 10 * x,
       physical_power: 15 + x,
       physical_resistance: 10 + x,
       magical_power: 20 + x,
       magical_resistance: 25 + x,
-      reward: 50+x,
-      duration: x+6,
-      task_to_dmg: "5df2fc8275cf270f44fabb6"+ x,
+      reward: 50 + x,
+      duration: x + 6,
+      task_to_dmg: '5df2fc8275cf270f44fabb6' + x,
     };
   });
   return await createModelBatch(models.creature, creatureData);
 };
 
-const createGuilds = async (prefix, count,  models) => {
+const createGuilds = async (prefix, count, models) => {
   const guildData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb4" + x,
+      _id: '5df2fc8275cf270f44fabb4' + x,
       name: prefix + x,
-      leader: "5df2fc8275cf270f44fabb1"+ x,
-      members: [
-        "5df2fc8275cf270f44fabb1"+ x,
-      ],
-      type: "Utility",
-      current_fight: "5df2fc8275cf270f44fabb5"+ x,
+      leader: '5df2fc8275cf270f44fabb1' + x,
+      members: ['5df2fc8275cf270f44fabb1' + x],
+      type: 'Utility',
+      current_fight: '5df2fc8275cf270f44fabb5' + x,
     };
   });
   return await createModelBatch(models.guild, guildData);
@@ -106,13 +100,13 @@ const createGuilds = async (prefix, count,  models) => {
 const createInventories = async (/*prefix,*/ count, /*division,*/ models) => {
   const inventoryData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb2" + x,
+      _id: '5df2fc8275cf270f44fabb2' + x,
       backpack: [
-        "5df2fc8275cf270f44fabb7"+(x*1),
-        "5df2fc8275cf270f44fabb7"+(x*2),
-        "5df2fc8275cf270f44fabb7"+(x*3)
+        '5df2fc8275cf270f44fabb7' + x * 1,
+        '5df2fc8275cf270f44fabb7' + x * 2,
+        '5df2fc8275cf270f44fabb7' + x * 3,
       ],
-      gold: x*500
+      gold: x * 500,
     };
   });
   return await createModelBatch(models.inventory, inventoryData);
@@ -121,14 +115,14 @@ const createInventories = async (/*prefix,*/ count, /*division,*/ models) => {
 const createItem = async (prefix, count, models) => {
   const itemData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb7" + x,
+      _id: '5df2fc8275cf270f44fabb7' + x,
       name: prefix + x,
-      slot: "Weapon",
-      description: "Opis itemka" + x,
-      effect: "Magic_power",
+      slot: 'Weapon',
+      description: 'Opis itemka' + x,
+      effect: 'Magic_power',
       effect_value: x,
-      price: 100*x,
-      equipped: false
+      price: 100 * x,
+      equipped: false,
     };
   });
   return await createModelBatch(models.item, itemData);
@@ -137,12 +131,8 @@ const createItem = async (prefix, count, models) => {
 const createQuestbook = async (/*prefix,*/ count, /*division,*/ models) => {
   const questbookData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb3" + x,
-      tasks: [
-        "5df2fc8275cf270f44fabb6"+(x*1),
-        "5df2fc8275cf270f44fabb6"+(x*2),
-        "5df2fc8275cf270f44fabb6"+(x*3)
-      ]
+      _id: '5df2fc8275cf270f44fabb3' + x,
+      tasks: ['5df2fc8275cf270f44fabb6' + x * 1, '5df2fc8275cf270f44fabb6' + x * 2, '5df2fc8275cf270f44fabb6' + x * 3],
     };
   });
   return await createModelBatch(models.questbook, questbookData);
@@ -151,18 +141,18 @@ const createQuestbook = async (/*prefix,*/ count, /*division,*/ models) => {
 const createTask = async (prefix, count, models) => {
   const taskData = arrayWithCount(count)(x => {
     return {
-      _id: "5df2fc8275cf270f44fabb6"+ x,
+      _id: '5df2fc8275cf270f44fabb6' + x,
       name: prefix + x,
-      description: "Opis taska" + x,
-      type: "Utility",
-      category: "Daily",
-      duration: (x+1),
+      description: 'Opis taska' + x,
+      type: 'Utility',
+      category: 'Daily',
+      duration: x + 1,
       reward: {
-        exp: (100+x),
-        gold: (50+x)
+        exp: 100 + x,
+        gold: 50 + x,
       },
-      penalty: (5+x),
-      done: false
+      penalty: 5 + x,
+      done: false,
     };
   });
   return await createModelBatch(models.task, taskData);
@@ -330,7 +320,7 @@ const questbookInitializer = async models => {
 
 const taskInitializer = async models => {
   const prefix = 'Task_';
-  await createTask(prefix, 10,  models);
+  await createTask(prefix, 10, models);
 };
 
 const defaultInitializers = new Map([
@@ -341,7 +331,7 @@ const defaultInitializers = new Map([
   ['creature', creatureInitializer],
   ['guild', guildInitializer],
   ['character', characterInitializer],
-  ['user', userInitializer]
+  ['user', userInitializer],
 ]);
 
 //To zostawiacie bez zmian

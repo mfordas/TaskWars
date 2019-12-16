@@ -32,7 +32,6 @@ const main = async () => {
   }
 
   db.register(app, connection, models);
- 
 
   //Middlewares
   app.use(express.json());

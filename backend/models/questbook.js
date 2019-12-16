@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const questbookSchema = new mongoose.Schema({
-  tasks: [{
-    type: ObjectId,
-    ref: 'Task',
-    default: []
-  }],
+  tasks: [
+    {
+      type: ObjectId,
+      ref: 'Task',
+      default: [],
+    },
+  ],
 });
 
 //const Questbook = mongoose.model('Questbook', questbookSchema);
