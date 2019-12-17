@@ -41,7 +41,7 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
     return {
       email: prefix + x + '@email.com',
       password,
-      character_id: "5df2fc8275cf270f44fabb1" + x,
+      character_id: characterCatalog[x],
       isAdmin: false
     };
   });
