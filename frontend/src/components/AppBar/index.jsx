@@ -21,6 +21,7 @@ const AppBar = () => {
         <Menu.Item as={NavLink} name="Main Page" to="/" activeClassName="active" exact /><br></br>
         <Menu.Item as={NavLink} name="Login" to="/login" activeClassName="active" /><br></br>
         <Menu.Item as={NavLink} name="Register" to="/register" activeClassName="active" /><br></br>
+        <Menu.Item as={NavLink} name="Questbook" to="/questbook" activeClassName="active" /><br></br>
         {isLogged && (
           <>
           <Menu.Menu>

@@ -35,8 +35,18 @@ const arrayWithCount = count => fn => [...Array(count).keys()].map(fn);
 ///Tu zaczynacie pisać
 
 const createUsers = async (prefix, count, models, characterCatalog) => {
-  const password = await hashPassword('Task-Wars-Admin');
+  const password = await hashPassword('Task-Wars');
+  const adminPassword = await hashPassword('Task-Wars-Admin');
   const userData = arrayWithCount(count)(x => {
+    if(x === 0) {
+      return {
+        _id: '5df8d7b5d3adee3b887e5bf0',
+        email: 'TaskWarsAdmin@email.com',
+        password: adminPassword,
+        character_id: characterCatalog[x],
+        isAdmin: true
+      };
+    }
     return {
       email: prefix + x + '@email.com',
       password,
