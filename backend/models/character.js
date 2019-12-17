@@ -35,6 +35,11 @@ const characterSchema = new mongoose.Schema({
     enum: ['', 'Warrior', 'Hunter', 'Mage', 'Druid'],
     default: '',
   },
+  avatar: {
+    type: String,
+    enum: ['default', 'Warrior', 'Hunter', 'Mage', 'Druid'],
+    default: 'default',
+  },
   exp_points: {
     type: Number,
     default: 0,
@@ -64,6 +69,7 @@ function validateCharacter(character) {
       .required(),
     level: Joi.number().min(0),
     class: Joi.valid('Warrior', 'Hunter', 'Mage', 'Druid'),
+    class: Joi.valid('default', 'Warrior', 'Hunter', 'Mage', 'Druid'),
     exp_points: Joi.number().min(0),
     health: Joi.number().min(0),
     physical_power: Joi.number().min(0),
