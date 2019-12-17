@@ -4,12 +4,13 @@ const defaultCreatures = require('./defaultObjects/defaultCreatures')
 const defaultTasks = require('./defaultObjects/defaultTasks')
 
 
-const transactional = initializer => async (model, models, previousCollection) => {
+const transactional = initializer => async (model, models, idCatalog) => {
   let result;
   const session = await model.startSession();
   await session.withTransaction(async () => {
-    result = await initializer(models, previousCollection);
+    result = await initializer(models, idCatalog);
   });
+  console.log(result);
   return result;
 };
 
@@ -180,12 +181,12 @@ const characterInitializer = async (models, idCatalog) => {
 
 const guildInitializer = async (models, idCatalog) => {
   const prefix = 'Guild_';
-  return await createGuilds(prefix, 6, models, idCatalog["creature"]);
+  return await createGuilds(prefix, defaultCreatures.length, models, idCatalog["creature"]);
 };
 
 const creatureInitializer = async (models, idCatalog) => {
   const prefix = 'Mob_';
-  return await createCreatures(prefix, 6, models, idCatalog["task"]);
+  return await createCreatures(prefix, defaultCreatures.length, models, idCatalog["task"]);
 };
 
 const inventoryInitializer = async (models, idCatalog) => {
@@ -198,12 +199,12 @@ const itemInitializer = async (models, idCatalog) => {
 };
 
 const questbookInitializer = async (models, idCatalog) => {
-  return await createQuestbook(3, models, idCatalog["task"]);
+  return await createQuestbook(Math.floor(defaultTasks.length/3), models, idCatalog["task"]);
 };
 
 const taskInitializer = async (models, idCatalog) => {
   const prefix = 'Task_';
-  return await createTask(prefix, 9,  models);
+  return await createTask(prefix, defaultTasks.length,  models);
 };
 
 const defaultInitializers = new Map([
