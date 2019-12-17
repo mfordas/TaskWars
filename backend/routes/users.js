@@ -4,8 +4,20 @@ const { validateUser } = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/authorization');
 const admin = require('../middleware/admin');
+const nodemailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
+
+// --------- Mail settings----------------------
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL, // TODO: your gmail account
+    pass: process.env.PASSWORD
+  }
+});
+// ------ end mail settings---------------------
 
 router.post('/', async (req, res) => {
   const User = res.locals.models.user;
@@ -19,6 +31,23 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
+
+  // send email -----------------
+  let mailOptions = {
+    from: 'task.wars12@gmail.com',
+    to: req.body.email,
+    sbuject: 'Welcome!',
+    text: `Your email: ${req.body.email} \nYour password: ${req.body.password}`
+  }
+
+  transporter.sendMail(mailOptions, function (err, data) {
+    if (err) {
+      console.log('Error Occurs: ', err);
+    } else {
+      console.log('Email sent!!!');
+    }
+  });
+  // ---------------------------
 
   const token = user.generateAuthToken();
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
