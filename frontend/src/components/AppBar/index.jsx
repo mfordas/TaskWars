@@ -13,7 +13,7 @@ const AppBar = () => {
     changeStore('me', null);
   };
   return (
-      <Menu secondary>
+      <Menu style={{display: "flex", justifyContent: "space-between"}} secondary>
         <Menu.Item as={Link}   to="/" >
           <p style={{color: '#800080', fontWeight: 'bold', fontSize: 'large'}}>
             TaskWars</p>
@@ -27,8 +27,7 @@ const AppBar = () => {
             <Menu.Item as={NavLink} name="Tasks" to="/tasks" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
-            <Menu.Item as={Link} name= {me ? me.email : 'user' } to="/profile" /><br></br>
-            <br></br>
+            <Menu.Item style={{marginRight: 100}} as={Link} name= {me ? me.email : 'user' } to="/profile" />
             <Menu.Item as={Link} name="Wyjdź" to="/" onClick={handleLogout} />
           </Menu.Menu>
           </>

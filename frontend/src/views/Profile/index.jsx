@@ -1,10 +1,17 @@
 import React from 'react';
+import { Avatar, HealthBar, ExperienceBar, Statistics} from '../../components/Profile'
+import { Container, Divider, Progress, Header } from 'semantic-ui-react'
+
 
 const Profile = () => {
   return (
     <div>
-      Profile Page here
+      <Avatar />
+      <HealthBar />
+      <ExperienceBar />
+      <Statistics />
     </div>
+   
   );
 };
 
