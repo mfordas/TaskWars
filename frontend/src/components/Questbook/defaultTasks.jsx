@@ -18,7 +18,8 @@ class TasksTable extends React.Component {
         method: 'get',
         headers: {'x-auth-token': localStorage.getItem('token'),},
       }).then(  result => {
-        var myTasks = result.data.map( task => task._id);
+          console.log(result.data);
+        var myTasks = result.data;
         console.log(myTasks);        
         this.setState({ tasks: myTasks });
       }).catch()  
@@ -39,7 +40,7 @@ class TasksTable extends React.Component {
     return (
       <Container text>
         {this.state.tasks.map(x => (
-          <p key={x._id}>{x}</p>
+          <p key={x._id}>{x.name}</p>
           ))}
             
       </Container>
