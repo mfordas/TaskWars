@@ -27,7 +27,8 @@ const AppBar = () => {
             <Menu.Item as={NavLink} name="Tasks" to="/tasks" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
-            <Menu.Item as={Link} name= {me ? me._id: 'user' } to="/profile" />
+            <Menu.Item as={Link} name= {me ? me.email : 'user' } to="/profile" /><br></br>
+            <br></br>
             <Menu.Item as={Link} name="Wyjdź" to="/" onClick={handleLogout} />
           </Menu.Menu>
           </>
