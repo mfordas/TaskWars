@@ -31,7 +31,7 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  equipped: { Type: Boolean, default: false },
+  equipped: { type: Boolean, default: false }
 });
 
 // const Item = mongoose.model('Item', itemSchema);
