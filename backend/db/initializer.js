@@ -10,7 +10,6 @@ const transactional = initializer => async (model, models, idCatalog) => {
   await session.withTransaction(async () => {
     result = await initializer(models, idCatalog);
   });
-  console.log(result);
   return result;
 };
 
@@ -239,7 +238,6 @@ const initialize = async (models, initializers = defaultInitializers) => {
     }
     console.log(`[MongoDB] Initializing data for ${modelName}`);
     const initializer = initializers.get(modelName);
-    console.log(initializer);
     idCatalog[modelName] = await transactional(initializer)(models[modelName], models, idCatalog);
   }
 };
