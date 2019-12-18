@@ -31,13 +31,15 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
+  const token = user.generateAuthToken();
 
   // send email -----------------
+  const url = `http://127.0.0.1:8080/api/users/confirmation/${user._id}`;
   let mailOptions = {
     from: 'task.wars12@gmail.com',
     to: req.body.email,
-    sbuject: 'Welcome!',
-    text: `Your email: ${req.body.email} \nYour password: ${req.body.password}`
+    sbuject: 'Confirm Email',
+    html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
   }
 
   transporter.sendMail(mailOptions, function (err, data) {
@@ -49,8 +51,14 @@ router.post('/', async (req, res) => {
   });
   // ---------------------------
 
-  const token = user.generateAuthToken();
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+});
+
+router.get('/confirmation/:id', async (req, res) => {
+  const User = res.locals.models.user;
+  let user = await User.findByIdAndUpdate(req.params.id, { isVerified: true }, { new: true });
+  res.write("Hello User! Your account has been verified.");
+  res.end();
 });
 
 router.get('/', async (req, res) => {
@@ -82,6 +90,7 @@ router.get('/:id', async (req, res) => {
 
   res.send(_.pick(user, ['_id', 'email']));
 });
+
 
 router.put('/me/password', auth, async (req, res) => {
   const User = res.locals.models.user;
