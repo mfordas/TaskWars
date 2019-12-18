@@ -18,7 +18,7 @@ class StatisticsRow extends React.Component {
                 </Header.Content>
             </Header>
             </Table.Cell>
-            <Table.Cell>0</Table.Cell>
+            <Table.Cell>{this.props.value}</Table.Cell>
             </Table.Row>
         );
     }

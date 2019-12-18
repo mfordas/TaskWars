@@ -1,0 +1,61 @@
+.profileViewDiv{
+    display: grid;
+    grid-template-columns: 50% 20% 20%;
+}
+
+.profileCharacterDetails {
+    display:flex;
+    flex-wrap: wrap;
+}
+
+.profileCharacterDetails > h1 {
+    width: 100%;
+}
+
+.profileCharacterStatistics {
+    display: flex;
+    align-items: flex-end;
+}
+
+.profileCharacterGuilds {
+    display: flex;
+    align-items: flex-end;
+}
+
+.avatarDiv {
+    width: 60%;
+}
+
+.detailsDiv {
+    width: 40%;
+}
+
+.progress {
+    width: 100%;
+}
+
+#progressDiv {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#progressLabel {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+#progressBar {
+    width: 60%;
+    display: inline-block;
+    margin: 0;
+}
+
+#progressCounter {
+    width: 30%;
+    margin: 0;
+    display: inline-block;
+    margin-left: auto;
+}

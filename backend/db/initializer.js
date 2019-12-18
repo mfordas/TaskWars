@@ -62,8 +62,8 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
     return {
       name: prefix + x,
       level: 10 + x,
-      health: 10*x,
-      exp_points: 100*x,
+      health: 10*(x+1),
+      exp_points: 100*(x+1),
       physical_power: 15 + x,
       magical_power: 20 + x, 
       class: "Druid",

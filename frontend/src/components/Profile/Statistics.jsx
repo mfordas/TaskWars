@@ -4,6 +4,10 @@ import 'semantic-ui-css/semantic.min.css';
 import StatisticsRow from './StatisticsRow';
 
 class Statistics extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
     render() {
         return (
             <div>
@@ -16,12 +20,9 @@ class Statistics extends React.Component {
                     </Table.Header>
 
                     <Table.Body>
-                        <StatisticsRow name="Name" image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
-                        <StatisticsRow name="Level" image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
-                        <StatisticsRow name="Class" image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
-                        <StatisticsRow name="Guild" image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
-                        <StatisticsRow name="Physical Power" image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
-                        <StatisticsRow name="Magical Power" image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
+                        <StatisticsRow name="Class" value={this.props.class} image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
+                        <StatisticsRow name="Physical Power" value={this.props.physical} image="https://image.flaticon.com/icons/png/512/834/premium/834240.png"/>
+                        <StatisticsRow name="Magical Power" value={this.props.magical} image="https://cdn3.iconfinder.com/data/icons/halloween-2243/512/Halloween_magic-cap-witch-wizzard-512.png"/>
                     </Table.Body>
                 </Table>
             </div>
