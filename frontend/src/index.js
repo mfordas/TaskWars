@@ -52,7 +52,7 @@ const App = () => {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
-          <Route exact path="/questbook" component={Questbook} />
+          <PrivateRoute exact path="/questbook" component={Questbook} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </Container>

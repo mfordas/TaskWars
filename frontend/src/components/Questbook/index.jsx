@@ -1,18 +1,10 @@
-import React, { useContext, Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Container, Header, Menu } from 'semantic-ui-react';
-import Store from '../../Store';
 import TasksTable from './defaultTasks';
 
-
 const QuestbookContent = () => {
-//   const { isLogged, changeStore, me } = useContext(Store);
-//   const handleLogout = () => {
-//     localStorage.removeItem('token');
-//     localStorage.removeItem('id');
-//     changeStore('isLogged', false);
-//     changeStore('me', null);
-//   };
+
 
   return (
     <Container text>
@@ -21,7 +13,16 @@ const QuestbookContent = () => {
             as={NavLink}
           name="Completed" 
           activeClassName="active"
-          to="/" 
+          to="/questbook" 
+          exact
+        >
+          All
+        </Menu.Item>
+        <Menu.Item
+            as={NavLink}
+          name="Completed" 
+          activeClassName="active"
+          to="/questbook/completed" 
           exact
         >
           Completed
@@ -30,7 +31,7 @@ const QuestbookContent = () => {
         <Menu.Item
         as={NavLink}
           name="Uncompleted" 
-          to="/tasks"
+          to="/questbook/uncompleted"
         >
           Uncompleted
         </Menu.Item>
@@ -38,18 +39,11 @@ const QuestbookContent = () => {
         <Menu.Item
         as={NavLink}
           name="Failed" 
-          to="/tasks"
+          to="/questbook/failed"
         >
           Failed
         </Menu.Item>
       </Menu>
-    <Header as='h2'>Header</Header>
-    <p>
-      Paragraph1
-    </p>
-    <p>
-      Paragraph2
-    </p>
     <TasksTable />
   </Container>
   );
