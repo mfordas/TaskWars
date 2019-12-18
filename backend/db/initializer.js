@@ -71,6 +71,9 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
       inventory_id: inventoryCatalog[x],
       //guild has empty field so character is not a member of any guild by deafult
       guilds: [
+        guildCatalog[0],
+        guildCatalog[1],
+        guildCatalog[3],
       ]
     };
   });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, HealthBar, ExperienceBar, Statistics, Details} from '../../components/Profile'
+import { Avatar, HealthBar, ExperienceBar, Statistics, Details, Guilds} from '../../components/Profile'
 import { Container, Divider, Progress, Header } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 
@@ -14,6 +14,7 @@ class Profile extends React.Component {
     class: "",
     physical: 0,
     magical: 0,
+    guildsNames: [],
   } 
 
   componentDidMount() {
@@ -39,7 +40,24 @@ class Profile extends React.Component {
         physical: body.physical_power,
         magical: body.magical_power
       })
+
+      this.fetchGuilds(body.guilds);
   }
+
+  fetchGuilds = async (idList) => {
+    const names = [];
+    const requests = idList.map(async (id) => {
+        const response = await fetch(`/api/guilds/${id}`, setHeaders());
+        const body = await response.json();
+        names.push(body.name);
+    })
+
+    Promise.all(requests).then(() => {
+      this.setState({
+        guildsNames: names
+      })
+    })
+}
 
   render() {
     return (
@@ -57,7 +75,7 @@ class Profile extends React.Component {
           <Statistics class={this.state.class} physical={this.state.physical} magical={this.state.magical}/>
         </div>
         <div className="profileCharacterGuilds">
-          <Statistics class={this.state.class} physical={this.state.physical} magical={this.state.magical}/>
+          <Guilds guilds={this.state.guildsNames}/>
         </div>
       </div>
     );
