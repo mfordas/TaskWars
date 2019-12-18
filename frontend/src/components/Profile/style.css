@@ -1,6 +1,6 @@
 .profileViewDiv{
     display: grid;
-    grid-template-columns: 50% 20% 20%;
+    grid-template-columns: 50% 25% 25%;
 }
 
 .profileCharacterDetails {
@@ -13,13 +13,31 @@
 }
 
 .profileCharacterStatistics {
-    display: flex;
-    align-items: flex-end;
+    display: grid;
+    grid-template-rows: 50% 50%;
 }
 
 .profileCharacterGuilds {
-    display: flex;
-    align-items: flex-end;
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
+.statistics{
+    padding: 5%;
+    grid-row-start: 2;
+    margin: 0 auto;
+}
+
+.guild{
+    grid-row-start: 2;
+    padding: 5%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.guildsList {
+    height: 200px;
+    overflow-x: auto;
 }
 
 .avatarDiv {
@@ -36,7 +54,7 @@
 
 #progressDiv {
     width: 100%;
-    margin: 0;
+    margin: 2% 0;
     display: flex;
     flex-wrap: wrap;
 }

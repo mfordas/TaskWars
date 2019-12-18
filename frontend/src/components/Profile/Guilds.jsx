@@ -56,15 +56,15 @@ class Guilds extends React.Component {
 
     render() {
         return (
-            <div>
-                  <Table basic='very' celled collapsing>
+            <div className="guild">
+                  <Table style={{width: "100%"}} basic='very' celled collapsing>
                     <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Character Guilds</Table.HeaderCell>
                     </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        <div>{this.renderList()}</div>
+                        <div className="guildsList">{this.renderList()}</div>
                     </Table.Body>
                 </Table>
             </div>

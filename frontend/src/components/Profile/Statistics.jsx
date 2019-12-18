@@ -10,7 +10,7 @@ class Statistics extends React.Component {
     
     render() {
         return (
-            <div>
+            <div className="statistics">
                   <Table basic='very' celled collapsing>
                     <Table.Header>
                     <Table.Row>
