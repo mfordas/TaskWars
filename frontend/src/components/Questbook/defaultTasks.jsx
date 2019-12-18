@@ -1,37 +1,50 @@
 import React from 'react';
-import axios from 'axios';
 import _ from 'lodash';
 import { Button, Icon, Item, Label } from 'semantic-ui-react';
-import Store from '../../Store';
+import setHeaders from '../../utils/setHeaders';
 
 class TasksTable extends React.Component {
-  static contextType = Store;
 
   state = {
-    tasks: [],
-    questbookId: ''
+    tasks: []
   }
 
   
 
-  getData() {
+  fetchUser = async () => {
+    const response = await fetch('/api/users/me', setHeaders());
+    const body = await response.json();
+    console.log(body.character_id);
+    console.log(1);
+    this.fetchCharacter(body.character_id);
     
-    if (!(_.isEqual(this.props.tasks, this.state.tasks))) {
-      axios({
-        url: `/api/questbook/5dfa2555ea37012b345fc36e/tasks`,
-        method: 'get',
-        headers: {'x-auth-token': localStorage.getItem('token'),},
-      }).then(  result => {
-          console.log(result.data);
-        var myTasks = result.data;
-        console.log(myTasks);        
-        this.setState({ tasks: myTasks });
-      }).catch()  
-    }
   }
 
+
+  fetchCharacter = async (id) => {
+    const response = await fetch(`/api/characters/${id}`, setHeaders());
+    const body = await response.json();
+    console.log(body);
+    this.getData(body.questbook_id);
+    
+    
+    }
+
+
+    getData = async (id) => {
+      const response = await fetch(`/api/questbook/${id}/tasks`, setHeaders());
+      const body = await response.json();
+      console.log(body);
+      this.setState(
+        {
+          tasks: body
+        }
+      )
+      }
+  
+
   componentDidMount() {
-    this.getData()
+    this.fetchUser()
     console.log('mounted')
   }
   
@@ -45,7 +58,7 @@ class TasksTable extends React.Component {
         <Item.Group divided>
         {this.state.tasks.map(x => (
 
-    <Item key={x._id}>
+    <Item key={x._id} >
     <Item.Image src='https://icons-for-free.com/iconfiles/png/128/description+note+problem+task+tasks+icon-1320168114384620466.png'  />
 
     <Item.Content>
@@ -61,9 +74,9 @@ class TasksTable extends React.Component {
           Start task
           <Icon name='right chevron' />
         </Button>
-        <Label>{x.category}</Label>
-        <Label>Gold: {x.reward.gold}</Label>
-        <Label>Exp: {x.reward.exp}</Label>
+        <Label color = 'brown'>{x.category}</Label>
+        <Label color = 'yellow'>Gold: {x.reward.gold}</Label>
+        <Label color = 'teal'>Exp: {x.reward.exp}</Label>
       </Item.Extra>
     </Item.Content>
   </Item>
