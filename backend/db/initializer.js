@@ -40,7 +40,7 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
     return {
       email: prefix + x + '@email.com',
       password: userPassword,
-      character_id: characterCatalog[x],
+      character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
       isAdmin: false
     };
   });
@@ -57,8 +57,8 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
       physical_power: 15 + x,
       magical_power: 20 + x, 
       class: "Druid",
-      questbook_id: questbookCatalog[x],
-      inventory_id: inventoryCatalog[x],
+      questbook_id: questbookCatalog[x] === undefined ? null : questbookCatalog[x],
+      inventory_id: inventoryCatalog[x] === undefined ? null : inventoryCatalog[x],
       //guild has empty field so character is not a member of any guild by deafult
       guilds: [
       ]
@@ -75,7 +75,7 @@ const createGuilds = async (prefix, count,  models, creatureCatalog) => {
       leader: null,
       members: [],
       type: "Utility",
-      current_fight: creatureCatalog[x],
+      current_fight: creatureCatalog[x] === undefined ? null : creatureCatalog[x],
     };
   });
   return await createModelBatch(models.guild, guildData);
