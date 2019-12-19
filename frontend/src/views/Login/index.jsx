@@ -4,9 +4,19 @@ import React from 'react';
 const Login = () => {
   //return <Login />;
   return (
-    <div>
-      Login Page here
-    </div>
+    <form method="POST" action="api/auth">
+      <p>
+        <label>Email Address</label>
+        <input type="email" name="email"></input>
+      </p>
+      <p>
+        <label>Password</label>
+        <input type="password" name="password"></input>
+      </p>
+      <p class="full">
+        <button type="submit">Submit</button>
+      </p>
+    </form>
   );
 };
 

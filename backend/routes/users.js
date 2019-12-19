@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const auth = require('../middleware/authorization');
 const admin = require('../middleware/admin');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
@@ -34,11 +35,11 @@ router.post('/', async (req, res) => {
   const token = user.generateAuthToken();
 
   // send email -----------------
-  const url = `http://127.0.0.1:8080/api/users/confirmation/${user._id}`;
+  const url = `http://127.0.0.1:8080/api/users/confirmation/${token}`;
   let mailOptions = {
     from: 'task.wars12@gmail.com',
     to: req.body.email,
-    sbuject: 'Confirm Email',
+    subject: 'Confirm Email',
     html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
   }
 
@@ -54,10 +55,13 @@ router.post('/', async (req, res) => {
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 
-router.get('/confirmation/:id', async (req, res) => {
+router.get('/confirmation/:token', async (req, res) => {  
   const User = res.locals.models.user;
-  let user = await User.findByIdAndUpdate(req.params.id, { isVerified: true }, { new: true });
-  res.write("Hello User! Your account has been verified.");
+
+  let user = await jwt.verify(req.params.token, process.env.JWTPRIVATEKEY);
+  user = await User.findByIdAndUpdate(user._id, { isVerified: true }, { new: true });
+
+  res.write(`Hello User ${user.email}! Your account has been verified.`);
   res.end();
 });
 
