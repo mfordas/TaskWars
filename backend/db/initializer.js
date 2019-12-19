@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const defaultCreatures = require('./defaultObjects/defaultCreatures')
 const defaultTasks = require('./defaultObjects/defaultTasks')
-
+const defaultItems = require('./defaultObjects/defaultItems')
 
 const transactional = initializer => async (model, models, idCatalog) => {
   let result;
@@ -36,7 +36,17 @@ const arrayWithCount = count => fn => [...Array(count).keys()].map(fn);
 
 const createUsers = async (prefix, count, models, characterCatalog) => {
   const userPassword = await hashPassword(process.env.USER_PASSWORD);
+  const adminPassword = await hashPassword(process.env.ADMIN_PASSWORD);
+  const adminEmail = process.env.ADMIN_EMAIL
   const userData = arrayWithCount(count)(x => {
+    if(x === 0) {
+      return {
+        email: adminEmail,
+        password: adminPassword,
+        character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
+        isAdmin: true
+      };
+    }
     return {
       email: prefix + x + '@email.com',
       password: userPassword,
@@ -107,9 +117,9 @@ const createInventories = async (count, models, itemCatalog) => {
   const inventoryData = arrayWithCount(count)(x => {
     return {
       backpack: [
-        itemCatalog[x*1] === undefined ? null : itemCatalog[x*1],
-        itemCatalog[x*2] === undefined ? null : itemCatalog[x*2],
-        itemCatalog[x*3] === undefined ? null : itemCatalog[x*3],
+        itemCatalog[(x+1)*1] === undefined ? null : itemCatalog[(x+1)*1],
+        itemCatalog[(x+1)*2] === undefined ? null : itemCatalog[(x+1)*2],
+        itemCatalog[(x+1)*3] === undefined ? null : itemCatalog[(x+1)*3],
       ],
       gold: (x+1) * 500,
     };
@@ -119,15 +129,19 @@ const createInventories = async (count, models, itemCatalog) => {
 
 const createItem = async (prefix, count, models) => {
   const itemData = arrayWithCount(count)(x => {
-    return {
-      name: prefix + x,
-      slot: 'Weapon',
-      description: 'Opis itemka' + x,
-      effect: 'Magic_power',
-      effect_value: x,
-      price: 100 * x,
-      equipped: false,
-    };
+    if(defaultItems[x] !== undefined) {
+      return defaultItems[x];
+    } else {
+      return {
+        name: prefix + x,
+        slot: 'Weapon',
+        description: 'Opis itemka' + x,
+        effect: 'Magic_power',
+        effect_value: x,
+        price: 100 * x,
+        equipped: false,
+      };
+  }
   });
   return await createModelBatch(models.item, itemData);
 };
@@ -136,9 +150,9 @@ const createQuestbook = async (count, models, taskCatalog) => {
   const questbookData = arrayWithCount(count)(x => {
     return {
       tasks: [
-        taskCatalog[x*1] === undefined ? null : taskCatalog[x*1],
-        taskCatalog[x*2] === undefined ? null : taskCatalog[x*2],
-        taskCatalog[x*3] === undefined ? null : taskCatalog[x*3],
+        taskCatalog[(x+1)*1] === undefined ? null : taskCatalog[(x+1)*1],
+        taskCatalog[(x+1)*2] === undefined ? null : taskCatalog[(x+1)*2],
+        taskCatalog[(x+1)*3] === undefined ? null : taskCatalog[(x+1)*3],
       ]
     };
   });
@@ -194,7 +208,7 @@ const inventoryInitializer = async (models, idCatalog) => {
 
 const itemInitializer = async (models, idCatalog) => {
   const prefix = 'Item_';
-  return await createItem(prefix, 9, models);
+  return await createItem(prefix, defaultItems.length, models);
 };
 
 const questbookInitializer = async (models, idCatalog) => {
@@ -205,6 +219,23 @@ const taskInitializer = async (models, idCatalog) => {
   const prefix = 'Task_';
   return await createTask(prefix, defaultTasks.length,  models);
 };
+
+const addCharactersToGuilds = async (characters, guilds, models) => {
+  let j = 3;
+  let g = [];
+  for(let i=0; i<characters.length; i++) {
+    const character = await models["character"].findById(characters[i]);
+    if (!character) return null;
+
+    for(let z=(j*i); z<j*i+3; z++) {
+      let guild = await models["guild"].findById(guilds[z]);
+      if (!guild) return null;
+      await models["guild"].findByIdAndUpdate(guilds[z], { members: [character] }, { new: true });
+      g.push(guilds[z]);
+    }
+    await models["character"].findByIdAndUpdate(characters[i], { guilds: g }, { new: true });
+  }
+}
 
 const defaultInitializers = new Map([
   ['task', taskInitializer],
@@ -240,6 +271,7 @@ const initialize = async (models, initializers = defaultInitializers) => {
     const initializer = initializers.get(modelName);
     idCatalog[modelName] = await transactional(initializer)(models[modelName], models, idCatalog);
   }
+  addCharactersToGuilds(idCatalog["character"], idCatalog["guild"], models)
 };
 
 module.exports = initialize;
