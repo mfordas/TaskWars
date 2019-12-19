@@ -107,11 +107,11 @@ const createInventories = async (count, models, itemCatalog) => {
   const inventoryData = arrayWithCount(count)(x => {
     return {
       backpack: [
-        itemCatalog[x*1],
-        itemCatalog[x*2],
-        itemCatalog[x*3]
+        itemCatalog[x*1] === undefined ? null : itemCatalog[x*1],
+        itemCatalog[x*2] === undefined ? null : itemCatalog[x*2],
+        itemCatalog[x*3] === undefined ? null : itemCatalog[x*3],
       ],
-      gold: x * 500,
+      gold: (x+1) * 500,
     };
   });
   return await createModelBatch(models.inventory, inventoryData);
@@ -136,9 +136,9 @@ const createQuestbook = async (count, models, taskCatalog) => {
   const questbookData = arrayWithCount(count)(x => {
     return {
       tasks: [
-        taskCatalog[x*1],
-        taskCatalog[x*2],
-        taskCatalog[x*3]
+        taskCatalog[x*1] === undefined ? null : taskCatalog[x*1],
+        taskCatalog[x*2] === undefined ? null : taskCatalog[x*2],
+        taskCatalog[x*3] === undefined ? null : taskCatalog[x*3],
       ]
     };
   });
