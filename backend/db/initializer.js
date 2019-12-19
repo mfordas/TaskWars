@@ -35,11 +35,11 @@ const arrayWithCount = count => fn => [...Array(count).keys()].map(fn);
 ///Tu zaczynacie pisać
 
 const createUsers = async (prefix, count, models, characterCatalog) => {
-  const password = await hashPassword('Task-Wars-Admin');
+  const userPassword = await hashPassword(process.env.USER_PASSWORD);
   const userData = arrayWithCount(count)(x => {
     return {
       email: prefix + x + '@email.com',
-      password,
+      password: userPassword,
       character_id: characterCatalog[x],
       isAdmin: false
     };
@@ -52,8 +52,8 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
     return {
       name: prefix + x,
       level: 10 + x,
-      health: 10*x,
-      exp_points: 100*x,
+      health: 10*(x+1),
+      exp_points: 100*(x+1),
       physical_power: 15 + x,
       magical_power: 20 + x, 
       class: "Druid",
@@ -170,12 +170,12 @@ const createTask = async (prefix, count, models) => {
 
 const userInitializer = async (models, idCatalog) => {
   const prefix = 'user';
-  return await createUsers(prefix, 3, models, idCatalog["character"]);
+  return await createUsers(prefix, 4, models, idCatalog["character"]);
 };
 
 const characterInitializer = async (models, idCatalog) => {
   const prefix = 'Character_';
-  return await createCharacters(prefix, 3, models, idCatalog["questbook"], idCatalog["guild"], idCatalog["inventory"]);
+  return await createCharacters(prefix, 4, models, idCatalog["questbook"], idCatalog["guild"], idCatalog["inventory"]);
 };
 
 const guildInitializer = async (models, idCatalog) => {
@@ -189,7 +189,7 @@ const creatureInitializer = async (models, idCatalog) => {
 };
 
 const inventoryInitializer = async (models, idCatalog) => {
-  return await createInventories(3, models, idCatalog["item"]);
+  return await createInventories(4, models, idCatalog["item"]);
 };
 
 const itemInitializer = async (models, idCatalog) => {
