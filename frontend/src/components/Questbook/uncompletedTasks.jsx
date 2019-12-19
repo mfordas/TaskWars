@@ -1,9 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Icon, Item, Label } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 
-class AllTasks extends React.Component {
+class UncompletedTasks extends React.Component {
 
   state = {
     tasks: []
@@ -32,7 +32,7 @@ class AllTasks extends React.Component {
 
 
     getData = async (id) => {
-      const response = await fetch(`/api/questbook/${id}/tasks`, setHeaders());
+      const response = await fetch(`/api/questbook/${id}/uncompleted`, setHeaders());
       const body = await response.json();
       console.log(body);
       this.setState(
@@ -55,11 +55,10 @@ class AllTasks extends React.Component {
 
   render() {
     return (
-      <Segment>
         <Item.Group divided>
         {this.state.tasks.map(x => (
 
-    <Item key={x._id}>
+    <Item key={x._id} >
     <Item.Image src='https://icons-for-free.com/iconfiles/png/128/description+note+problem+task+tasks+icon-1320168114384620466.png'  />
 
     <Item.Content>
@@ -82,10 +81,9 @@ class AllTasks extends React.Component {
     </Item.Content>
   </Item>
           ))}
-         </Item.Group> 
-         </Segment>  
+         </Item.Group>   
     );
   }
 }
 
-export default AllTasks;    
+export default UncompletedTasks;    
