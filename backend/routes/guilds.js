@@ -64,4 +64,18 @@ router.put('/:id/current_fight', async (req, res) => {
   res.send(guild);
 });
 
+router.put('/:id/flag', async (req, res) => {
+  const Guild = res.locals.models.guild;
+
+  const { error } = validateGuild(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let guild = await Guild.findById(req.params.id);
+  if (!guild) return res.status(404).send('The guild with given ID was not found');
+
+  guild = await Guild.findByIdAndUpdate(req.params.id, { flag: req.body.flag }, { new: true });
+
+  res.send(guild);
+});
+
 module.exports = router;
