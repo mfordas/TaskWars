@@ -31,10 +31,11 @@ router.post('/', async (req, res) => {
 
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
+  user.confirmPassword = await bcrypt.hash(user.confirmPassword, salt);
   await user.save();
   const token = user.generateAuthToken();
 
-  // send email -----------------
+  // // send email -----------------
   const url = `http://127.0.0.1:8080/api/users/confirmation/${token}`;
   sednEmail(req.body.email, url);
 
