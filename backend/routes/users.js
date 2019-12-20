@@ -4,8 +4,21 @@ const { validateUser } = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/authorization');
 const admin = require('../middleware/admin');
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
+
+// --------- Mail settings----------------------
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL, // TODO: your gmail account
+    pass: process.env.PASSWORD
+  }
+});
+// ------ end mail settings---------------------
 
 router.post('/', async (req, res) => {
   const User = res.locals.models.user;
@@ -19,9 +32,37 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
-
   const token = user.generateAuthToken();
+
+  // send email -----------------
+  const url = `http://127.0.0.1:8080/api/users/confirmation/${token}`;
+  let mailOptions = {
+    from: 'task.wars12@gmail.com',
+    to: req.body.email,
+    subject: 'Confirm Email',
+    html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+  }
+
+  transporter.sendMail(mailOptions, function (err, data) {
+    if (err) {
+      console.log('Error Occurs: ', err);
+    } else {
+      console.log('Email sent!!!');
+    }
+  });
+  // ---------------------------
+
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+});
+
+router.get('/confirmation/:token', async (req, res) => {  
+  const User = res.locals.models.user;
+
+  let user = await jwt.verify(req.params.token, process.env.JWTPRIVATEKEY);
+  user = await User.findByIdAndUpdate(user._id, { isVerified: true }, { new: true });
+
+  res.write(`Hello User ${user.email}! Your account has been verified.`);
+  res.end();
 });
 
 router.get('/', async (req, res) => {
@@ -53,6 +94,7 @@ router.get('/:id', async (req, res) => {
 
   res.send(_.pick(user, ['_id', 'email']));
 });
+
 
 router.put('/me/password', auth, async (req, res) => {
   const User = res.locals.models.user;

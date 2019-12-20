@@ -31,6 +31,10 @@ const guildSchema = new mongoose.Schema({
     ref: 'Creature',
     default: null,
   },
+  flag: {
+    type: String,
+    default: '',
+  },
 });
 
 function validateGuild(guild) {
@@ -43,6 +47,7 @@ function validateGuild(guild) {
     members: Joi.array().items(Joi.objectId()),
     type: Joi.valid('Physical', 'Mental', 'Utility'),
     current_fight: Joi.objectId(),
+    flag: Joi.string(),
   });
 
   return schema.validate(guild);

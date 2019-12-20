@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 
+
 import Store, { StoreProvider } from './Store';
 import setHeaders from './utils/setHeaders';
 import AppBar from './components/AppBar';
@@ -12,6 +13,12 @@ import Login from './views/Login';
 import Register from './views/Register';
 import Tasks from './views/Tasks';
 import Profile from './views/Profile';
+import Questbook from './views/Questbook';
+
+const styleLink = document.createElement("link");
+styleLink.rel = "stylesheet";
+styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
+document.head.appendChild(styleLink);
 
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
@@ -47,6 +54,7 @@ const App = () => {
           <Route path="/register" component={Register} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <Route exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/questbook" component={Questbook} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </Container>

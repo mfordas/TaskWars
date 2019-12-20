@@ -35,6 +35,11 @@ const characterSchema = new mongoose.Schema({
     enum: ['', 'Warrior', 'Hunter', 'Mage', 'Druid'],
     default: '',
   },
+  avatar: {
+    type: String,
+    enum: ['default', 'Warrior', 'Hunter', 'Mage', 'Druid'],
+    default: 'default',
+  },
   exp_points: {
     type: Number,
     default: 0,
