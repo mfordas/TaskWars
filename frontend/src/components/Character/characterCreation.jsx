@@ -8,7 +8,7 @@ import {
   Label,
   Image
 } from 'semantic-ui-react'
-
+import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 
 const classChosen = {
@@ -42,26 +42,48 @@ class CharacterCreation extends React.Component {
     questbook_id: '5dfbfa9c9f0dfe3ef4e512f5'
   }
 
-  postCharacter = async (state) => {
-    const data = state;
-    console.log(data)
-    try {
-      const response = await fetch('http://localhost:8080/api/characters', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: setHeaders(),
-        mode: 'no-cors'
-      });
-      const json = await response.json();
-      console.log('Success:', JSON.stringify(json));
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  // postCharacter = async (state) => {
+  //   const data = state;
+  //   console.log(data)
+  //   try {
+  //     const response = await fetch('http://localhost:8080/api/characters', {
+  //       method: 'POST',
+  //       body: {
+  //         "name": "Habarala",
+  //         "charClass": "Druid",
+  //         "inventory_id": "5dfbfa9c9f0dfe3ef4e511f5",
+  //         "questbook_id": "5dfbfa9c9f0dfe3ef4e512f5"
+  //       },
+  //       headers: setHeaders(),
+  //       mode: 'no-cors'
+  //     });
+  //     const json = await response.json();
+  //     console.log('Success:', JSON.stringify(json));
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // }
+  //JSON.stringify(data)
+
+  postCharacter = async () =>{
+    await axios({
+      url: 'api/characters',
+      method: 'post',
+      data: {
+        name: this.state.name,
+        charClass: this.state.charClass,
+        inventory_id: this.state.inventory_id,
+        questbook_id: this.state.questbook_id
+      },
+      headers: setHeaders(),
+    })
   }
-  
+
+
+
 
   handleButtonClick = () => {
-    this.postCharacter(this.state)
+    this.postCharacter()
   }
 
   handleInputChange = (e, {name, value}) => this.setState({name: value});
@@ -84,11 +106,11 @@ class CharacterCreation extends React.Component {
             />
           </Form.Group>
           <Form.Group>
-            <Label>Class:</Label>
-            <Radio label = 'Warrior' name = "charClassRadio" value = 'Warrior'  checked={this.charClass === 'Warrior'} onChange ={this.handleRadioChange} />
-            <Radio label = 'Hunter' name = "charClassRadio" value = 'Hunter'  checked={this.charClass === 'Hunter'} onChange ={this.handleRadioChange} />
-            <Radio label = 'Mage' name = "charClassRadio" value = 'Mage'  checked={this.charClass === 'Mage'} onChange ={this.handleRadioChange} />
-            <Radio label = 'Druid' name = "charClassRadio" value = 'Druid' checked={this.charClass === 'Druid'} onChange ={this.handleRadioChange} />
+            <Header>Class: </Header>
+            <Radio label = 'Warrior' name = "charClassRadio" value = 'Warrior'  checked={charClass === 'Warrior'} onChange ={this.handleRadioChange} />
+            <Radio label = 'Hunter' name = "charClassRadio" value = 'Hunter'  checked={charClass === 'Hunter'} onChange ={this.handleRadioChange} />
+            <Radio label = 'Mage' name = "charClassRadio" value = 'Mage'  checked={charClass === 'Mage'} onChange ={this.handleRadioChange} />
+            <Radio label = 'Druid' name = "charClassRadio" value = 'Druid' checked={charClass === 'Druid'} onChange ={this.handleRadioChange} />
           </Form.Group>
           <Button onClick ={this.handleButtonClick}>Create</Button>
         </Form>
