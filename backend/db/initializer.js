@@ -67,6 +67,7 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
       physical_power: 15 + x,
       magical_power: 20 + x, 
       charClass: "Druid",
+      avatar: 'http://icons.iconarchive.com/icons/chanut/role-playing/256/Villager-icon.png',
       questbook_id: questbookCatalog[x] === undefined ? null : questbookCatalog[x],
       inventory_id: inventoryCatalog[x] === undefined ? null : inventoryCatalog[x],
       //guild has empty field so character is not a member of any guild by deafult
@@ -107,6 +108,7 @@ const createCreatures = async (prefix, count, models, taskCatalog) => {
         reward: 50+x,
         duration: x+6,
         task_to_dmg: taskCatalog[x],
+        picture: ''
       };
     }
   });
@@ -140,6 +142,7 @@ const createItem = async (prefix, count, models) => {
         effect_value: x,
         price: 100 * x,
         equipped: false,
+        picture: '',
       };
   }
   });

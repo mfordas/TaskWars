@@ -17,11 +17,6 @@ const db = require('./db');
 const main = async () => {
   const app = express();
 
-  if (app.get('env') == 'development') {
-    app.use(morgan('tiny'));
-    debug('Morgan enabled...');
-  }
-
   // Database configuration
 
   const connection = await db.connect();
