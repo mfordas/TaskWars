@@ -18,6 +18,9 @@ router.post('/', async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid email or password.');
 
+  if(req.body.isVerified === false)
+    return res.status(400).send('You must first confirm the registration.');
+
   const token = user.generateAuthToken();
 
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'email']));

@@ -1,22 +1,12 @@
 import React from 'react';
-//import Login from '../../components/Login';
+import Bar from '../../components/Login/bar';
 
 const Login = () => {
-  //return <Login />;
   return (
-    <form method="POST" action="api/auth">
-      <p>
-        <label>Email Address</label>
-        <input type="email" name="email"></input>
-      </p>
-      <p>
-        <label>Password</label>
-        <input type="password" name="password"></input>
-      </p>
-      <p class="full">
-        <button type="submit">Submit</button>
-      </p>
-    </form>
+    <div className="ui container" style={{ marginTop: '10px', width: '350px'}}>
+      <h3>Login</h3>
+      <Bar/>
+    </div>
   );
 };
 

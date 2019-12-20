@@ -1,20 +1,12 @@
 import React from 'react';
+import Bar from './../../components/Register/bar';
 
 const Register = () => {
   return (
-    <form method="POST" action="api/users">
-      <p>
-        <label>Email Address</label>
-        <input type="email" name="email"></input>
-      </p>
-      <p>
-        <label>Password</label>
-        <input type="password" name="password"></input>
-      </p>
-      <p class="full">
-        <button type="submit">Submit</button>
-      </p>
-    </form>
+    <div className="ui container" style={{ marginTop: '10px', width: '350px' }}>
+      <h3>Register</h3>
+      <Bar />
+    </div>
   );
 };
 
