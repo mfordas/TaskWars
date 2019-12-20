@@ -1,0 +1,79 @@
+.profileViewDiv{
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
+}
+
+.profileCharacterDetails {
+    display:flex;
+    flex-wrap: wrap;
+}
+
+.profileCharacterDetails > h1 {
+    width: 100%;
+}
+
+.profileCharacterStatistics {
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
+.profileCharacterGuilds {
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
+.statistics{
+    padding: 5%;
+    grid-row-start: 2;
+    margin: 0 auto;
+}
+
+.guild{
+    grid-row-start: 2;
+    padding: 5%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.guildsList {
+    height: 200px;
+    overflow-x: auto;
+}
+
+.avatarDiv {
+    width: 60%;
+}
+
+.detailsDiv {
+    width: 40%;
+}
+
+.progress {
+    width: 100%;
+}
+
+#progressDiv {
+    width: 100%;
+    margin: 2% 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#progressLabel {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+#progressBar {
+    width: 60%;
+    display: inline-block;
+    margin: 0;
+}
+
+#progressCounter {
+    width: 30%;
+    margin: 0;
+    display: inline-block;
+    margin-left: auto;
+}
