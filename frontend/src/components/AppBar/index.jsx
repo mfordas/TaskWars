@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 import Store from '../../Store';
-
 
 const AppBar = () => {
   const { isLogged, changeStore, me } = useContext(Store);
