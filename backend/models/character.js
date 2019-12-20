@@ -30,7 +30,7 @@ const characterSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  class: {
+  charClass: {
     type: String,
     enum: ['', 'Warrior', 'Hunter', 'Mage', 'Druid'],
     default: '',
@@ -63,7 +63,7 @@ function validateCharacter(character) {
       .max(50)
       .required(),
     level: Joi.number().min(0),
-    class: Joi.valid('Warrior', 'Hunter', 'Mage', 'Druid'),
+    charClass: Joi.valid('Warrior', 'Hunter', 'Mage', 'Druid'),
     exp_points: Joi.number().min(0),
     health: Joi.number().min(0),
     physical_power: Joi.number().min(0),

@@ -11,6 +11,7 @@ import Home from './views/Homepage';
 import Login from './views/Login';
 import Register from './views/Register';
 import Tasks from './views/Tasks';
+import Character from './views/Character'
 
 const App = () => {
   const { isLogged, changeStore } = useContext(Store);
@@ -44,6 +45,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route exact path="/characterCreation" component={Character} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>

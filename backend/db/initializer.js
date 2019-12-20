@@ -56,7 +56,7 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
       exp_points: 100*x,
       physical_power: 15 + x,
       magical_power: 20 + x, 
-      class: "Druid",
+      charClass: "Druid",
       questbook_id: questbookCatalog[x],
       inventory_id: inventoryCatalog[x],
       //guild has empty field so character is not a member of any guild by deafult
