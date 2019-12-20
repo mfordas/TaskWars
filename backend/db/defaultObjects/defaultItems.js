@@ -1,0 +1,88 @@
+
+const defaultItems = [
+//-----------------------------Weapon----------------------------
+  {
+    name: "Staff of Compilation",
+    slot: 'Weapon',
+    description: 'Hit and Run without debugging',
+    effect: "magic_power",
+    effect_value: 10,
+    price: 300,
+    equipped: false,
+  },
+  {
+    name: 'Decrementer',
+    slot: 'Weapon',
+    description: 'Few iterations and your health is gone',
+    effect: "physical_power and health",
+    effect_value: 5,
+    price: 300,
+    equipped: false,
+  },
+  {
+    name: "Agile Bow",
+    slot: 'Weapon',
+    description: 'Agile and deadly',
+    effect: "physical_power",
+    effect_value: 10,
+    price: 300,
+    equipped: false,
+  },
+  {
+    name: "Python Flail",
+    slot: 'Weapon',
+    description: 'x++ at home: x +=1',
+    effect: "magic_power and health",
+    effect_value: 5,
+    price: 300,
+    equipped: false,
+  },
+  {
+    name: "RESTful sword",
+    slot: 'Weapon',
+    description: '',
+    effect: "",
+    effect_value: 0,
+    price: 0,
+    equipped: false,
+  },
+  {
+    name: "Nullifier (bow)",
+    slot: 'Weapon',
+    description: '',
+    effect: "",
+    effect_value: 0,
+    price: 0,
+    equipped: false,
+  },
+  {
+    name: "Wand of Pointers",
+    slot: 'Weapon',
+    description: 'Pointer to lower health',
+    effect: "",
+    effect_value: 0,
+    price: 0,
+    equipped: false,
+  },
+//----------------------------Usable-------------------------
+  {
+    name: "Health Potion",
+    slot: 'Usable',
+    description: 'Drink and be healed',
+    effect: "regains hp",
+    effect_value: 100,
+    price: 100,
+    equipped: false,
+  },
+  {
+    name: "Scroll of Timestamp",
+    slot: 'Usable',
+    description: 'One cheat day won\'t hurt me',
+    effect: "no daily task failure penalty",
+    effect_value: 0,
+    price: 1000,
+    equipped: false,
+  },
+]
+
+module.exports = defaultItems;
