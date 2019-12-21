@@ -7,6 +7,12 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    minlength: 3,
+    maxlength: 255,
+    trim: true,
+  },
   email: {
     type: String,
     required: true,
@@ -22,6 +28,13 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     trim: true,
   },
+  confirmPassword: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 1024,
+    trim: true,
+  },
   character_id: {
     type: ObjectId,
     ref: 'Character',
@@ -31,16 +44,27 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  }
 });
 
-userSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.JWTPRIVATEKEY);
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({
+    _id: this._id,
+    isAdmin: this.isAdmin
+  }, process.env.JWTPRIVATEKEY);
   return token;
 };
 
 //const User = mongoose.model('User', userSchema);
 function validateUser(user) {
   const schema = Joi.object({
+    name: Joi.string()
+      .min(3)
+      .max(26)
+      .trim(),
     email: Joi.string()
       .min(8)
       .max(26)
@@ -51,6 +75,10 @@ function validateUser(user) {
       .min(8)
       .max(26)
       .required()
+      .trim(),
+    confirmPassword: Joi.string()
+      .min(8)
+      .max(26)
       .trim(),
     character_id: Joi.objectId(),
     isAdmin: Joi.boolean(),
