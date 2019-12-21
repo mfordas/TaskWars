@@ -44,7 +44,7 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
         email: adminEmail,
         password: adminPassword,
         character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
-        isAdmin: false,
+        isAdmin: true,
         isVerified: true
       };
     }
