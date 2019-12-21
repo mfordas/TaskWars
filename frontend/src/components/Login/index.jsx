@@ -1,54 +1,55 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   Button,
   Form,
   Header,
   Segment
 } from 'semantic-ui-react'
-import setHeaders from '../../utils/setHeaders';
+import jwt from 'jwt-decode';
+
+import Store from '../../Store';
 const axios = require('axios');
 
-class RegisterContent extends React.Component {
+class Login extends React.Component {
 
   state = {
     email: '',
     password: '',
   }
 
-  logIn = () => {
-    console.log('User Logged In');
-    localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGZkZjIwODEwZDJjZDA1ZmM3YTRjYTAiLCJuYW1lIjoiT2xlazMiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTc2OTIzNjU2fQ.XqNPMtn4Ta9kAl5uxTLJxtRytH-a5n2Xf7RcDWHBM-U');
-    window.location.reload(true);
-  }
+  static contextType = Store;
 
-  postData = async (state) => {
-    const data = state;
+  onButtonSubmit = async e => {
+    e.preventDefault();
+    const data = this.state;
     try {
-      const res = await axios({
-        method: 'post',
-        url: '/api/auth', 
-        data: data,
-        headers: setHeaders()
+    const res = await axios({
+      method: 'post',
+      url: '/api/auth', 
+      data: data,
+        headers: {
+          'Content-Type': 'application/json',
+        }
       });
-      console.log(`Success: ${res.data}`);
-      this.logIn();
-    } catch (error) {
-      console.error('Error Registration:', error);
+      
+      if (res.status === 200) {
+        const token = res.headers["x-auth-token"];
+        localStorage.setItem('token', token);
+        localStorage.setItem('id', jwt(token)._id);
+        this.context.changeStore('isLogged', true);
+        this.setState({ isLogged: true });
+      } else {
+        this.setState({ invalidData: true });
+      }
     }
+   catch (error) {
+    console.error('Error Registration:', error);
   }
-
-  onButtonSubmit = () => {
-    console.log(this.state)
-    this.postData(this.state)
-  }
-
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+}
 
   render() {
-    const {
-      email,
-      password,      
-    } = this.state
+    if (this.context.isLogged) return <Redirect to="/" />;
 
     return (
       <Segment compact>
@@ -60,8 +61,8 @@ class RegisterContent extends React.Component {
             placeholder='Email'
             name='email'
             type='email'
-            value={email}
-            onChange={this.handleChange}
+            value={this.state.email}
+            onChange={e => this.setState({ email: e.target.value })}
           />
 
           <Form.Input
@@ -69,15 +70,15 @@ class RegisterContent extends React.Component {
             placeholder='Password'
             name='password'
             type='password'
-            value={password}
-            onChange={this.handleChange}
+            value={this.state.password}
+            onChange={e => this.setState({ password: e.target.value })}
           />
 
-          <Form.Field color='purple' control={Button} >Submit</Form.Field>
+          <Button color='purple' type='submit'>Submit</Button>
         </Form>
       </Segment>
     );
   }
 }
 
-export default RegisterContent;
+export default Login;

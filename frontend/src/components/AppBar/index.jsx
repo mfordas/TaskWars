@@ -34,7 +34,7 @@ const AppBar = () => {
           </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item as={Link} name= {me ? me.email: 'user' } to="/profile" />
-            <Menu.Item as={Link} name="Wyjdź" to="/" onClick={handleLogout} />
+            <Menu.Item as={Link} name="Log out" to="/" onClick={handleLogout} />
           </Menu.Menu>
           </>
         )}

@@ -5,7 +5,6 @@ import {
   Header,
   Segment
 } from 'semantic-ui-react'
-import setHeaders from '../../utils/setHeaders';
 const axios = require('axios');
 
 class RegisterContent extends React.Component {
@@ -24,9 +23,13 @@ class RegisterContent extends React.Component {
         method: 'post',
         url: '/api/users', 
         data: data,
-        headers: setHeaders()
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-      console.log(`Success: ${res.data}`);
+      if (res.status === 200) {
+        alert('Account created, check your email');
+      }
     } catch (error) {
       console.error('Error Registration:', error);
     }
