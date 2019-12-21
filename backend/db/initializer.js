@@ -44,14 +44,16 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
         email: adminEmail,
         password: adminPassword,
         character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
-        isAdmin: true
+        isAdmin: true,
+        isVerified: true
       };
     }
     return {
       email: prefix + x + '@email.com',
       password: userPassword,
       character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
-      isAdmin: false
+      isAdmin: false,
+      isVerified: true
     };
   });
   return await createModelBatch(models.user, userData);
