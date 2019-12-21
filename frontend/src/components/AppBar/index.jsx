@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 import Store from '../../Store';
-
 
 const AppBar = () => {
   const { isLogged, changeStore, me } = useContext(Store);
@@ -34,7 +34,7 @@ const AppBar = () => {
           </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item as={Link} name= {me ? me.email: 'user' } to="/profile" />
-            <Menu.Item as={Link} name="Wyjdź" to="/" onClick={handleLogout} />
+            <Menu.Item as={Link} name="Log out" to="/" onClick={handleLogout} />
           </Menu.Menu>
           </>
         )}
