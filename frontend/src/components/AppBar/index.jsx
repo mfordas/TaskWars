@@ -19,8 +19,12 @@ const AppBar = () => {
             TaskWars</p>
         </Menu.Item>
         <Menu.Item as={NavLink} name="Main Page" to="/" activeClassName="active" exact /><br></br>
-        <Menu.Item as={NavLink} name="Login" to="/login" activeClassName="active" /><br></br>
-        <Menu.Item as={NavLink} name="Register" to="/register" activeClassName="active" /><br></br>
+        {!isLogged && (
+          <>
+          <Menu.Item as={NavLink} name="Login" to="/login" activeClassName="active" /><br></br>
+          <Menu.Item as={NavLink} name="Register" to="/register" activeClassName="active" /><br></br>
+          </>
+        )}
         
         {isLogged && (
           <>
@@ -29,7 +33,7 @@ const AppBar = () => {
             <Menu.Item as={NavLink} name="Tasks" to="/tasks" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
-            <Menu.Item as={Link} name= {me ? me._id: 'user' } to="/profile" />
+            <Menu.Item as={Link} name= {me ? me.email: 'user' } to="/profile" />
             <Menu.Item as={Link} name="Wyjdź" to="/" onClick={handleLogout} />
           </Menu.Menu>
           </>

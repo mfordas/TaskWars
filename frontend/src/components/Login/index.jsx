@@ -17,7 +17,7 @@ class RegisterContent extends React.Component {
 
   logIn = () => {
     console.log('User Logged In');
-    localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGZkMDk5NzI2ZDg2OTRiN2NlNDA4MDgiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTc2ODY0MTUxfQ.hnUt9SZUqv9_JwBprYHMovabjxs70KP36A4uEEaqx6E ');
+    localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGZkZjIwODEwZDJjZDA1ZmM3YTRjYTAiLCJuYW1lIjoiT2xlazMiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTc2OTIzNjU2fQ.XqNPMtn4Ta9kAl5uxTLJxtRytH-a5n2Xf7RcDWHBM-U');
     window.location.reload(true);
   }
 
