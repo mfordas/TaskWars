@@ -12,6 +12,7 @@ const defaultCreatures = [
     reward: 500,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/2180/premium/2180715.png'
   },
   {
     name: "Wind Elemental",
@@ -24,6 +25,7 @@ const defaultCreatures = [
     reward: 500,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/1164/1164927.png'
   },
   {
     name: "Werewolf",
@@ -36,6 +38,7 @@ const defaultCreatures = [
     reward: 800,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/1205/1205564.png'
   },
   {
     name: "Fatty Ooze",
@@ -48,6 +51,7 @@ const defaultCreatures = [
     reward: 800,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/863/863611.png'
   },
   {
     name: "Broomaster",
@@ -60,6 +64,7 @@ const defaultCreatures = [
     reward: 1000,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/323/323953.png'
   },
   {
     name: "Unbearable Bear",
@@ -72,6 +77,7 @@ const defaultCreatures = [
     reward: 1200,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/427/427540.png'
   },
   {
     name: "Hivemother",
@@ -84,6 +90,7 @@ const defaultCreatures = [
     reward: 1200,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/809/809052.png'
   },
   {
     name: "Fire Drake",
@@ -96,6 +103,7 @@ const defaultCreatures = [
     reward: 1500,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/1016/1016748.png'
   },
   {
     name: "Sloth",
@@ -108,6 +116,7 @@ const defaultCreatures = [
     reward: 1800,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/427/427518.png'
   },
   {
     name: "The Great Habitus",
@@ -120,6 +129,7 @@ const defaultCreatures = [
     reward: 2000,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/2010/2010383.png'
   },
   {
     name: "Santa Clown",
@@ -132,6 +142,7 @@ const defaultCreatures = [
     reward: 2000,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/2366/2366450.png'
   },
   {
     name: "Handless Horseman",
@@ -144,6 +155,7 @@ const defaultCreatures = [
     reward: 2000,
     duration: defaultDuration,
     task_to_dmg: null,
+    picture: 'https://image.flaticon.com/icons/png/512/2136/premium/2136600.png'
   },
 ]
 

@@ -9,6 +9,7 @@ const defaultItems = [
     effect_value: 10,
     price: 300,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/2380/2380051.png'
   },
   {
     name: 'Decrementer',
@@ -18,6 +19,7 @@ const defaultItems = [
     effect_value: 5,
     price: 300,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/681/681767.png'
   },
   {
     name: "Agile Bow",
@@ -27,6 +29,7 @@ const defaultItems = [
     effect_value: 10,
     price: 300,
     equipped: false,
+    picture: 'http://icons.iconarchive.com/icons/chanut/role-playing/256/Bow-Arrow-icon.png'
   },
   {
     name: "Python Flail",
@@ -36,6 +39,7 @@ const defaultItems = [
     effect_value: 5,
     price: 300,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/2074/2074800.png'
   },
   {
     name: "RESTful sword",
@@ -45,6 +49,7 @@ const defaultItems = [
     effect_value: 0,
     price: 0,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/1037/1037974.png'
   },
   {
     name: "Nullifier (bow)",
@@ -54,6 +59,7 @@ const defaultItems = [
     effect_value: 0,
     price: 0,
     equipped: false,
+    picture: 'https://cdn2.iconfinder.com/data/icons/flat-icons-19/512/Hunting_bow.png'
   },
   {
     name: "Wand of Pointers",
@@ -63,6 +69,7 @@ const defaultItems = [
     effect_value: 0,
     price: 0,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/867/867855.png'
   },
 //----------------------------Usable-------------------------
   {
@@ -73,6 +80,7 @@ const defaultItems = [
     effect_value: 100,
     price: 100,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/1037/1037966.png'
   },
   {
     name: "Scroll of Timestamp",
@@ -82,6 +90,7 @@ const defaultItems = [
     effect_value: 0,
     price: 1000,
     equipped: false,
+    picture: 'https://image.flaticon.com/icons/png/512/1037/1037988.png'
   },
 ]
 

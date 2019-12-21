@@ -37,8 +37,7 @@ const characterSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    enum: ['default', 'Warrior', 'Hunter', 'Mage', 'Druid'],
-    default: 'default',
+    default: 'http://icons.iconarchive.com/icons/chanut/role-playing/256/Villager-icon.png',
   },
   exp_points: {
     type: Number,
@@ -69,6 +68,7 @@ function validateCharacter(character) {
       .required(),
     level: Joi.number().min(0),
     charClass: Joi.valid('Warrior', 'Hunter', 'Mage', 'Druid'),
+    avatar: Joi.string(),
     exp_points: Joi.number().min(0),
     health: Joi.number().min(0),
     physical_power: Joi.number().min(0),
