@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Grid, GridColumn, GridRow } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import MenuTasks from './menuTasks';
 
 const TasksContent = () => {

@@ -78,8 +78,8 @@ class MenuTasks extends React.Component {
     render() {
         return (
             <Container className='filterWrapper'>
-                <Segment>
-                    <Input placeholder='Tags...' icon='search' onChange={this.onSearchChange} />
+                <Segment style={{display: 'inline-block'}}>
+                    <Input fluid placeholder='Tags...' icon='search' onChange={this.onSearchChange} />
 
                     <Menu vertical inverted>
                         <Menu.Item header><Icon name='bars' fitted />Sort by type</Menu.Item>
@@ -91,7 +91,7 @@ class MenuTasks extends React.Component {
                         {this.arrayToMenuCategory(tasksCategories)}
                     </Menu>
 
-                    <Button animated size='huge' onClick={this.onSearchButtonClick}>
+                    <Button fluid animated color='blue' size='huge' onClick={this.onSearchButtonClick}>
                         <Button.Content visible>Search</Button.Content>
                         <Button.Content hidden>
                             <Icon name='search' />
