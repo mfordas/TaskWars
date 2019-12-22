@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react'
+import { Button, Modal} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
+import AccountModal from './AccountModal';
 
 class AccountButton extends React.Component {
     constructor(props){
@@ -10,10 +11,14 @@ class AccountButton extends React.Component {
     render() {
         return (
             <div className="accountButton">
-                <Button id='button' animated='fade'>
-                    <Button.Content visible>Account</Button.Content>
-                    <Button.Content hidden>Edit Account</Button.Content>
-                </Button>
+                 <Modal trigger={
+                    <Button id='button' animated='fade'>
+                        <Button.Content visible>Account</Button.Content>
+                        <Button.Content hidden>Edit Account</Button.Content>
+                    </Button>
+                }>
+                <AccountModal />
+            </Modal>
             </div>
         );
     }
