@@ -3,11 +3,11 @@ import { Redirect } from 'react-router-dom';
 import {
   Button,
   Form,
+  Grid,
   Header,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import jwt from 'jwt-decode';
-
 import Store from '../../Store';
 const axios = require('axios');
 
@@ -24,15 +24,15 @@ class Login extends React.Component {
     e.preventDefault();
     const data = this.state;
     try {
-    const res = await axios({
-      method: 'post',
-      url: '/api/auth', 
-      data: data,
+      const res = await axios({
+        method: 'post',
+        url: '/api/auth',
+        data: data,
         headers: {
           'Content-Type': 'application/json',
         }
       });
-      
+
       if (res.status === 200) {
         const token = res.headers["x-auth-token"];
         localStorage.setItem('token', token);
@@ -43,40 +43,41 @@ class Login extends React.Component {
         this.setState({ invalidData: true });
       }
     }
-   catch (error) {
-    console.error('Error Registration:', error);
+    catch (error) {
+      console.error('Error Registration:', error);
+    }
   }
-}
 
   render() {
     if (this.context.isLogged) return <Redirect to="/" />;
 
     return (
-      <Segment compact>
-        <Form onSubmit={this.onButtonSubmit}>
-          <Header>Login</Header>
-
-          <Form.Input
-            label='Email'
-            placeholder='Email'
-            name='email'
-            type='email'
-            value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value })}
-          />
-
-          <Form.Input
-            label='Password'
-            placeholder='Password'
-            name='password'
-            type='password'
-            value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
-          />
-
-          <Button color='purple' type='submit'>Submit</Button>
-        </Form>
-      </Segment>
+      <Grid centered>
+        <Segment compact textAlign='left'>
+          <Form onSubmit={this.onButtonSubmit}>
+            <Header textAlign='center'>Login</Header>
+            <Form.Input
+              label='Email'
+              placeholder='Email'
+              name='email'
+              type='email'
+              value={this.state.email}
+              onChange={e => this.setState({ email: e.target.value })}
+            />
+            <Form.Input
+              label='Password'
+              placeholder='Password'
+              name='password'
+              type='password'
+              value={this.state.password}
+              onChange={e => this.setState({ password: e.target.value })}
+            />
+            <Grid textAlign='center' padded>
+              <Button color='purple' type='submit'>Submit</Button>
+            </Grid>
+          </Form>
+        </Segment>
+      </Grid >
     );
   }
 }

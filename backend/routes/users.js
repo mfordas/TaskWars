@@ -25,13 +25,9 @@ router.post('/', async (req, res) => {
   });
   if (user) return res.status(400).send('User already registered.');
 
-  user = new User(_.pick(req.body, ['name', 'email', 'password', 'confirmPassword']));
-  if (req.body.password !== req.body.confirmPassword)
-    return res.status(400).send('Both passwords must be the same.');
-
+  user = new User(_.pick(req.body, ['name', 'email', 'password']));
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
-  user.confirmPassword = await bcrypt.hash(user.confirmPassword, salt);
   await user.save();
   const token = user.generateAuthToken();
 
@@ -51,9 +47,6 @@ router.get('/confirmation/:token', async (req, res) => {
   }, {
     new: true
   });
-
-  // res.write(`Hello ${user.name}! Your account has been verified.`);
-  // res.end();
 
   res.redirect('http://localhost:3000/confirmed');
 });
@@ -136,5 +129,3 @@ router.put('/:id/password', [auth, admin], async (req, res) => {
 });
 
 module.exports = router;
-
-// "name": "Task Wars"
