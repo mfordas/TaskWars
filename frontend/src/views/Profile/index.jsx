@@ -12,6 +12,7 @@ class Profile extends React.Component {
     health: 50,
     exp: 50,
     class: "",
+    avatar: "",
     physical: 0,
     magical: 0,
     guildsNames: [],
@@ -36,7 +37,8 @@ class Profile extends React.Component {
         guilds: body.guilds,
         health: body.health,
         exp: body.exp_points,
-        class: body.class,
+        class: body.charClass,
+        avatar: body.avatar,
         physical: body.physical_power,
         magical: body.magical_power
       })
@@ -63,19 +65,19 @@ class Profile extends React.Component {
     return (
       <div className="profileViewDiv">
         <div className="profileCharacterDetails">
-          <h1>Character details</h1>
-            <Avatar />
+          <h1>Character Details</h1>
+            <Avatar avatar={this.state.avatar}/>
             <Details name={this.state.name} level={this.state.level}/>
           <div className="progress">
             <HealthBar health={this.state.health}/>
             <ExperienceBar exp={this.state.exp}/>
             </div>
         </div>
-        <div className="profileCharacterStatistics">
-          <Statistics class={this.state.class} physical={this.state.physical} magical={this.state.magical}/>
-        </div>
         <div className="profileCharacterGuilds">
           <Guilds guilds={this.state.guildsNames}/>
+        </div>
+        <div className="profileCharacterStatistics">
+          <Statistics class={this.state.class} physical={this.state.physical} magical={this.state.magical}/>
         </div>
       </div>
     );

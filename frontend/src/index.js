@@ -55,7 +55,7 @@ const App = () => {
           <PublicRoute path="/login" component={Login} />
           <PublicRoute path="/register" component={Register} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
-          <Route exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/profile" component={Profile} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />

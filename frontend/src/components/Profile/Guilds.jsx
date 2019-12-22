@@ -20,7 +20,6 @@ class Guilds extends React.Component {
                         </Header>
                     </Table.Cell>
                 </Table.Row>
-                {/* ------------- */}
                 <Table.Row>
                     <Table.Cell>
                         <Header as='h4' image>
@@ -39,16 +38,6 @@ class Guilds extends React.Component {
                         </Header>
                     </Table.Cell>
                 </Table.Row>
-                <Table.Row>
-                    <Table.Cell>
-                        <Header as='h4' image>
-                            <Header.Content>
-                             {name}
-                            </Header.Content>
-                        </Header>
-                    </Table.Cell>
-                </Table.Row>
-                {/* ---------------- */}
               </div>
             );
           });

@@ -3,10 +3,17 @@ import { Image } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
 class Avatar extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
+            <div className="avatarHover">
+            <h1>zmien</h1>
             <div className='avatarDiv'>
-               <Image src='https://static.wikia.nocookie.net/1cf171b2-6efe-43de-9418-86d2b759b44a' size='medium' rounded />
+               <Image id='avatar' src={this.props.avatar} size='medium' rounded />
+            </div>
             </div>
         );
     }
