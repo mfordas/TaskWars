@@ -1,6 +1,5 @@
 import React from 'react';
-import { Avatar, HealthBar, ExperienceBar, Statistics, Details, Guilds} from '../../components/Profile'
-import { Container, Divider, Progress, Header } from 'semantic-ui-react'
+import { Avatar, HealthBar, ExperienceBar, Statistics, Details, Guilds, AccountButton} from '../../components/Profile'
 import setHeaders from '../../utils/setHeaders';
 
 class Profile extends React.Component {
@@ -73,11 +72,14 @@ class Profile extends React.Component {
             <ExperienceBar exp={this.state.exp}/>
             </div>
         </div>
-        <div className="profileCharacterGuilds">
-          <Guilds guilds={this.state.guildsNames}/>
-        </div>
-        <div className="profileCharacterStatistics">
-          <Statistics class={this.state.class} physical={this.state.physical} magical={this.state.magical}/>
+        <div className="profileViewGroup">
+          <AccountButton />
+          <div className="profileCharacterGuilds">
+            <Guilds guilds={this.state.guildsNames}/>
+          </div>
+          <div className="profileCharacterStatistics">
+            <Statistics class={this.state.class} physical={this.state.physical} magical={this.state.magical}/>
+          </div>
         </div>
       </div>
     );
