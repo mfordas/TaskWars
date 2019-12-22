@@ -13,6 +13,8 @@ import Login from './views/Login';
 import Register from './views/Register';
 import Tasks from './views/Tasks';
 import Questbook from './views/Questbook';
+import PublicRoute from './components/PublicRoute';
+import Confirmed from './components/Confirmed';
 
 const styleLink = document.createElement("link");
 styleLink.rel = "stylesheet";
@@ -49,10 +51,11 @@ const App = () => {
         <AppBar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          <PublicRoute path="/login" component={Login} />
+          <PublicRoute path="/register" component={Register} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
+          <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </Container>
