@@ -1,5 +1,5 @@
 import React from 'react';
-import {Item, Segment, Icon, Button, Label, Popup } from 'semantic-ui-react';
+import { Item, Segment, Icon, Button, Label, Popup } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 const axios = require('axios');
 
@@ -16,14 +16,12 @@ class TaskPattern extends React.Component {
             "type": `${this.props.task.type}`,
             "category": `${this.props.task.category}`,
             "duration": `${this.props.task.duration}`,
-            "reward": {
-                "exp": `${this.props.task.reward.exp}`,
-                "gold": `${this.props.task.reward.gold}`
-            },
+            "exp": `${this.props.task.exp}`,
+            "gold": `${this.props.task.gold}`,
             "penalty": `${this.props.task.penalty}`,
             "status": "in_progress"
         };
-        
+
         await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
     }
 
@@ -52,14 +50,14 @@ class TaskPattern extends React.Component {
                     <Popup content='Gold' trigger={
                         <Label color='yellow'>
                             <Icon name='dot circle' />
-                            {this.props.task.reward.gold}
+                            {this.props.task.gold}
                         </Label>
                     } />
 
                     <Popup content='Experience' trigger={
                         <Label color='violet'>
                             <Icon name='star' />
-                            {this.props.task.reward.exp}
+                            {this.props.task.exp}
                         </Label>
                     } />
 
@@ -69,9 +67,9 @@ class TaskPattern extends React.Component {
                     </Item.Meta>
 
                     <Item.Description>
-                        {this.props.task.description}<br/>
-                        {this.props.task.penalty}<br/>
-                        {this.props.task.duration}<br/>
+                        {this.props.task.description}<br />
+                        {this.props.task.penalty}<br />
+                        {this.props.task.duration}<br />
                     </Item.Description>
 
                     <Item.Extra>
