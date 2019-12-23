@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
   if (user) return res.status(400).send('User already registered.');
 
   user = new User(_.pick(req.body, ['name', 'email', 'password']));
-
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
@@ -49,9 +48,6 @@ router.get('/confirmation/:token', async (req, res) => {
     new: true
   });
 
-  // res.write(`Hello ${user.name}! Your account has been verified.`);
-  // res.end();
-
   res.redirect('http://localhost:3000/confirmed');
 });
 
@@ -70,7 +66,7 @@ router.get('/me', auth, async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) return res.status(404).send('The user with the given ID was not found.');
 
-  res.send(_.pick(user, ['_id', 'email', 'character_id']));
+  res.send(_.pick(user, ['_id', 'name', 'email', 'character_id']));
 });
 
 router.get('/:id', async (req, res) => {
@@ -133,5 +129,3 @@ router.put('/:id/password', [auth, admin], async (req, res) => {
 });
 
 module.exports = router;
-
-// "name": "Task Wars"
