@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon, Container, Input, Button, Segment, Pagination } from 'semantic-ui-react';
+import { Menu, Icon, Container, Input, Button, Segment } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 
 const tasksTypes = [
@@ -19,14 +19,15 @@ const tasksCategories = [
 ];
 
 
-class MenuTasks extends React.Component {
+class MenuTasksFilter extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             category: 'All',
             type: 'All',
-            tags: ''
+            tags: '',
+            results: ['elo']
         };
     }
 
@@ -69,7 +70,13 @@ class MenuTasks extends React.Component {
     fetchTasks = async () => {
         const response = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders());
         const tasks = await response.json();
-        console.log(tasks);
+        
+        this.setState({ results: tasks });
+        console.log(this.state.results);
+    }
+
+    componentDidMount() {
+        this.fetchTasks();
     }
 
     componentDidUpdate() {
@@ -78,21 +85,40 @@ class MenuTasks extends React.Component {
     render() {
         return (
             <Container className='filterWrapper'>
-                <Segment style={{display: 'inline-block'}}>
-                    <Input fluid placeholder='Tags...' icon='search' onChange={this.onSearchChange} />
-
+                <Segment style={{ display: 'inline-block' }} inverted>
+                    <Input
+                        fluid
+                        placeholder='Tags...'
+                        icon='search'
+                        onChange={this.onSearchChange} />
                     <Menu vertical inverted>
-                        <Menu.Item header><Icon name='bars' fitted />Sort by type</Menu.Item>
-                        {this.arrayToMenuType(tasksTypes)}
+                        <Menu.Item header>
+                            <Icon name='bars' fitted />Sort by type
+                        </Menu.Item>
+                        {this.arrayToMenuType(tasksCategories)}
                     </Menu>
 
                     <Menu vertical inverted>
-                        <Menu.Item header><Icon name='bars' fitted />Sort by category</Menu.Item>
-                        {this.arrayToMenuCategory(tasksCategories)}
+                        <Menu.Item header>
+                            <Icon name='bars' fitted />Sort by category
+                        </Menu.Item>
+                        {this.arrayToMenuCategory(tasksTypes)}
                     </Menu>
 
-                    <Button fluid animated color='blue' size='huge' onClick={this.onSearchButtonClick}>
-                        <Button.Content visible>Search</Button.Content>
+                    <p style={{ color: 'gray', fontSize: '14px' }}>
+                        {`Found ${this.state.results.length} results...`}
+                    </p>
+
+                    <Button
+                        fluid
+                        animated
+                        color='blue' 
+                        size='huge'
+                        onClick={this.onSearchButtonClick}>
+                        <Button.Content visible>
+                            Search
+                        </Button.Content>
+
                         <Button.Content hidden>
                             <Icon name='search' />
                         </Button.Content>
@@ -113,4 +139,4 @@ class MenuTasks extends React.Component {
     }
 }
 
-export default MenuTasks;
+export default MenuTasksFilter;

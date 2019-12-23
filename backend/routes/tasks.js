@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
   res.send(tasks);
 });
 
-router.get('/:type&:category&:tags?', async (req, res) => {
+router.get('/:category&:type&:tags?', async (req, res) => {
   const Task = res.locals.models.task;
 
   const categoryParam = req.params.category;
@@ -40,7 +40,9 @@ router.get('/:type&:category&:tags?', async (req, res) => {
     else
       return;
   }
-  console.log(tagsArray);
+
+  //console.log(tagsArray);
+
   const tasks = await Task
     .find(searchObj());
 
