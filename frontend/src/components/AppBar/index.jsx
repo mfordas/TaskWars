@@ -32,6 +32,7 @@ const AppBar = () => {
             <Menu.Item as={NavLink} name="Create Character" to="/characterCreation" activeClassName="active" /> 
             <Menu.Item as={NavLink} name="Questbook" to="/questbook" activeClassName="active" /><br></br>
             <Menu.Item as={NavLink} name="Tasks" to="/tasks" activeClassName="active" /><br></br>
+            <Menu.Item as={NavLink} name="Shop" to="/shop" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item as={Link} name= {me ? me.name: 'user' } to="/profile" />

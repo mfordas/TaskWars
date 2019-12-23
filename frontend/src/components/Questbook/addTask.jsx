@@ -9,11 +9,13 @@ import {
   Select,
   TextArea,
   Header,
-  Segment
+  Segment,
+  Message
 } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
 import ErrorMessage from '../ErrorMessage';
+import { number } from 'joi';
 
 const options = [
   { key: 'd', text: 'Daily', value: 'Daily' },
@@ -34,7 +36,11 @@ class AddTask extends React.Component {
       exp: '',
       gold: '',
     penalty: '',
-    status: ''
+    status: '',
+    submitStatus: false,
+    days: '',
+    hours: '',
+    taskAdded: null
   }
 
 
@@ -76,12 +82,22 @@ class AddTask extends React.Component {
         penalty: data.penalty,
         status: data.status
       }
-    })
+    }).then((response) =>{ 
+      if(response.status === 200){
+        this.setState({taskAdded: true});
+      }else{
+        this.setState({taskAdded: false});
+      }
+    }, (error) => {
+      console.log(error)
+    });
   }
+  
 
   
   onButtonSubmit = async e => {
     e.preventDefault();
+    this.setState({submitStatus:true})
     console.log(this.state);
     await this.fetchUser();
 
@@ -90,11 +106,71 @@ class AddTask extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   nameValidate = (e) => {
-    if(this.state.name === '') {
-    return {content:<ErrorMessage message='Enter your name:'/>}} 
+    if(this.state.name === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Name shoud have between 5 and 50 characters'/>}} 
     else { return null }
 
   }
+  descriptionValidate = (e) => {
+    if(this.state.description === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Description shoud have between 5 and 50 characters'/>}} 
+    else { return null }
+
+  }
+  categoryValidate = (e) => {
+    if(this.state.category === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Choose category'/>}} 
+    else { return null }
+
+  }
+  typeValidate = (e) => {
+    if(this.state.type === '' && this.state.submitStatus) {
+    return <ErrorMessage message='Choose type'/>} 
+    else { return null }
+
+  }
+  penaltyValidate = (e) => {
+    if(this.state.penalty === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type penalty'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.penalty) === number) {
+      return {content:<ErrorMessage message='Penalty shoud be a number'/>}} 
+      else { return null }
+
+  }
+  goldValidate = (e) => {
+    if(this.state.gold === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type gold'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.gold)===number) {
+      return {content:<ErrorMessage message='Gold shoud be a number'/>}} 
+      else { return null }
+
+  }
+  expValidate = (e) => {
+    if(this.state.exp === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type exp'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.exp) === number) {
+      return {content:<ErrorMessage message='Exp shoud be a number'/>}} 
+      else { return null }
+
+  }
+  hoursValidate = (e) => {
+    if(this.state.hours === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type hours'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.hours) === number) {
+      return {content:<ErrorMessage message='Hours shoud be a number'/>}} 
+      else { return null }
+
+  }
+  daysValidate = (e) => {
+    if(this.state.days === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type days'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.days) === number) {
+      return {content:<ErrorMessage message='Days shoud be a number'/>}} 
+      else { return null }
+
+  }
+
+  
 
 
   render() {
@@ -117,6 +193,8 @@ class AddTask extends React.Component {
     return (
       <div>
         <Segment inverted>
+        {this.state.taskAdded === true ?
+          <Message color = 'green' header ='Success' content = 'Task added'/> : null }
           <Form inverted onSubmit={this.onButtonSubmit}>
             <Header inverted>Add new task</Header>
             
@@ -131,7 +209,7 @@ class AddTask extends React.Component {
               />
 
               <Form.Field
-                error={this.state.category === false ? {content:<ErrorMessage message='Please choose category'/>} : null}
+                error={this.categoryValidate()}
                 control={Select}
                 label='Category'
                 options={options}
@@ -143,6 +221,7 @@ class AddTask extends React.Component {
             </Form.Group>
 
             <Form.Field
+              error={this.descriptionValidate()}
               control={TextArea}
               label='Description'
               placeholder='Write description of the task...'
@@ -150,8 +229,9 @@ class AddTask extends React.Component {
               name='description'
               onChange={this.handleChange}
             />
-            <Form.Group inline>
+            <Form.Group inline >
               <label>Type</label>
+              <div>{this.typeValidate()}</div>
               <Form.Field
                 control={Radio}
                 label='Physical'
@@ -169,6 +249,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
               <Form.Field
+                
                 control={Radio}
                 label='Utility'
                 value='Utility'
@@ -179,6 +260,7 @@ class AddTask extends React.Component {
             </Form.Group>
             <Form.Group widths='equal'>
               <Form.Field
+                error={this.daysValidate()}
                 control={Input}
                 label='Duration: days'
                 placeholder='Days'
@@ -187,6 +269,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
               <Form.Field
+                error={this.hoursValidate()}
                 control={Input}
                 label='hours'
                 placeholder='Hours'
@@ -195,6 +278,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
               <Form.Field
+              error={this.penaltyValidate()}
                 control={Input}
                 label='Penalty'
                 placeholder='Penalty'
@@ -205,6 +289,7 @@ class AddTask extends React.Component {
             </Form.Group>
             <Form.Group widths='equal'>
               <Form.Field
+              error={this.goldValidate()}
                 control={Input}
                 label='Gold'
                 placeholder='Gold'
@@ -213,6 +298,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
               <Form.Field
+              error={this.expValidate()}
                 control={Input}
                 label='Exp'
                 placeholder='Exp'
