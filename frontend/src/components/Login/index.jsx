@@ -5,6 +5,7 @@ import {
   Form,
   Grid,
   Header,
+  Message,
   Segment,
 } from 'semantic-ui-react'
 import jwt from 'jwt-decode';
@@ -23,6 +24,7 @@ class Login extends React.Component {
   onButtonSubmit = async e => {
     e.preventDefault();
     const data = this.state;
+    delete this.state["invalidData"];
     try {
       const res = await axios({
         method: 'post',
@@ -45,6 +47,7 @@ class Login extends React.Component {
     }
     catch (error) {
       console.error('Error Registration:', error);
+      this.setState({ invalidData: true });
     }
   }
 
@@ -54,7 +57,7 @@ class Login extends React.Component {
     return (
       <Grid centered>
         <Segment compact textAlign='left'>
-          <Form onSubmit={this.onButtonSubmit}>
+          <Form error onSubmit={this.onButtonSubmit}>
             <Header textAlign='center'>Login</Header>
             <Form.Input
               label='Email'
@@ -75,6 +78,11 @@ class Login extends React.Component {
             <Grid textAlign='center' padded>
               <Button color='purple' type='submit'>Submit</Button>
             </Grid>
+            {this.state.invalidData ? (
+              <Message
+                error
+                header='Invalid email or password'
+              />) : null}
           </Form>
         </Segment>
       </Grid >
