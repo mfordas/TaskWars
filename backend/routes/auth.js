@@ -38,11 +38,12 @@ router.post('/', async (req, res) => {
   const token = jwt.sign(
     {
       _id: user._id,
+      name: user.name,
     },
     process.env.JWTPRIVATEKEY,
   );
 
-  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'email']));
+  res.header('x-auth-token', token).send(_.pick(user, ['_id','name', 'email']));
 });
 
 module.exports = router;

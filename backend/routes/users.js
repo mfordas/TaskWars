@@ -66,7 +66,7 @@ router.get('/me', auth, async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) return res.status(404).send('The user with the given ID was not found.');
 
-  res.send(_.pick(user, ['_id', 'email', 'character_id']));
+  res.send(_.pick(user, ['_id', 'name', 'email', 'character_id']));
 });
 
 router.get('/:id', async (req, res) => {
