@@ -13,6 +13,7 @@ import {
 } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
+import ErrorMessage from '../ErrorMessage';
 
 const options = [
   { key: 'd', text: 'Daily', value: 'Daily' },
@@ -43,7 +44,6 @@ class AddTask extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     console.log(body.character_id);
-    console.log(1);
     this.fetchCharacter(body.character_id);
 
   }
@@ -61,7 +61,6 @@ class AddTask extends React.Component {
   postData = async (questbook_id, state) =>{
     let data = state;
     console.log(data);
-    console.log(JSON.stringify(data));
     await axios({
       url: `/api/questbook/${questbook_id}/task`,
       method: 'post',
@@ -80,22 +79,22 @@ class AddTask extends React.Component {
     })
   }
 
-  //   componentDidMount() {
-  //     console.log('mounted')
-  //   }
-
-  //   componentDidUpdate() {
-
-  //   }
-
-  onButtonSubmit = async () => {
+  
+  onButtonSubmit = async e => {
+    e.preventDefault();
     console.log(this.state);
-    // console.log(this.state.reward)
     await this.fetchUser();
 
 
   }
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+  nameValidate = (e) => {
+    if(this.state.name === '') {
+    return {content:<ErrorMessage message='Enter your name:'/>}} 
+    else { return null }
+
+  }
 
 
   render() {
@@ -112,14 +111,18 @@ class AddTask extends React.Component {
       hours
     } = this.state
 
+    
+
            
     return (
       <div>
         <Segment inverted>
           <Form inverted onSubmit={this.onButtonSubmit}>
             <Header inverted>Add new task</Header>
+            
             <Form.Group widths='equal'>
               <Form.Input
+                error={this.nameValidate()}
                 label='Task name'
                 placeholder='Task name'
                 name='name'
@@ -128,6 +131,7 @@ class AddTask extends React.Component {
               />
 
               <Form.Field
+                error={this.state.category === false ? {content:<ErrorMessage message='Please choose category'/>} : null}
                 control={Select}
                 label='Category'
                 options={options}
