@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const defaultCreatures = require('./defaultObjects/defaultCreatures')
 const defaultTasks = require('./defaultObjects/defaultTasks')
@@ -64,7 +64,9 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
     return {
       name: prefix + x,
       level: 10 + x,
+      maxHealth: 10*x,
       health: 10*(x+1),
+      expRequired: 120*(x+1),
       exp_points: 100*(x+1),
       physical_power: 15 + x,
       magical_power: 20 + x, 
@@ -102,6 +104,7 @@ const createCreatures = async (prefix, count, models, taskCatalog) => {
       return {
         name: prefix + x,
         level: 10 + x,
+        maxHealth: 10*x,
         health: 10*x,
         physical_power: 15 + x,
         physical_resistance: 10 + x,
