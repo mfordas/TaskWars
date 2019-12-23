@@ -107,7 +107,8 @@ const createCreatures = async (prefix, count, models, taskCatalog) => {
         physical_resistance: 10 + x,
         magical_power: 20 + x,
         magical_resistance: 25 + x,
-        reward: 50+x,
+        exp: 50+x,
+        gold: 50+x,
         duration: x+6,
         task_to_dmg: taskCatalog[x],
         picture: ''
@@ -175,10 +176,8 @@ const createTask = async (prefix, count, models) => {
         type: "Utility",
         category: "Daily",
         duration: (x+1),
-        reward: {
-          exp: (100+x),
-          gold: (50+x)
-        },
+        exp: (100+x),
+        gold: (50+x),
         penalty: (5+x),
         done: false
       }
