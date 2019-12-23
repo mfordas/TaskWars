@@ -1,9 +1,15 @@
 import React from 'react';
-import { Item, Segment, Icon, Button, Label, Popup } from 'semantic-ui-react';
+import { Item, Segment, Icon, Button, Label, Popup, Portal, Header, TransitionablePortal } from 'semantic-ui-react';
+import TopPortal from '../Utils/TopPortal';
 import setHeaders from '../../utils/setHeaders';
 const axios = require('axios');
 
 class TaskPattern extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.portalRef = React.createRef();
+    }
 
     handleButtonAddClick = async (e, { name }) => {
         const userFetch = await fetch('/api/users/me', setHeaders());
@@ -22,7 +28,10 @@ class TaskPattern extends React.Component {
             "status": "in_progress"
         };
 
-        await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
+        const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
+
+        if (res.status == 200)
+            this.portalRef.current.handleOpen();
     }
 
     pickImage() {
@@ -81,7 +90,12 @@ class TaskPattern extends React.Component {
 
                 </Item>
 
-            </Segment>
+                <TopPortal 
+                    ref={this.portalRef}
+                    header={'Success!'} 
+                    description={`${this.props.task.name} has been added to your questbook`} />
+
+            </Segment >
         );
     }
 }
