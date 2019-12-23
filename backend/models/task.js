@@ -32,14 +32,14 @@ const taskSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-    exp: {
-      type: Number,
-      default: 0,
-    },
-    gold: {
-      type: Number,
-      default: 0,
-    },
+  exp: {
+    type: Number,
+    default: 0,
+  },
+  gold: {
+    type: Number,
+    default: 0,
+  },
   penalty: {
     type: Number,
     default: 1,

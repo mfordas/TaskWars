@@ -59,8 +59,8 @@ function validateUser(user) {
       .max(26)
       .trim(),
     email: Joi.string()
-      .min(8)
-      .max(26)
+      .min(5)
+      .max(255)
       .required()
       .email()
       .trim(),
