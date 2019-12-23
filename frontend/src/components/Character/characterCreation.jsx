@@ -43,12 +43,13 @@ const classChosen = {
 class CharacterCreation extends React.Component {
   state = {
     name: '',
-    charClass: '',
+    charClass: 'Warrior',
     inventory_id: '',
     questbook_id: '',
     health: '',
     physical_power: '',
-    magical_power: ''
+    magical_power: '',
+    nameTaken: false
   }
 
   postQuestbook = async () =>{
@@ -127,23 +128,26 @@ class CharacterCreation extends React.Component {
       method: 'get',
       headers: setHeaders()
     }).then((response) => {
-      console.log(response.data.forEach( (data) => {
-        if(data.name === this.state.name){console.log("Name taken")}}))
+      response.data.forEach((data) => {
+        if(data.name === this.state.name){
+          this.setState({nameTaken: true})
+        }
+      })
     }, (error) => {
       console.log(error);
     });
   }
 
-  onFormSubmit = (event) => {
+  handleButtonClick = async (event) => {
+    this.setState({nameTaken: false})
     event.preventDefault();
-    this.postCharacter();
+    await this.checkName();
+    if(this.state.nameTaken === false && this.state.name.length > 5) {
+      this.postCharacter();
+    }
   }
 
-  handleButtonClick = () => {
-    this.checkName();
-  }
-
-  handleInputChange = (e, {name, value}) => this.setState({name: value});
+  handleInputChange = (e, {name, value}) => this.setState({ name: value});
   handleRadioChange = (e, {charClass, value }) => this.setState({ charClass: value });
 
   render() {
@@ -152,8 +156,7 @@ class CharacterCreation extends React.Component {
     return(
       <div> 
       <Segment>
-        <Form onSubmit={this.onFormSubmit}>
-          <Header >Create your character!</Header>
+        <Form onSubmit={this.handleButtonClick}>
           <Form.Group>
             <Form.Input label='Character Name'
             required
@@ -161,16 +164,22 @@ class CharacterCreation extends React.Component {
             name = 'name'
             value = {this.name}
             onChange = {this.handleInputChange}
+            warning={{
+              content: 'Name must be at least 5 characters long',
+              pointing: 'above',
+            }}
             />
           </Form.Group>
+          {this.state.nameTaken ?
+              <Message header ='Name taken' content = 'This name is already in use'/> : null}
           <Form.Group>
             <Header>Class: </Header>
-            <Radio label = 'Warrior' name = "charClassRadio" value = 'Warrior'  checked={charClass === 'Warrior'} onChange ={this.handleRadioChange} />
+            <Radio label = 'Warrior' name = "charClassRadio" value = 'Warrior'  checked={charClass === 'Warrior'} onChange ={this.handleRadioChange} default />
             <Radio label = 'Hunter' name = "charClassRadio" value = 'Hunter'  checked={charClass === 'Hunter'} onChange ={this.handleRadioChange} />
             <Radio label = 'Mage' name = "charClassRadio" value = 'Mage'  checked={charClass === 'Mage'} onChange ={this.handleRadioChange} />
             <Radio label = 'Druid' name = "charClassRadio" value = 'Druid' checked={charClass === 'Druid'} onChange ={this.handleRadioChange} />
           </Form.Group>
-          <Button onClick ={this.handleButtonClick}>Create</Button>
+          <Button type = 'submit'>Create</Button>
         </Form>
       </Segment>
       <Segment>
