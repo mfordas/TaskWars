@@ -10,9 +10,21 @@ class TaskPattern extends React.Component {
         const user = await userFetch.json();
         const characterFetch = await fetch(`/api/characters/${user.character_id}`);
         const character = await characterFetch.json();
+        const taskToInsert = {
+            "name": `${this.props.task.name}`,
+            "description": `${this.props.task.description}`,
+            "type": `${this.props.task.type}`,
+            "category": `${this.props.task.category}`,
+            "duration": `${this.props.task.duration}`,
+            "reward": {
+                "exp": `${this.props.task.reward.exp}`,
+                "gold": `${this.props.task.reward.gold}`
+            },
+            "penalty": `${this.props.task.penalty}`,
+            "status": "in_progress"
+        };
         
-        await axios.put(`/api/questbook/${character.questbook_id}/task`, {'_id': `${this.props.task._id}`});
-        await axios.put(`/api/tasks/${this.props.task._id}/status`, {'status': 'in_progress'});
+        await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
     }
 
     pickImage() {
@@ -57,7 +69,9 @@ class TaskPattern extends React.Component {
                     </Item.Meta>
 
                     <Item.Description>
-                        {this.props.task.description}
+                        {this.props.task.description}<br/>
+                        {this.props.task.penalty}<br/>
+                        {this.props.task.duration}<br/>
                     </Item.Description>
 
                     <Item.Extra>

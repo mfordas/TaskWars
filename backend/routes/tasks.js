@@ -10,7 +10,6 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let task = new Task(req.body);
-  console.log(task);
   await task.save();
 
   res.send(task);

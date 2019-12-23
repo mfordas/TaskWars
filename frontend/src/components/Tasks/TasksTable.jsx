@@ -13,7 +13,6 @@ class TasksTable extends React.Component {
         const response = await fetch(`/api/tasks`);
         const tasks = await response.json();
         this.setState({ results: tasks });
-        console.log(this.state.results);
     }
 
     arrayToTable = ((arr) => {
