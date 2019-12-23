@@ -12,6 +12,7 @@ import {
   Segment
 } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
+import axios from 'axios';
 
 const options = [
   { key: 'd', text: 'Daily', value: 'Daily' },
@@ -29,13 +30,12 @@ class AddTask extends React.Component {
     type: '',
     category: '',
     duration: '',
-    reward: {
       exp: '',
       gold: '',
-    },
     penalty: '',
     status: ''
   }
+
 
 
 
@@ -52,44 +52,33 @@ class AddTask extends React.Component {
   fetchCharacter = async (id) => {
     const response = await fetch(`/api/characters/${id}`, setHeaders());
     const body = await response.json();
-    console.log(body);
+    console.log(body.questbook_id);
     this.postData(body.questbook_id, this.state);
 
 
   }
 
-
-  //     getData = async (id) => {
-  //       const response = await fetch(`/api/questbook/${id}/task`, setHeaders());
-  //       const body = await response.json();
-  //       console.log(body);
-  //       this.setState(
-  //         {
-  //           tasks: body
-  //         }
-  //       )
-  //       }
-
-  postData = async (state) => {
-
-    const data = state;
-
-    try {
-      const response = await fetch(`/api/tasks/`, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(data), // data can be `string` or {object}!
-        headers: setHeaders()
-      });
-      const json = await response.json();
-      console.log('Success:', JSON.stringify(json));
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  postData = async (questbook_id, state) =>{
+    let data = state;
+    console.log(data);
+    console.log(JSON.stringify(data));
+    await axios({
+      url: `/api/questbook/${questbook_id}/task`,
+      method: 'post',
+      headers: setHeaders(),
+      data:  {
+        name: data.name,
+        description: data.description,
+        type: data.type,
+        category: data.category,
+        duration: `${data.hours*1+data.days*24}`,
+          exp: data.exp,
+          gold: data.gold,
+        penalty: data.penalty,
+        status: data.status
+      }
+    })
   }
-
-
-  // // const form = new FormData(document.getElementById('login-form'));
-
 
   //   componentDidMount() {
   //     console.log('mounted')
@@ -99,9 +88,10 @@ class AddTask extends React.Component {
 
   //   }
 
-  onButtonSubmit = () => {
-    console.log(this.state)
-    this.postData(this.state)
+  onButtonSubmit = async () => {
+    console.log(this.state);
+    // console.log(this.state.reward)
+    await this.fetchUser();
 
 
   }
@@ -114,12 +104,15 @@ class AddTask extends React.Component {
       type,
       category,
       duration,
-
-      exp,
-      gold,
+        exp,
+        gold,
       penalty,
-      status
+      status,
+      days,
+      hours
     } = this.state
+
+           
     return (
       <div>
         <Segment inverted>
@@ -183,10 +176,18 @@ class AddTask extends React.Component {
             <Form.Group widths='equal'>
               <Form.Field
                 control={Input}
-                label='Duration'
-                placeholder='Duration'
-                value={duration}
-                name='duration'
+                label='Duration: days'
+                placeholder='Days'
+                value={days}
+                name='days'
+                onChange={this.handleChange}
+              />
+              <Form.Field
+                control={Input}
+                label='hours'
+                placeholder='Hours'
+                value={hours}
+                name='hours'
                 onChange={this.handleChange}
               />
               <Form.Field

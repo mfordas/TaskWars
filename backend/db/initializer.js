@@ -175,10 +175,8 @@ const createTask = async (prefix, count, models) => {
         type: "Utility",
         category: "Daily",
         duration: (x+1),
-        reward: {
           exp: (100+x),
-          gold: (50+x)
-        },
+          gold: (50+x),
         penalty: (5+x),
         done: false
       }
