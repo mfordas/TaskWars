@@ -28,13 +28,6 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     trim: true,
   },
-  confirmPassword: {
-    type: String,
-    required: true,
-    minlength: 8,
-    maxlength: 1024,
-    trim: true,
-  },
   character_id: {
     type: ObjectId,
     ref: 'Character',
@@ -66,8 +59,8 @@ function validateUser(user) {
       .max(26)
       .trim(),
     email: Joi.string()
-      .min(8)
-      .max(26)
+      .min(5)
+      .max(255)
       .required()
       .email()
       .trim(),
@@ -75,10 +68,6 @@ function validateUser(user) {
       .min(8)
       .max(26)
       .required()
-      .trim(),
-      confirmPassword: Joi.string()
-      .min(8)
-      .max(26)
       .trim(),
     character_id: Joi.objectId(),
     isAdmin: Joi.boolean(),
