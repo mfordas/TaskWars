@@ -75,8 +75,8 @@ class CompletedTasks extends React.Component {
           <Icon name='right chevron' />
         </Button>
         <Label color = 'brown'>{x.category}</Label>
-        <Label color = 'yellow'>Gold: {x.reward.gold}</Label>
-        <Label color = 'teal'>Exp: {x.reward.exp}</Label>
+        <Label color = 'yellow'>Gold: {x.gold}</Label>
+        <Label color = 'teal'>Exp: {x.exp}</Label>
       </Item.Extra>
     </Item.Content>
   </Item>

@@ -50,7 +50,8 @@ class CharacterCreation extends React.Component {
     health: '',
     physical_power: '',
     magical_power: '',
-    nameTaken: false
+    nameTaken: false,
+    charCreated: null
   }
 
   postQuestbook = async () =>{
@@ -121,7 +122,15 @@ class CharacterCreation extends React.Component {
         magical_power: this.state.magical_power
       },
       headers: setHeaders(),
-    })
+    }).then((response) =>{ 
+      if(response.status === 200){
+        this.setState({charCreated: true});
+      }else{
+        this.setState({charCreated: false});
+      }
+    }, (error) => {
+      console.log(error)
+    });
   }
 
   checkName = async () => {
@@ -157,6 +166,8 @@ class CharacterCreation extends React.Component {
     const {text, avatar, stats} = classChosen[charClass];
     return(
       <div> 
+      {this.state.charCreated === true ?
+      <Message color = 'green' header ='Success' content = 'Character created'/> : null }
       <Segment>
         <Form onSubmit={this.handleButtonClick}>
           <Header>Character name</Header>

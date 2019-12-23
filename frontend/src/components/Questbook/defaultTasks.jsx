@@ -14,8 +14,6 @@ class AllTasks extends React.Component {
   fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
-    console.log(body.character_id);
-    console.log(1);
     this.fetchCharacter(body.character_id);
     
   }
@@ -24,7 +22,6 @@ class AllTasks extends React.Component {
   fetchCharacter = async (id) => {
     const response = await fetch(`/api/characters/${id}`, setHeaders());
     const body = await response.json();
-    console.log(body);
     this.getData(body.questbook_id);
     
     
@@ -34,7 +31,7 @@ class AllTasks extends React.Component {
     getData = async (id) => {
       const response = await fetch(`/api/questbook/${id}/tasks`, setHeaders());
       const body = await response.json();
-      console.log(body);
+      
       this.setState(
         {
           tasks: body
@@ -76,8 +73,8 @@ class AllTasks extends React.Component {
           <Icon name='right chevron' />
         </Button>
         <Label color = 'brown'>{x.category}</Label>
-        <Label color = 'yellow'>Gold: {x.reward.gold}</Label>
-        <Label color = 'teal'>Exp: {x.reward.exp}</Label>
+        <Label color = 'yellow'>Gold: {x.gold}</Label>
+        <Label color = 'teal'>Exp: {x.exp}</Label>
       </Item.Extra>
     </Item.Content>
   </Item>

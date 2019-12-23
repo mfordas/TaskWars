@@ -12,6 +12,8 @@ import {
   Segment
 } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
+import axios from 'axios';
+import ErrorMessage from '../ErrorMessage';
 
 const options = [
   { key: 'd', text: 'Daily', value: 'Daily' },
@@ -29,13 +31,12 @@ class AddTask extends React.Component {
     type: '',
     category: '',
     duration: '',
-    reward: {
       exp: '',
       gold: '',
-    },
     penalty: '',
     status: ''
   }
+
 
 
 
@@ -43,7 +44,6 @@ class AddTask extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     console.log(body.character_id);
-    console.log(1);
     this.fetchCharacter(body.character_id);
 
   }
@@ -52,60 +52,49 @@ class AddTask extends React.Component {
   fetchCharacter = async (id) => {
     const response = await fetch(`/api/characters/${id}`, setHeaders());
     const body = await response.json();
-    console.log(body);
+    console.log(body.questbook_id);
     this.postData(body.questbook_id, this.state);
 
 
   }
 
-
-  //     getData = async (id) => {
-  //       const response = await fetch(`/api/questbook/${id}/task`, setHeaders());
-  //       const body = await response.json();
-  //       console.log(body);
-  //       this.setState(
-  //         {
-  //           tasks: body
-  //         }
-  //       )
-  //       }
-
-  postData = async (state) => {
-
-    const data = state;
-
-    try {
-      const response = await fetch(`/api/tasks/`, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(data), // data can be `string` or {object}!
-        headers: setHeaders()
-      });
-      const json = await response.json();
-      console.log('Success:', JSON.stringify(json));
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  postData = async (questbook_id, state) =>{
+    let data = state;
+    console.log(data);
+    await axios({
+      url: `/api/questbook/${questbook_id}/task`,
+      method: 'post',
+      headers: setHeaders(),
+      data:  {
+        name: data.name,
+        description: data.description,
+        type: data.type,
+        category: data.category,
+        duration: `${data.hours*1+data.days*24}`,
+          exp: data.exp,
+          gold: data.gold,
+        penalty: data.penalty,
+        status: data.status
+      }
+    })
   }
 
-
-  // // const form = new FormData(document.getElementById('login-form'));
-
-
-  //   componentDidMount() {
-  //     console.log('mounted')
-  //   }
-
-  //   componentDidUpdate() {
-
-  //   }
-
-  onButtonSubmit = () => {
-    console.log(this.state)
-    this.postData(this.state)
+  
+  onButtonSubmit = async e => {
+    e.preventDefault();
+    console.log(this.state);
+    await this.fetchUser();
 
 
   }
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+  nameValidate = (e) => {
+    if(this.state.name === '') {
+    return {content:<ErrorMessage message='Enter your name:'/>}} 
+    else { return null }
+
+  }
 
 
   render() {
@@ -114,19 +103,26 @@ class AddTask extends React.Component {
       type,
       category,
       duration,
-
-      exp,
-      gold,
+        exp,
+        gold,
       penalty,
-      status
+      status,
+      days,
+      hours
     } = this.state
+
+    
+
+           
     return (
       <div>
         <Segment inverted>
           <Form inverted onSubmit={this.onButtonSubmit}>
             <Header inverted>Add new task</Header>
+            
             <Form.Group widths='equal'>
               <Form.Input
+                error={this.nameValidate()}
                 label='Task name'
                 placeholder='Task name'
                 name='name'
@@ -135,6 +131,7 @@ class AddTask extends React.Component {
               />
 
               <Form.Field
+                error={this.state.category === false ? {content:<ErrorMessage message='Please choose category'/>} : null}
                 control={Select}
                 label='Category'
                 options={options}
@@ -183,10 +180,18 @@ class AddTask extends React.Component {
             <Form.Group widths='equal'>
               <Form.Field
                 control={Input}
-                label='Duration'
-                placeholder='Duration'
-                value={duration}
-                name='duration'
+                label='Duration: days'
+                placeholder='Days'
+                value={days}
+                name='days'
+                onChange={this.handleChange}
+              />
+              <Form.Field
+                control={Input}
+                label='hours'
+                placeholder='Hours'
+                value={hours}
+                name='hours'
                 onChange={this.handleChange}
               />
               <Form.Field
