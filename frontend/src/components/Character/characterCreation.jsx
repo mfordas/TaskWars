@@ -152,41 +152,55 @@ class CharacterCreation extends React.Component {
 
   render() {
     const {name, charClass} = this.state;
-    const {text, avatar} = classChosen[charClass];
+    const {text, avatar, stats} = classChosen[charClass];
     return(
       <div> 
       <Segment>
         <Form onSubmit={this.handleButtonClick}>
-          <Form.Group>
-            <Form.Input label='Character Name'
+          <Header>Character name</Header>
+          <Form.Group inline >
+            <Form.Input
             required
             placeholder='Character Name'
             name = 'name'
             value = {this.name}
             onChange = {this.handleInputChange}
-            warning={{
-              content: 'Name must be at least 5 characters long',
-              pointing: 'above',
-            }}
             />
+            {this.state.name.length < 5 ?
+            <Label>Name must be at least 5 characters long.</Label> : null}
           </Form.Group>
-          {this.state.nameTaken ?
-              <Message header ='Name taken' content = 'This name is already in use'/> : null}
-          <Form.Group>
-            <Header>Class: </Header>
-            <Radio label = 'Warrior' name = "charClassRadio" value = 'Warrior'  checked={charClass === 'Warrior'} onChange ={this.handleRadioChange} default />
-            <Radio label = 'Hunter' name = "charClassRadio" value = 'Hunter'  checked={charClass === 'Hunter'} onChange ={this.handleRadioChange} />
-            <Radio label = 'Mage' name = "charClassRadio" value = 'Mage'  checked={charClass === 'Mage'} onChange ={this.handleRadioChange} />
-            <Radio label = 'Druid' name = "charClassRadio" value = 'Druid' checked={charClass === 'Druid'} onChange ={this.handleRadioChange} />
+
+          {this.state.nameTaken === true ?
+          <Message color = 'red' header ='Name taken' content = 'This name is already in use.'/> : null}
+
+          <Header>Class</Header>
+          <Form.Group inline>
+            <Form.Field>
+              <Radio label = 'Warrior' name = "charClassRadio" value = 'Warrior'  checked={charClass === 'Warrior'} onChange ={this.handleRadioChange} default />
+            </Form.Field>
+            <Form.Field>
+              <Radio label = 'Hunter' name = "charClassRadio" value = 'Hunter'  checked={charClass === 'Hunter'} onChange ={this.handleRadioChange} />
+            </Form.Field>
+            <Form.Field>
+              <Radio label = 'Mage' name = "charClassRadio" value = 'Mage'  checked={charClass === 'Mage'} onChange ={this.handleRadioChange} />
+            </Form.Field>
+            <Form.Field>
+              <Radio label = 'Druid' name = "charClassRadio" value = 'Druid' checked={charClass === 'Druid'} onChange ={this.handleRadioChange} />
+            </Form.Field>
           </Form.Group>
           <Button type = 'submit'>Create</Button>
         </Form>
       </Segment>
-      <Segment>
-        <Header>{charClass} {name}</Header>
-        <Header>{text}</Header>
-        <Image src = {avatar} />
-      </Segment>
+      <Segment.Group horizontal>
+        <Segment floated = 'left' >
+          <Image size = 'medium' src = {avatar} />
+        </Segment>
+        <Segment floated = 'right' >
+          <Header as='h1'>{charClass} {name}</Header>
+          <Header>{text}</Header>
+          <Header>{stats}</Header>
+        </Segment>
+      </Segment.Group>
     </div>
     );
   }
