@@ -54,7 +54,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <PublicRoute path="/login" component={Login} />
           <PublicRoute path="/register" component={Register} />
-          <Route exact path="/characterCreation" component={Character} />
+          <PrivateRoute exact path="/characterCreation" component={Character} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
           <Route exact path="/confirmed" component={Confirmed} />
