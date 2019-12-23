@@ -9,8 +9,8 @@ router.post('/', async (req, res) => {
   function validate(req) {
     const schema = {
       email: Joi.string()
-        .min(8)
-        .max(26)
+        .min(5)
+        .max(255)
         .required()
         .email(),
       password: Joi.string()
@@ -38,11 +38,12 @@ router.post('/', async (req, res) => {
   const token = jwt.sign(
     {
       _id: user._id,
+      name: user.name,
     },
     process.env.JWTPRIVATEKEY,
   );
 
-  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'email']));
+  res.header('x-auth-token', token).send(_.pick(user, ['_id','name', 'email']));
 });
 
 module.exports = router;

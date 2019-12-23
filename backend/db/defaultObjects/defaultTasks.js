@@ -14,10 +14,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Daily",
         duration: defaultDuration,
-        reward: {
-            exp: 100,
-            gold: 100
-        },
+        exp: 100,
+        gold: 100,
         penalty: 10,
         done: false
     },
@@ -27,10 +25,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Weekly",
         duration: defaultDuration,
-        reward: {
-            exp: 300,
-            gold: 300
-        },
+        exp: 300,
+        gold: 300,
         penalty: 70,
         done: false
     },
@@ -40,10 +36,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -53,10 +47,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -66,10 +58,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -79,10 +69,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -93,10 +81,8 @@ const defaultCreatures = [
         type: "Mental",
         category: "Daily",
         duration: defaultDuration,
-        reward: {
-            exp: 100,
-            gold: 100
-        },
+        exp: 100,
+        gold: 100,
         penalty: 10,
         done: false
     },
@@ -106,10 +92,8 @@ const defaultCreatures = [
         type: "Mental",
         category: "Weekly",
         duration: defaultDuration,
-        reward: {
-            exp: 300,
-            gold: 300
-        },
+        exp: 300,
+        gold: 300,
         penalty: 70,
         done: false
     },
@@ -119,10 +103,8 @@ const defaultCreatures = [
         type: "Mental",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -132,10 +114,8 @@ const defaultCreatures = [
         type: "Mental",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -145,10 +125,8 @@ const defaultCreatures = [
         type: "Mental",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 70,
         done: false
     },
@@ -159,10 +137,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Weekly",
         duration: defaultDuration,
-        reward: {
-            exp: 300,
-            gold: 300
-        },
+        exp: 300,
+        gold: 300,
         penalty: 70,
         done: false
     },
@@ -172,10 +148,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Weekly",
         duration: defaultDuration,
-        reward: {
-            exp: 300,
-            gold: 300
-        },
+        exp: 300,
+        gold: 300,
         penalty: 70,
         done: false
     },
@@ -185,10 +159,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Weekly",
         duration: defaultDuration,
-        reward: {
-            exp: 300,
-            gold: 300
-        },
+        exp: 300,
+        gold: 300,
         penalty: 70,
         done: false
     },
@@ -198,10 +170,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Monthly",
         duration: defaultDuration,
-        reward: {
-            exp: 1200,
-            gold: 1200
-        },
+        exp: 1200,
+        gold: 1200,
         penalty: 150,
         done: false
     },
@@ -211,10 +181,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Encounters",
         duration: defaultDuration,
-        reward: {
-            exp: 50,
-            gold: 50
-        },
+        exp: 50,
+        gold: 50,
         penalty: 150,
         done: false
     },
@@ -224,10 +192,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Events",
         duration: defaultDuration,
-        reward: {
-            exp: 1000,
-            gold: 1000
-        },
+        exp: 1000,
+        gold: 1000,
         penalty: 200,
         done: false
     },
@@ -237,10 +203,8 @@ const defaultCreatures = [
         type: "Utility",
         category: "Events",
         duration: defaultDuration,
-        reward: {
-            exp: 1000,
-            gold: 1000
-        },
+        exp: 1000,
+        gold: 1000,
         penalty: 200,
         done: false
     },
