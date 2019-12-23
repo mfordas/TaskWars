@@ -13,7 +13,7 @@ class RegisterContent extends React.Component {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    // confirmPassword: ''
   }
 
   postData = async (state) => {
@@ -86,7 +86,7 @@ class RegisterContent extends React.Component {
             name='confirmPassword'
             type='password'
             value={confirmPassword}
-            onChange={this.handleChange}
+            // onChange={this.handleChange}
           />
           <Form.Field color='purple' control={Button} >Submit</Form.Field>
         </Form>
