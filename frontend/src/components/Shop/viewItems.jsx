@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Icon, Item, Button, Image, ItemExtra  } from 'semantic-ui-react'
+import { Segment, Icon, Item, Button, Grid  } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 
 class ViewItems extends React.Component {
@@ -52,14 +52,18 @@ class ViewItems extends React.Component {
   }
   render() {
     return (
-      
-      <Segment.Group vertical>
-        <Segment>Your gold: { this.state.gold }</Segment>
-        <Item.Group>
+      <Segment>
+      <Grid doubling container centered columns='equal' padded>
+        <Grid.Row textAlign='center' verticalAlign='top'> 
+           Your gold: { this.state.gold } 
+         </Grid.Row>
+
+        {/* <Item.Group> */}
         {this.state.items.map(item => (
+          <Grid.Column mobile={16} tablet={8} computer={4} stretched>
+          <Segment>
 
           <Item key={item._id} >
-                      <Segment>
             <Item.Image src={item.picture} size="small" wrapped />
             <Item.Content>
               <Item.Header>{item.name}</Item.Header>
@@ -68,18 +72,21 @@ class ViewItems extends React.Component {
               <Item.Description>slot: {item.slot}</Item.Description>
               <Item.Description>price: {item.price}</Item.Description>
               <Item.Extra>
-                <Button primary floated='right'>
+                <Button primary floated='center'>
                     Buy
-                    <Icon name='right chevron' />
+                    <Icon name='chevron' />
                 </Button>
               </Item.Extra>
             </Item.Content>
-            </Segment>
         </Item>
 
+        </Segment>
+        </Grid.Column>
           ))}
-          </Item.Group>
-         </Segment.Group> 
+          {/* </Item.Group> */}
+
+         </Grid>
+         </Segment> 
     );
   }
 }
