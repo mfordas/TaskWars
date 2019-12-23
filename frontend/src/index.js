@@ -13,6 +13,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import Tasks from './views/Tasks';
 import Questbook from './views/Questbook';
+import Shop from './views/Shop';
 import PublicRoute from './components/PublicRoute';
 import Confirmed from './components/Confirmed';
 
@@ -55,6 +56,7 @@ const App = () => {
           <PublicRoute path="/register" component={Register} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
+          <PrivateRoute exact path="/shop" component={Shop} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
