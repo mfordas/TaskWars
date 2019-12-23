@@ -38,34 +38,67 @@ class CharacterCreation extends React.Component {
   state = {
     name: '',
     charClass: '',
-    inventory_id: '5dfbfa9c9f0dfe3ef4e511f5',
-    questbook_id: '5dfbfa9c9f0dfe3ef4e512f5'
+    inventory_id: '',
+    questbook_id: '',
+    health: '',
+    physical_power: '',
+    magical_power: ''
   }
 
-  // postCharacter = async (state) => {
-  //   const data = state;
-  //   console.log(data)
-  //   try {
-  //     const response = await fetch('http://localhost:8080/api/characters', {
-  //       method: 'POST',
-  //       body: {
-  //         "name": "Habarala",
-  //         "charClass": "Druid",
-  //         "inventory_id": "5dfbfa9c9f0dfe3ef4e511f5",
-  //         "questbook_id": "5dfbfa9c9f0dfe3ef4e512f5"
-  //       },
-  //       headers: setHeaders(),
-  //       mode: 'no-cors'
-  //     });
-  //     const json = await response.json();
-  //     console.log('Success:', JSON.stringify(json));
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // }
-  //JSON.stringify(data)
+  postQuestbook = async () =>{
+    await axios({
+      url: 'api/questbook',
+      method: 'post',
+      headers: setHeaders(),
+    }).then((response)=>{
+      this.setState({questbook_id: response.data._id})
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+
+  postInventory = async () =>{
+    await axios({
+      url: 'api/inventory',
+      method: 'post',
+      headers: setHeaders(),
+    }).then((response)=>{
+      this.setState({inventory_id: response.data._id})
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  setStatistics = async () => {
+    if(this.state.charClass === 'Warrior' ){
+      this.setState({
+        health: 35,
+        physical_power: 6,
+        magical_power: 1})
+    }else if(this.state.charClass === 'Hunter' ){
+      this.setState({
+        health: 31,
+        physical_power: 11,
+        magical_power: 1})
+    }else if(this.state.charClass === 'Mage' ){
+      this.setState({
+        health: 31,
+        physical_power: 1,
+        magical_power: 11})
+    }else if(this.state.charClass === 'Druid' ){
+      this.setState({
+        health: 31,
+        physical_power: 1,
+        magical_power: 6})
+    }
+  }
 
   postCharacter = async () =>{
+    await this.postQuestbook();
+    await this.postInventory();
+    await this.setStatistics();
+    console.log(this.state);
     await axios({
       url: 'api/characters',
       method: 'post',
@@ -73,7 +106,10 @@ class CharacterCreation extends React.Component {
         name: this.state.name,
         charClass: this.state.charClass,
         inventory_id: this.state.inventory_id,
-        questbook_id: this.state.questbook_id
+        questbook_id: this.state.questbook_id,
+        health: this.state.health,
+        physical_power: this.state.physical_power,
+        magical_power: this.state.magical_power
       },
       headers: setHeaders(),
     })
