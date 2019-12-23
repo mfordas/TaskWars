@@ -15,7 +15,7 @@ class Profile extends React.Component {
     physical: 0,
     magical: 0,
     guildsNames: [],
-  } 
+  }
 
   componentDidMount() {
     this.fetchUser()
@@ -70,7 +70,7 @@ class Profile extends React.Component {
           <div className="progress">
             <HealthBar health={this.state.health}/>
             <ExperienceBar exp={this.state.exp}/>
-            </div>
+          </div>
         </div>
         <div className="profileViewGroup">
           <AccountButton />

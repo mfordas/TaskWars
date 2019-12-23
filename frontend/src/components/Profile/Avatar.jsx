@@ -32,7 +32,7 @@ class Avatar extends React.Component {
                         <h1>Change avatar</h1>
                     </div>
                 }>
-                    <AvatarModal />
+                    <AvatarModal avatar={this.props.avatar}/>
                 </Modal>
                 <div className='avatarDiv'>
                     <Image id='avatar' src={this.props.avatar} size='medium' rounded />

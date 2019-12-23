@@ -9,7 +9,8 @@ class AccountModal extends React.Component {
 
     render() {
         return (
-            <h1>Zmień hasło</h1>
+            <h1>Zmień dane</h1>
+            
         );
     }
 }
