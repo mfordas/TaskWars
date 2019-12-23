@@ -46,7 +46,7 @@ class Login extends React.Component {
       }
     }
     catch (error) {
-      console.error('Error Registration:', error);
+      console.error('Error Login:', error);
       this.setState({ invalidData: true });
     }
   }

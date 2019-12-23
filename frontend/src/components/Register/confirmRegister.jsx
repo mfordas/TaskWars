@@ -5,8 +5,7 @@ const Confirmed = () => (
   <Grid centered>
     <Message
       success
-      header='Your email address has been successfully confirmed'
-      content='You may now log-in with the email you have chosen'
+      header='Account created, check your email'
     />
   </Grid>
 )

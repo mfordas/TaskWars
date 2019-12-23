@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     const schema = {
       email: Joi.string()
         .min(8)
-        .max(26)
+        .max(50)
         .required()
         .email(),
       password: Joi.string()
