@@ -14,6 +14,12 @@ router.post('/', async (req, res) => {
   res.send(character);
 });
 
+router.get('/', async (req, res) => {
+  const Character = res.locals.models.character;
+  const character = await Character.find().sort('name');
+  res.send(character);
+});
+
 //Searching character by ID [working]
 router.get('/:id', async (req, res) => {
   const Character = res.locals.models.character;

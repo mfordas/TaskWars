@@ -6,7 +6,8 @@ import {
   Header,
   Segment,
   Label,
-  Image
+  Image,
+  Message
 } from 'semantic-ui-react'
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
@@ -14,23 +15,28 @@ import setHeaders from '../../utils/setHeaders';
 const classChosen = {
   '': {
     avatar: '',
-    text: "Choose a class for more information."
+    text: "Choose a class for more information.",
+    stats: ''
   },
   'Warrior': {
     avatar: 'https://images-na.ssl-images-amazon.com/images/I/718T-mBL9AL._SY500_.jpg',
     text: 'Mighty swordmaster',
+    stats: '+5 additional maximum health and physical power per level'
   },
   'Hunter': {
     avatar: 'https://i.pinimg.com/originals/9e/d3/b1/9ed3b13275b8ccc7908be73753b33842.jpg',
     text: 'Sneaky sniper',
+    stats: '+10 additional physical power per level'
   },
   'Mage': {
     avatar: 'https://previews.123rf.com/images/chudtsankov/chudtsankov1303/chudtsankov130300165/18573211-happy-wizard-with-open-arms.jpg',
-    text: 'Kills in 5 seconds dies in 2...'
+    text: 'Kills in 5 seconds dies in 2...',
+    stats: '+10 additional magical power per level'
   },
   'Druid':{
     avatar: 'http://midnightsun2.wdfiles.com/local--resized-images/druids/druid%203%20%282%29.jpg/medium.jpg',
-    text: 'Protector of nature'
+    text: 'Protector of nature',
+    stats: '+5 additional maximum health and magical power per level'
   }
 };
 
@@ -115,11 +121,26 @@ class CharacterCreation extends React.Component {
     })
   }
 
+  checkName = async () => {
+    await axios({
+      url: 'api/characters',
+      method: 'get',
+      headers: setHeaders()
+    }).then((response) => {
+      console.log(response.data.forEach( (data) => {
+        if(data.name === this.state.name){console.log("Name taken")}}))
+    }, (error) => {
+      console.log(error);
+    });
+  }
 
-
+  onFormSubmit = (event) => {
+    event.preventDefault();
+    this.postCharacter();
+  }
 
   handleButtonClick = () => {
-    this.postCharacter()
+    this.checkName();
   }
 
   handleInputChange = (e, {name, value}) => this.setState({name: value});
@@ -135,6 +156,7 @@ class CharacterCreation extends React.Component {
           <Header >Create your character!</Header>
           <Form.Group>
             <Form.Input label='Character Name'
+            required
             placeholder='Character Name'
             name = 'name'
             value = {this.name}
