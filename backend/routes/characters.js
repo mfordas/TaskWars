@@ -178,6 +178,29 @@ router.put('/:id/magical_power', (req, res) => {
   });
 });
 
+router.put('/:id/avatar', (req, res) => {
+  const Character = res.locals.models.character;
+  getCharacters(Character, req.params.id).then(result => {
+    if (!result) {
+      res.status(404).send(`Character with this id: ${req.params.id} not found`);
+    } else {
+      // console.log(result);
+      Character.findByIdAndUpdate(req.params.id, {
+        avatar: req.body.avatar
+      }, { new: true }).then(
+        r => {
+          res.send(`Avatar updated for: ${r.name}:\n${r}`);
+        },
+        err => {
+          console.log(err.errmsg);
+          res.status(403).send('Bad request!');
+        },
+      );
+    }
+  });
+});
+
+
 async function getCharacters(Character, id) {
   if (id) {
     return await Character.find({ _id: id }).then(

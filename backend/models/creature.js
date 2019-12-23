@@ -49,6 +49,10 @@ const creatureSchema = new mongoose.Schema({
     ref: 'Task',
     default: null,
   },
+  picture: {
+    type: String,
+    default: ''
+  }
 });
 
 function validateCreature(creature) {
@@ -68,6 +72,7 @@ function validateCreature(creature) {
     reward: Joi.number().min(0),
     duration: Joi.number().min(0),
     task_to_dmg: Joi.objectId(),
+    picture: Joi.string()
   });
 
   return schema.validate(creature);

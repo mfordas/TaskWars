@@ -10,17 +10,13 @@ const guilds = require('./routes/guilds');
 const inventory = require('./routes/inventory');
 const tasks = require('./routes/tasks');
 const questbook = require('./routes/questbook');
+const auth = require('./routes/auth');
 const express = require('express');
 const path = require('path');
 const db = require('./db');
 
 const main = async () => {
   const app = express();
-
-  if (app.get('env') == 'development') {
-    app.use(morgan('tiny'));
-    debug('Morgan enabled...');
-  }
 
   // Database configuration
 
@@ -42,6 +38,7 @@ const main = async () => {
   //Routes
   app.use('/', home);
   app.use('/api/users', users);
+  app.use('/api/auth', auth);
   app.use('/api/creatures', creatures);
   app.use('/api/characters', characters);
   app.use('/api/item', item);

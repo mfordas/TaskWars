@@ -31,7 +31,14 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  equipped: { type: Boolean, default: false }
+  equipped: { 
+    type: Boolean,
+    default: false
+  },
+  picture: {
+    type: String,
+    default: ''
+  }
 });
 
 // const Item = mongoose.model('Item', itemSchema);
@@ -48,6 +55,7 @@ function validateItem(item) {
     effect_value: Joi.number(),
     price: Joi.number(),
     equipped: Joi.boolean(),
+    picture: Joi.string(),
   });
 
   return schema.validate(item);
