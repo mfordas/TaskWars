@@ -106,7 +106,6 @@ class CharacterCreation extends React.Component {
     await this.postQuestbook();
     await this.postInventory();
     await this.setStatistics();
-    console.log(this.state);
     await axios({
       url: 'api/characters',
       method: 'post',
