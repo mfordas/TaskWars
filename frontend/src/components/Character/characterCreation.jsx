@@ -114,6 +114,7 @@ class CharacterCreation extends React.Component {
         charClass: this.state.charClass,
         inventory_id: this.state.inventory_id,
         questbook_id: this.state.questbook_id,
+        maxHealth: this.state.health,
         health: this.state.health,
         physical_power: this.state.physical_power,
         magical_power: this.state.magical_power

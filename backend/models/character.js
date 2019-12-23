@@ -39,6 +39,10 @@ const characterSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  maxHealth: {
+    type: Number,
+    default: 0,
+  },
   health: {
     type: Number,
     default: 0,
@@ -65,6 +69,7 @@ function validateCharacter(character) {
     level: Joi.number().min(0),
     charClass: Joi.valid('Warrior', 'Hunter', 'Mage', 'Druid'),
     exp_points: Joi.number().min(0),
+    maxHealth: Joi.number().min(0),
     health: Joi.number().min(0),
     physical_power: Joi.number().min(0),
     magical_power: Joi.number().min(0),
