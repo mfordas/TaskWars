@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
   if (user) return res.status(400).send('User already registered.');
 
   user = new User(_.pick(req.body, ['name', 'email', 'password']));
-
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
@@ -48,9 +47,6 @@ router.get('/confirmation/:token', async (req, res) => {
   }, {
     new: true
   });
-
-  // res.write(`Hello ${user.name}! Your account has been verified.`);
-  // res.end();
 
   res.redirect('http://localhost:3000/confirmed');
 });
@@ -133,5 +129,3 @@ router.put('/:id/password', [auth, admin], async (req, res) => {
 });
 
 module.exports = router;
-
-// "name": "Task Wars"

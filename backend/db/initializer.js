@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const defaultCreatures = require('./defaultObjects/defaultCreatures')
 const defaultTasks = require('./defaultObjects/defaultTasks')
