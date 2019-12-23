@@ -8,7 +8,7 @@ class AvatarModal extends React.Component {
         super(props);
 
         this.state = {
-            img: this.props.avatar,
+            img: '',
         }
     }
 
@@ -16,6 +16,10 @@ class AvatarModal extends React.Component {
         this.setState({
             img: e.currentTarget.value
         })
+    }
+
+    componentDidUpdate() {
+        this.props.handleClose(this.state.img);
     }
 
     render() {
