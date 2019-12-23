@@ -12,8 +12,8 @@ class HealthBar extends React.Component {
         return (
             <div id="progressDiv">
                 <Header id="progressLabel" as='h4'>Health</Header>
-                <Progress id="progressBar" color='red' value={this.props.health} total={100}/>
-                <Header id="progressCounter" as='h4'>{this.props.health}/100</Header>
+                <Progress id="progressBar" color='red' value={this.props.health} total={this.props.maxHealth}/>
+                <Header id="progressCounter" as='h4'>{this.props.health}/{this.props.maxHealth}</Header>
             </div>
         );
     }

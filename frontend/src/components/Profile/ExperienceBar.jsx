@@ -13,8 +13,8 @@ class ExperienceBar extends React.Component {
         return (
             <div id="progressDiv">
                 <Header id="progressLabel" as='h4'>Experience</Header>
-                <Progress id="progressBar" color='yellow' value={this.props.exp} total={150}/>
-                <Header id="progressCounter" as='h4'>{this.props.exp}/150</Header>
+                <Progress id="progressBar" color='yellow' value={this.props.exp} total={this.props.expRequired}/>
+                <Header id="progressCounter" as='h4'>{this.props.exp}/{this.props.expRequired}</Header>
             </div>
         );
     }

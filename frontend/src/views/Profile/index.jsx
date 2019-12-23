@@ -9,6 +9,8 @@ class Profile extends React.Component {
     level: 0,
     guilds: [],
     health: 50,
+    maxHealth: 100,
+    expRequired: 200,
     exp: 50,
     class: "",
     avatar: "",
@@ -35,6 +37,8 @@ class Profile extends React.Component {
         level: body.level,
         guilds: body.guilds,
         health: body.health,
+        maxHealth: body.maxHealth,
+        expRequired: body.expRequired,
         exp: body.exp_points,
         class: body.charClass,
         avatar: body.avatar,
@@ -68,8 +72,8 @@ class Profile extends React.Component {
             <Avatar avatar={this.state.avatar}/>
             <Details name={this.state.name} level={this.state.level}/>
           <div className="progress">
-            <HealthBar health={this.state.health}/>
-            <ExperienceBar exp={this.state.exp}/>
+            <HealthBar health={this.state.health} maxHealth={this.state.maxHealth}/>
+            <ExperienceBar exp={this.state.exp} expRequired={this.props.expRequired}/>
           </div>
         </div>
         <div className="profileViewGroup">
