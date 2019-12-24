@@ -51,6 +51,7 @@ class ViewItems extends React.Component {
 
   }
   render() {
+    let activeV,disabledV;
     return (
       <Segment>
       <Grid doubling container centered columns='equal' padded>
@@ -72,9 +73,11 @@ class ViewItems extends React.Component {
               <Item.Description>slot: {item.slot}</Item.Description>
               <Item.Description>price: {item.price}</Item.Description>
               <Item.Extra>
-                <Button primary floated='center'>
-                    Buy
-                    <Icon name='chevron' />
+               { activeV = item.price <= this.state.gold ? true : false }
+               { disabledV = item.price > this.state.gold ? true : false}
+                <Button  primary animated='fade' floated='center' active={activeV} disabled={disabledV} >
+                <Button.Content visible>{ item.price <= this.state.gold ? 'Buy' : 'Not enough money' }</Button.Content>
+                <Button.Content hidden>{item.price}</Button.Content>
                 </Button>
               </Item.Extra>
             </Item.Content>
