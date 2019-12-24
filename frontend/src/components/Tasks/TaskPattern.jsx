@@ -9,9 +9,11 @@ class TaskPattern extends React.Component {
         super(props);
 
         this.portalRef = React.createRef();
+        this.state = {open: false}
     }
 
     handleButtonAddClick = async (e, { name }) => {
+        this.setState({open: true});
         const userFetch = await fetch('/api/users/me', setHeaders());
         const user = await userFetch.json();
         const characterFetch = await fetch(`/api/characters/${user.character_id}`);
@@ -32,6 +34,8 @@ class TaskPattern extends React.Component {
 
         if (res.status == 200)
             this.portalRef.current.handleOpen();
+        await new Promise(res => setTimeout(res, 3500));
+        this.setState({open: false});
     }
 
     pickImage() {
@@ -82,7 +86,13 @@ class TaskPattern extends React.Component {
                     </Item.Description>
 
                     <Item.Extra>
-                        <Button fluid icon color='blue' labelPosition='right' onClick={this.handleButtonAddClick}>
+                        <Button 
+                            fluid 
+                            icon 
+                            color='blue' 
+                            labelPosition='right' 
+                            onClick={this.handleButtonAddClick}
+                            disabled={this.state.open}>
                             <Icon name='plus' />
                             Add to questbook
                     </Button>

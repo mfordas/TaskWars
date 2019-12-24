@@ -1,5 +1,5 @@
 import React from 'react';
-import {Segment, Button, Header, TransitionablePortal } from 'semantic-ui-react';
+import { Segment, Button, Header, TransitionablePortal, Dimmer, Icon, Transition } from 'semantic-ui-react';
 
 class TopPortal extends React.Component {
     constructor(props) {
@@ -16,28 +16,32 @@ class TopPortal extends React.Component {
     };
 
     render() {
-        return <TransitionablePortal
-                    open={this.state.portalOpen}
-                    onClose={this.handleClose}
-                    transition={{ animation: 'fly down', duration: '1500' }}>
-                    <Segment
-                        style={{
-                            left: '40%',
-                            position: 'fixed',
-                            top: '0',
-                            zIndex: 1000,
-                        }}
-                    >
-                        <Header textAlign='center'>{this.props.header}</Header>
-                        <p >{this.props.description}</p>
+        return (
+            <TransitionablePortal
+                open={this.state.portalOpen}
+                onClose={this.handleClose}
+                transition={{ animation: 'fly down', duration: '1500' }}>
+                <Segment
+                    style={{
+                        left: '40%',
+                        position: 'fixed',
+                        top: '0',
+                        zIndex: 1000,
+                    }}
+                >
+                    <Header textAlign='center'>{this.props.header}</Header>
+                    <p >{this.props.description}</p>
 
-                        <Button color='green'
-                            content='Close'
-                            onClick={this.handleClose}
-                            fluid
-                        />
-                    </Segment>
-                </TransitionablePortal>
+                    <Button color='green'
+                        content='Close'
+                        onClick={this.handleClose}
+                        fluid
+                    />
+                    <Dimmer active={this.state.portalOpen} animation='scale' inverted page />
+                </Segment>
+            </TransitionablePortal>
+
+        );
     }
 }
 
