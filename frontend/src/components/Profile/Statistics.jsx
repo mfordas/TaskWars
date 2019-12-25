@@ -9,7 +9,6 @@ class Statistics extends React.Component {
     }
 
     getClassImage = (c) => {
-        console.log(c);
         if(c === "Warrior") return `https://cdn0.iconfinder.com/data/icons/viking-6/64/Axe-weapon-warrior-battle-512.png`;
         if(c === "Hunter") return `https://cdn1.iconfinder.com/data/icons/outlined-medieval-icons-pack/200/weapons_bow-512.png`;
         if(c === "Mage") return `https://cdn1.iconfinder.com/data/icons/outlined-medieval-icons-pack/200/magic_wizard_hat-512.png`;

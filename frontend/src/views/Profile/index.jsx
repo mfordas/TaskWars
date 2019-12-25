@@ -1,10 +1,12 @@
 import React from 'react';
 import { Avatar, HealthBar, ExperienceBar, Statistics, Details, Guilds, AccountButton} from '../../components/Profile'
 import setHeaders from '../../utils/setHeaders';
+import { set } from 'mongoose';
 
 class Profile extends React.Component {
 
   state = {
+    id:'',
     name: "",
     level: 0,
     guilds: [],
@@ -21,18 +23,23 @@ class Profile extends React.Component {
 
   componentDidMount() {
     this.fetchUser()
+      .then((x) => {
+          this.render();
+        })
   }
 
   fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
-    this.fetchCharacter(body.character_id);
+     return await this.fetchCharacter(body.character_id);
   };
 
   fetchCharacter = async (id) => {
       const response = await fetch(`/api/characters/${id}`, setHeaders());
-      const body = await response.json();
+      const body = await response.json();;
+      const names = await this.fetchGuilds(body.guilds);
       this.setState({
+        id: id,
         name: body.name,
         level: body.level,
         guilds: body.guilds,
@@ -43,10 +50,9 @@ class Profile extends React.Component {
         class: body.charClass,
         avatar: body.avatar,
         physical: body.physical_power,
-        magical: body.magical_power
+        magical: body.magical_power,
+        guildsNames: [...names[0]]
       })
-
-      this.fetchGuilds(body.guilds);
   }
 
   fetchGuilds = async (idList) => {
@@ -54,26 +60,29 @@ class Profile extends React.Component {
     const requests = idList.map(async (id) => {
         const response = await fetch(`/api/guilds/${id}`, setHeaders());
         const body = await response.json();
-        names.push(body.name);
+        return body.name;
     })
 
-    Promise.all(requests).then(() => {
-      this.setState({
-        guildsNames: names
+    return await Promise.all(requests)
+      .then((name) => {
+        names.push(name)
       })
-    })
+      .then(() => {
+        return names;
+      })
 }
 
   render() {
+    console.log(this.state.avatar)
     return (
       <div className="profileViewDiv">
         <div className="profileCharacterDetails">
           <h1>Character Details</h1>
-            <Avatar avatar={this.state.avatar}/>
+            <Avatar avatar={this.state.avatar} id={this.state.id}/>
             <Details name={this.state.name} level={this.state.level}/>
           <div className="progress">
             <HealthBar health={this.state.health} maxHealth={this.state.maxHealth}/>
-            <ExperienceBar exp={this.state.exp} expRequired={this.props.expRequired}/>
+            <ExperienceBar exp={this.state.exp} expRequired={this.state.expRequired}/>
           </div>
         </div>
         <div className="profileViewGroup">

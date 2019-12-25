@@ -10,6 +10,7 @@ class AvatarModal extends React.Component {
         this.state = {
             img: '',
         }
+        console.log(this.props.img);
     }
 
     setImage = (e) => {
@@ -18,7 +19,13 @@ class AvatarModal extends React.Component {
         })
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
+        this.setState({
+            img: this.props.img
+        })
+    }
+
+    componentDidUpdate(prevProps) {
         this.props.handleClose(this.state.img);
     }
 

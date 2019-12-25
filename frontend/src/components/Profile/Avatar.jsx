@@ -3,6 +3,7 @@ import { Image, Modal, Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import AvatarModal from './AvatarModal';
 import { compareSync } from 'bcryptjs';
+import setHeaders from '../../utils/setHeaders';
 
 class Avatar extends React.Component {
     constructor(props) {
@@ -10,7 +11,8 @@ class Avatar extends React.Component {
 
     this.avatarHoverRef = React.createRef();
     this.state = {
-        avatar: ''
+        avatar: this.props.avatar,
+        id: this.props.id
     }
     }
 
@@ -19,6 +21,16 @@ class Avatar extends React.Component {
         this.avatarHoverRef.current.addEventListener("mouseover", this.onMouseOverAvatar);
         this.avatarHoverRef.current.addEventListener("mouseleave", this.onMouseLeaveAvatar);
     }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.avatar !== prevProps.avatar)
+        {
+          this.setState({
+              avatar: this.props.avatar,
+              id: this.props.id
+          })
+        }
+      } 
 
     onMouseOverAvatar = () => {
         this.avatarHoverRef.current.style.opacity="70%";
@@ -34,12 +46,22 @@ class Avatar extends React.Component {
 
     onModalClose = () => {
         this.setState({avatar: this.img});
+        this.putAvatar(this.img);
+    }
+
+    putAvatar = async (img) => {
+        const data = {
+            avatar: img
+        };
+        let params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
+        const response = await fetch(`/api/characters/${this.props.id}/avatar`, params);
     }
 
     render() {
         return (
             <div className="avatarWrap">
                 <Modal 
+                size="small"
                 trigger={
                     <div id='avatarHover' ref={this.avatarHoverRef}>
                         <h1>Change avatar</h1>
