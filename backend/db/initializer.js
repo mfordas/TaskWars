@@ -41,6 +41,7 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
   const userData = arrayWithCount(count)(x => {
     if(x === 0) {
       return {
+        name: 'Admin',
         email: adminEmail,
         password: adminPassword,
         character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
@@ -49,6 +50,7 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
       };
     }
     return {
+      name: 'User',
       email: prefix + x + '@email.com',
       password: userPassword,
       character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
