@@ -17,7 +17,7 @@ class AccountButton extends React.Component {
                         <Button.Content hidden>Edit Account</Button.Content>
                     </Button>
                 }>
-                <AccountModal />
+                <AccountModal id={this.props.id} email={this.props.email} userName={this.props.userName}/>
             </Modal>
             </div>
         );

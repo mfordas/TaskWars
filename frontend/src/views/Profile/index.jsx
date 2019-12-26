@@ -2,11 +2,14 @@ import React from 'react';
 import { Avatar, HealthBar, ExperienceBar, Statistics, Details, Guilds, AccountButton} from '../../components/Profile'
 import setHeaders from '../../utils/setHeaders';
 import { set } from 'mongoose';
+import { compareSync } from 'bcryptjs';
 
 class Profile extends React.Component {
 
   state = {
     id:'',
+    email: '',
+    userName: '',
     name: "",
     level: 0,
     guilds: [],
@@ -31,15 +34,17 @@ class Profile extends React.Component {
   fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
-     return await this.fetchCharacter(body.character_id);
+     return await this.fetchCharacter(body);
   };
 
-  fetchCharacter = async (id) => {
-      const response = await fetch(`/api/characters/${id}`, setHeaders());
+  fetchCharacter = async (user) => {
+      const response = await fetch(`/api/characters/${user.character_id}`, setHeaders());
       const body = await response.json();;
       const names = await this.fetchGuilds(body.guilds);
       this.setState({
-        id: id,
+        id: user._id,
+        email: user.email,
+        userName: user.name,
         name: body.name,
         level: body.level,
         guilds: body.guilds,
@@ -86,7 +91,7 @@ class Profile extends React.Component {
           </div>
         </div>
         <div className="profileViewGroup">
-          <AccountButton />
+          <AccountButton id={this.state.id} email={this.state.email} userName={this.state.userName}/>
           <div className="profileCharacterGuilds">
             <Guilds guilds={this.state.guildsNames}/>
           </div>
