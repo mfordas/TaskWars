@@ -41,17 +41,21 @@ const createUsers = async (prefix, count, models, characterCatalog) => {
   const userData = arrayWithCount(count)(x => {
     if(x === 0) {
       return {
+        name: 'Admin',
         email: adminEmail,
         password: adminPassword,
         character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
-        isAdmin: true
+        isAdmin: true,
+        isVerified: true
       };
     }
     return {
+      name: 'User',
       email: prefix + x + '@email.com',
       password: userPassword,
       character_id: characterCatalog[x] === undefined ? null : characterCatalog[x],
-      isAdmin: false
+      isAdmin: false,
+      isVerified: true
     };
   });
   return await createModelBatch(models.user, userData);
@@ -62,7 +66,9 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
     return {
       name: prefix + x,
       level: 10 + x,
+      maxHealth: 10*x,
       health: 10*(x+1),
+      expRequired: 120*(x+1),
       exp_points: 100*(x+1),
       physical_power: 15 + x,
       magical_power: 20 + x, 
@@ -100,12 +106,14 @@ const createCreatures = async (prefix, count, models, taskCatalog) => {
       return {
         name: prefix + x,
         level: 10 + x,
+        maxHealth: 10*x,
         health: 10*x,
         physical_power: 15 + x,
         physical_resistance: 10 + x,
         magical_power: 20 + x,
         magical_resistance: 25 + x,
-        reward: 50+x,
+        exp: 50+x,
+        gold: 50+x,
         duration: x+6,
         task_to_dmg: taskCatalog[x],
         picture: ''
@@ -173,10 +181,8 @@ const createTask = async (prefix, count, models) => {
         type: "Utility",
         category: "Daily",
         duration: (x+1),
-        reward: {
-          exp: (100+x),
-          gold: (50+x)
-        },
+        exp: (100+x),
+        gold: (50+x),
         penalty: (5+x),
         done: false
       }

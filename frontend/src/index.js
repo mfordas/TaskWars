@@ -12,7 +12,9 @@ import Home from './views/Homepage';
 import Login from './views/Login';
 import Register from './views/Register';
 import Tasks from './views/Tasks';
+import Character from './views/Character'
 import Questbook from './views/Questbook';
+import Shop from './views/Shop';
 import PublicRoute from './components/PublicRoute';
 import Confirmed from './components/Confirmed';
 
@@ -53,8 +55,10 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <PublicRoute path="/login" component={Login} />
           <PublicRoute path="/register" component={Register} />
+          <PrivateRoute exact path="/characterCreation" component={Character} />
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
+          <PrivateRoute exact path="/shop" component={Shop} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>

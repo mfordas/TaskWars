@@ -36,7 +36,11 @@ const creatureSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  reward: {
+  exp: {
+    type: Number,
+    default: 0,
+  },
+  gold: {
     type: Number,
     default: 0,
   },
@@ -69,7 +73,8 @@ function validateCreature(creature) {
     physical_power: Joi.number().min(0),
     magical_power: Joi.number().min(0),
     magical_resistence: Joi.number().min(0),
-    reward: Joi.number().min(0),
+    exp: Joi.number().min(0),
+    gold: Joi.number().min(0),
     duration: Joi.number().min(0),
     task_to_dmg: Joi.objectId(),
     picture: Joi.string()

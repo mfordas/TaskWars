@@ -9,9 +9,13 @@ import {
   Select,
   TextArea,
   Header,
-  Segment
+  Segment,
+  Message
 } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
+import axios from 'axios';
+import ErrorMessage from '../ErrorMessage';
+import { number } from 'joi';
 
 const options = [
   { key: 'd', text: 'Daily', value: 'Daily' },
@@ -29,13 +33,16 @@ class AddTask extends React.Component {
     type: '',
     category: '',
     duration: '',
-    reward: {
       exp: '',
       gold: '',
-    },
     penalty: '',
-    status: ''
+    status: '',
+    submitStatus: false,
+    days: '',
+    hours: '',
+    taskAdded: null
   }
+
 
 
 
@@ -43,7 +50,6 @@ class AddTask extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     console.log(body.character_id);
-    console.log(1);
     this.fetchCharacter(body.character_id);
 
   }
@@ -52,60 +58,119 @@ class AddTask extends React.Component {
   fetchCharacter = async (id) => {
     const response = await fetch(`/api/characters/${id}`, setHeaders());
     const body = await response.json();
-    console.log(body);
+    console.log(body.questbook_id);
     this.postData(body.questbook_id, this.state);
 
 
   }
 
-
-  //     getData = async (id) => {
-  //       const response = await fetch(`/api/questbook/${id}/task`, setHeaders());
-  //       const body = await response.json();
-  //       console.log(body);
-  //       this.setState(
-  //         {
-  //           tasks: body
-  //         }
-  //       )
-  //       }
-
-  postData = async (state) => {
-
-    const data = state;
-
-    try {
-      const response = await fetch(`/api/tasks/`, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(data), // data can be `string` or {object}!
-        headers: setHeaders()
-      });
-      const json = await response.json();
-      console.log('Success:', JSON.stringify(json));
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  postData = async (questbook_id, state) =>{
+    let data = state;
+    console.log(data);
+    await axios({
+      url: `/api/questbook/${questbook_id}/task`,
+      method: 'post',
+      headers: setHeaders(),
+      data:  {
+        name: data.name,
+        description: data.description,
+        type: data.type,
+        category: data.category,
+        duration: `${data.hours*1+data.days*24}`,
+          exp: data.exp,
+          gold: data.gold,
+        penalty: data.penalty,
+        status: data.status
+      }
+    }).then((response) =>{ 
+      if(response.status === 200){
+        this.setState({taskAdded: true});
+      }else{
+        this.setState({taskAdded: false});
+      }
+    }, (error) => {
+      console.log(error)
+    });
   }
+  
 
-
-  // // const form = new FormData(document.getElementById('login-form'));
-
-
-  //   componentDidMount() {
-  //     console.log('mounted')
-  //   }
-
-  //   componentDidUpdate() {
-
-  //   }
-
-  onButtonSubmit = () => {
-    console.log(this.state)
-    this.postData(this.state)
+  
+  onButtonSubmit = async e => {
+    e.preventDefault();
+    this.setState({submitStatus:true})
+    console.log(this.state);
+    await this.fetchUser();
 
 
   }
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+  nameValidate = (e) => {
+    if(this.state.name === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Name shoud have between 5 and 50 characters'/>}} 
+    else { return null }
+
+  }
+  descriptionValidate = (e) => {
+    if(this.state.description === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Description shoud have between 5 and 50 characters'/>}} 
+    else { return null }
+
+  }
+  categoryValidate = (e) => {
+    if(this.state.category === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Choose category'/>}} 
+    else { return null }
+
+  }
+  typeValidate = (e) => {
+    if(this.state.type === '' && this.state.submitStatus) {
+    return <ErrorMessage message='Choose type'/>} 
+    else { return null }
+
+  }
+  penaltyValidate = (e) => {
+    if(this.state.penalty === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type penalty'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.penalty) === number) {
+      return {content:<ErrorMessage message='Penalty shoud be a number'/>}} 
+      else { return null }
+
+  }
+  goldValidate = (e) => {
+    if(this.state.gold === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type gold'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.gold)===number) {
+      return {content:<ErrorMessage message='Gold shoud be a number'/>}} 
+      else { return null }
+
+  }
+  expValidate = (e) => {
+    if(this.state.exp === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type exp'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.exp) === number) {
+      return {content:<ErrorMessage message='Exp shoud be a number'/>}} 
+      else { return null }
+
+  }
+  hoursValidate = (e) => {
+    if(this.state.hours === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type hours'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.hours) === number) {
+      return {content:<ErrorMessage message='Hours shoud be a number'/>}} 
+      else { return null }
+
+  }
+  daysValidate = (e) => {
+    if(this.state.days === '' && this.state.submitStatus) {
+    return {content:<ErrorMessage message='Type days'/>}} 
+    else if(this.state.submitStatus && typeof(this.state.days) === number) {
+      return {content:<ErrorMessage message='Days shoud be a number'/>}} 
+      else { return null }
+
+  }
+
+  
 
 
   render() {
@@ -114,19 +179,28 @@ class AddTask extends React.Component {
       type,
       category,
       duration,
-
-      exp,
-      gold,
+        exp,
+        gold,
       penalty,
-      status
+      status,
+      days,
+      hours
     } = this.state
+
+    
+
+           
     return (
       <div>
         <Segment inverted>
+        {this.state.taskAdded === true ?
+          <Message color = 'green' header ='Success' content = 'Task added'/> : null }
           <Form inverted onSubmit={this.onButtonSubmit}>
             <Header inverted>Add new task</Header>
+            
             <Form.Group widths='equal'>
               <Form.Input
+                error={this.nameValidate()}
                 label='Task name'
                 placeholder='Task name'
                 name='name'
@@ -135,6 +209,7 @@ class AddTask extends React.Component {
               />
 
               <Form.Field
+                error={this.categoryValidate()}
                 control={Select}
                 label='Category'
                 options={options}
@@ -146,6 +221,7 @@ class AddTask extends React.Component {
             </Form.Group>
 
             <Form.Field
+              error={this.descriptionValidate()}
               control={TextArea}
               label='Description'
               placeholder='Write description of the task...'
@@ -153,8 +229,9 @@ class AddTask extends React.Component {
               name='description'
               onChange={this.handleChange}
             />
-            <Form.Group inline>
+            <Form.Group inline >
               <label>Type</label>
+              <div>{this.typeValidate()}</div>
               <Form.Field
                 control={Radio}
                 label='Physical'
@@ -172,6 +249,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
               <Form.Field
+                
                 control={Radio}
                 label='Utility'
                 value='Utility'
@@ -182,14 +260,25 @@ class AddTask extends React.Component {
             </Form.Group>
             <Form.Group widths='equal'>
               <Form.Field
+                error={this.daysValidate()}
                 control={Input}
-                label='Duration'
-                placeholder='Duration'
-                value={duration}
-                name='duration'
+                label='Duration: days'
+                placeholder='Days'
+                value={days}
+                name='days'
                 onChange={this.handleChange}
               />
               <Form.Field
+                error={this.hoursValidate()}
+                control={Input}
+                label='hours'
+                placeholder='Hours'
+                value={hours}
+                name='hours'
+                onChange={this.handleChange}
+              />
+              <Form.Field
+              error={this.penaltyValidate()}
                 control={Input}
                 label='Penalty'
                 placeholder='Penalty'
@@ -200,6 +289,7 @@ class AddTask extends React.Component {
             </Form.Group>
             <Form.Group widths='equal'>
               <Form.Field
+              error={this.goldValidate()}
                 control={Input}
                 label='Gold'
                 placeholder='Gold'
@@ -208,6 +298,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
               <Form.Field
+              error={this.expValidate()}
                 control={Input}
                 label='Exp'
                 placeholder='Exp'
