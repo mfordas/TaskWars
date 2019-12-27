@@ -43,7 +43,8 @@ router.get('/:category&:type&:tags?', async (req, res) => {
   //console.log(tagsArray);
 
   const tasks = await Task
-    .find(searchObj());
+    .find(searchObj())
+    .sort('name');
 
   const result = filterByValue(tasks, tagsArray)
 

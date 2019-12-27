@@ -1,6 +1,7 @@
 import React from 'react';
-import { Menu, Icon, Container, Input, Button, Segment } from 'semantic-ui-react';
+import { Menu, Icon, Container, Input, Button, Segment, Form, Grid } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
+import TaskTable from './TasksTable';
 
 const tasksTypes = [
     { key: 0, text: 'All', value: 0 },
@@ -23,11 +24,12 @@ class MenuTasksFilter extends React.Component {
     constructor(props) {
         super(props);
 
+        this.taskTableRef = React.createRef();
         this.state = {
             category: 'All',
             type: 'All',
             tags: '',
-            results: ['elo']
+            results: []
         };
     }
 
@@ -70,70 +72,74 @@ class MenuTasksFilter extends React.Component {
     fetchTasks = async () => {
         const response = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders());
         const tasks = await response.json();
-        
+
         this.setState({ results: tasks });
-        console.log(this.state.results);
     }
 
     componentDidMount() {
         this.fetchTasks();
+
     }
 
     componentDidUpdate() {
+        this.taskTableRef.current.setState({ results: this.state.results });
     }
 
     render() {
         return (
             <Container className='filterWrapper'>
-                <Segment style={{ display: 'inline-block' }} inverted>
-                    <Input
-                        fluid
-                        placeholder='Tags...'
-                        icon='search'
-                        onChange={this.onSearchChange} />
-                    <Menu vertical inverted>
-                        <Menu.Item header>
-                            <Icon name='bars' fitted />Sort by type
-                        </Menu.Item>
-                        {this.arrayToMenuType(tasksCategories)}
-                    </Menu>
+                <Grid columns={10}>
+                    <Grid.Column width={4}>
+                        <Segment style={{ display: 'inline-block' }} inverted>
+                            <Form >
+                                <Input
+                                    fluid
+                                    placeholder='Tags...'
+                                    icon='search'
+                                    onChange={this.onSearchChange} 
+                                />
 
-                    <Menu vertical inverted>
-                        <Menu.Item header>
-                            <Icon name='bars' fitted />Sort by category
-                        </Menu.Item>
-                        {this.arrayToMenuCategory(tasksTypes)}
-                    </Menu>
+                                <Menu vertical inverted>
+                                    <Menu.Item header>
+                                        <Icon name='bars' fitted />Sort by type
+                                     </Menu.Item>
+                                    {this.arrayToMenuType(tasksCategories)}
+                                </Menu>
 
-                    <p style={{ color: 'gray', fontSize: '14px' }}>
-                        {`Found ${this.state.results.length} results...`}
-                    </p>
+                                <Menu vertical inverted>
+                                    <Menu.Item header>
+                                        <Icon name='bars' fitted />Sort by category
+                                    </Menu.Item>
+                                    {this.arrayToMenuCategory(tasksTypes)}
+                                </Menu>
 
-                    <Button
-                        fluid
-                        animated
-                        color='blue' 
-                        size='huge'
-                        onClick={this.onSearchButtonClick}>
-                        <Button.Content visible>
-                            Search
-                        </Button.Content>
+                                <p style={{ color: 'gray', fontSize: '14px' }}>
+                                    {`Found ${this.state.results.length} results...`}
+                                </p>
 
-                        <Button.Content hidden>
-                            <Icon name='search' />
-                        </Button.Content>
-                    </Button>
+                                <Button
+                                    fluid
+                                    animated
+                                    color='blue'
+                                    size='huge'
+                                    onClick={this.onSearchButtonClick}>
+                                    <Button.Content visible>
+                                        Search
+                                    </Button.Content>
 
-                    {/* <Pagination
-                        boundaryRange={0}
-                        defaultActivePage={1}
-                        ellipsisItem={null}
-                        firstItem={null}
-                        lastItem={null}
-                        siblingRange={1}
-                        totalPages={10}
-                    /> */}
-                </Segment>
+                                    <Button.Content hidden>
+                                        <Icon name='search' />
+                                    </Button.Content>
+                                </Button>
+                            </Form>
+                        </Segment>
+                    </Grid.Column>
+
+                    <Grid.Column width={10}>
+                        <TaskTable ref={this.taskTableRef} />
+                    </Grid.Column>
+                </Grid>
+
             </Container>
         );
     }

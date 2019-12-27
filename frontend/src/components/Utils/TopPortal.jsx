@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Header, TransitionablePortal, Dimmer, Icon, Transition } from 'semantic-ui-react';
+import { Segment, Button, Header, TransitionablePortal, Dimmer } from 'semantic-ui-react';
 
 class TopPortal extends React.Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Segment, Icon, Button, Label, Popup, Portal, Header, TransitionablePortal } from 'semantic-ui-react';
+import { Item, Segment, Icon, Button, Label, Popup, Step, Header } from 'semantic-ui-react';
 import TopPortal from '../Utils/TopPortal';
 import setHeaders from '../../utils/setHeaders';
 const axios = require('axios');
@@ -9,11 +9,11 @@ class TaskPattern extends React.Component {
         super(props);
 
         this.portalRef = React.createRef();
-        this.state = {open: false}
+        this.state = { open: false }
     }
 
     handleButtonAddClick = async (e, { name }) => {
-        this.setState({open: true});
+        this.setState({ open: true });
         const userFetch = await fetch('/api/users/me', setHeaders());
         const user = await userFetch.json();
         const characterFetch = await fetch(`/api/characters/${user.character_id}`);
@@ -35,7 +35,7 @@ class TaskPattern extends React.Component {
         if (res.status == 200)
             this.portalRef.current.handleOpen();
         await new Promise(res => setTimeout(res, 3500));
-        this.setState({open: false});
+        this.setState({ open: false });
     }
 
     pickImage() {
@@ -53,44 +53,81 @@ class TaskPattern extends React.Component {
 
     render() {
         return (
-            <Segment>
+            <Segment inverted>
                 <Item>
-                    <Item.Image style={{ display: 'inline-block' }}><Icon {...this.pickImage()} /></Item.Image>
+                    <Item.Image style={{ display: 'inline-block' }}>
+                        <Icon {...this.pickImage()} />
+                    </Item.Image>
                     <Item.Header style={{ display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
                         {this.props.task.name}
                     </Item.Header>
 
-                    <Popup content='Gold' trigger={
-                        <Label color='yellow'>
-                            <Icon name='dot circle' />
-                            {this.props.task.gold}
+                    <Popup content='Type' trigger={
+                        <Label color='orange'>
+                            {this.props.task.type}
                         </Label>
                     } />
 
-                    <Popup content='Experience' trigger={
-                        <Label color='violet'>
-                            <Icon name='star' />
-                            {this.props.task.exp}
+                    <Popup content='Category' trigger={
+                        <Label color='olive'>
+                            {this.props.task.category}
                         </Label>
                     } />
-
-                    <Item.Meta>
-                        <span className='type'>Type: {this.props.task.type}</span><br />
-                        <span className='category'>Category: {this.props.task.category}</span>
-                    </Item.Meta>
 
                     <Item.Description>
-                        {this.props.task.description}<br />
-                        {this.props.task.penalty}<br />
-                        {this.props.task.duration}<br />
+                        <Segment.Group>
+                            <Segment 
+                                inverted 
+                                textAlign='center' 
+                                color='purple'
+                                style={{ padding: '2px 0px 0px 6px' }}>
+                                <Header as='h5'>
+                                    Description
+                                </Header>
+                            </Segment>
+                            <Segment>
+                                {this.props.task.description}<br />
+                            </Segment>
+                        </Segment.Group>
                     </Item.Description>
 
+                    <Step.Group widths={4} size='tiny'>
+                        <Step style={{ padding: '2px' }}>
+                            <Icon name='dot circle' color='yellow' />
+                            <Step.Content>
+                                <Step.Title>Gold</Step.Title>
+                                <Step.Description>{this.props.task.gold}</Step.Description>
+                            </Step.Content>
+                        </Step>
+                        <Step style={{ padding: '2px' }}>
+                            <Icon name='star' color='violet' />
+                            <Step.Content>
+                                <Step.Title>Experience</Step.Title>
+                                <Step.Description>{this.props.task.exp}</Step.Description>
+                            </Step.Content>
+                        </Step>
+                        <Step style={{ padding: '2px' }}>
+                            <Icon name='clock' color='teal' />
+                            <Step.Content>
+                                <Step.Title>Duration</Step.Title>
+                                <Step.Description>{this.props.task.duration}</Step.Description>
+                            </Step.Content>
+                        </Step>
+                        <Step style={{ padding: '2px' }}>
+                            <Icon name='wheelchair' />
+                            <Step.Content>
+                                <Step.Title>Penalty</Step.Title>
+                                <Step.Description>{this.props.task.penalty}</Step.Description>
+                            </Step.Content>
+                        </Step>
+                    </Step.Group>
+
                     <Item.Extra>
-                        <Button 
-                            fluid 
-                            icon 
-                            color='blue' 
-                            labelPosition='right' 
+                        <Button
+                            fluid
+                            icon
+                            color='blue'
+                            labelPosition='right'
                             onClick={this.handleButtonAddClick}
                             disabled={this.state.open}>
                             <Icon name='plus' />
@@ -100,10 +137,11 @@ class TaskPattern extends React.Component {
 
                 </Item>
 
-                <TopPortal 
+                <TopPortal
                     ref={this.portalRef}
-                    header={'Success!'} 
-                    description={`${this.props.task.name} has been added to your questbook`} />
+                    header={'Success!'}
+                    description={`${this.props.task.name} has been added to your questbook`} 
+                />
 
             </Segment >
         );
