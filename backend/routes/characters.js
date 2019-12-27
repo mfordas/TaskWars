@@ -36,9 +36,12 @@ router.put('/:id/level', (req, res) => {
     if (!result) {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
+      const stats = getStatsOnLevelUp(result, req.body.level);
+      console.log(stats);
       Character.findByIdAndUpdate(
         req.params.id,
         {
+          maxHealth: stats[0],
           level: req.body.level,
         },
         { new: true },
@@ -54,6 +57,28 @@ router.put('/:id/level', (req, res) => {
   });
 });
 
+const getStatsOnLevelUp = (character, level) => {
+  let stats = [];
+  let baseHP = 30;
+  let newBaseHP = 30;
+  for(let i=2; i<level; i++) {
+    baseHP += 10 + i*2;
+  }
+  stats["baseHP"] = baseHP;
+  let actualHP = character.maxHealth;
+  for(let i=2; i<level+1; i++) {
+    newBaseHP += 10 + i*2;
+  }
+  let gainHP = newBaseHP - baseHP;
+
+  let baseExp = 100;
+  for(let i=1; i<level+2; i++) {
+    baseExp += i*100 ;
+  }
+  console.log(baseEXp);
+
+  return [actualHP + gainHP]
+}
 
 router.put('/:id/maxHealth', (req, res) => {
   const Character = res.locals.models.character;
