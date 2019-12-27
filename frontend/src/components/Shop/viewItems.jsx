@@ -1,9 +1,9 @@
 import React from 'react';
-import { Segment, Icon, Item, Button, Image, ItemExtra  } from 'semantic-ui-react'
+import { Segment, Icon, Item, Button, Grid  } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 
 class ViewItems extends React.Component {
-  state = { items: [] }
+  state = { items: [], id_user: 0, id_inventory: 0 , gold: 0 }
 
   fetchItems = async () => {
     const response = await fetch('/api/item', setHeaders());
@@ -12,18 +12,59 @@ class ViewItems extends React.Component {
     console.log(body);
     this.setState({ items: body });
   }
+
+  fetchUser = async () => {
+    const response = await fetch('/api/users/me', setHeaders());
+    console.log(response);
+    const body = await response.json();
+    console.log(body);
+    this.setState({ id_user: body.character_id });
+    this.fetchInventory(this.state.id_user);
+  }
+
+  fetchInventory = async (character_id) => {
+    const response = await fetch('/api/characters/'+character_id, setHeaders());
+    console.log(response);
+    const body = await response.json();
+    console.log(body);
+    this.setState({ id_inventory: body.inventory_id });
+    this.fetchUserGold(this.state.id_inventory);
+  }
+
+  fetchUserGold = async (inventory_id) => {
+    const response = await fetch('/api/inventory/'+inventory_id, setHeaders());
+    console.log(response);
+    const body = await response.json();
+    console.log(body);
+    this.setState({ gold: body.gold });
+
+  }
+
   componentDidMount() {
     this.fetchItems();
+    this.fetchUser();
+
     console.log('mounted');
   }
+  componentDidUpdate() {
+
+
+  }
   render() {
+    let activeV,disabledV;
     return (
-      <Segment.Group vertical>
-        <Item.Group>
+      <Segment>
+      <Grid doubling container centered columns='equal' padded>
+        <Grid.Row textAlign='center' verticalAlign='top'> 
+           Your gold: { this.state.gold } 
+         </Grid.Row>
+
+        {/* <Item.Group> */}
         {this.state.items.map(item => (
+          <Grid.Column mobile={16} tablet={8} computer={4} stretched>
+          <Segment>
 
           <Item key={item._id} >
-                      <Segment>
             <Item.Image src={item.picture} size="small" wrapped />
             <Item.Content>
               <Item.Header>{item.name}</Item.Header>
@@ -32,18 +73,23 @@ class ViewItems extends React.Component {
               <Item.Description>slot: {item.slot}</Item.Description>
               <Item.Description>price: {item.price}</Item.Description>
               <Item.Extra>
-                <Button primary floated='right'>
-                    Buy
-                    <Icon name='right chevron' />
+               { activeV = item.price <= this.state.gold ? true : false }
+               { disabledV = item.price > this.state.gold ? true : false}
+                <Button  primary animated='fade' floated='center' active={activeV} disabled={disabledV} >
+                <Button.Content visible>{ item.price <= this.state.gold ? 'Buy' : 'Not enough money' }</Button.Content>
+                <Button.Content hidden>{item.price}</Button.Content>
                 </Button>
               </Item.Extra>
             </Item.Content>
-            </Segment>
         </Item>
 
+        </Segment>
+        </Grid.Column>
           ))}
-          </Item.Group>
-         </Segment.Group> 
+          {/* </Item.Group> */}
+
+         </Grid>
+         </Segment> 
     );
   }
 }
