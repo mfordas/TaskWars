@@ -161,9 +161,9 @@ const createQuestbook = async (count, models, taskCatalog) => {
   const questbookData = arrayWithCount(count)(x => {
     return {
       tasks: [
-        taskCatalog[(x+1)*1] === undefined ? null : taskCatalog[(x+1)*1],
-        taskCatalog[(x+1)*2] === undefined ? null : taskCatalog[(x+1)*2],
-        taskCatalog[(x+1)*3] === undefined ? null : taskCatalog[(x+1)*3],
+        taskCatalog[(x+1)*1] === undefined ? null : defaultTasks[(x+1)*1],
+        taskCatalog[(x+1)*2] === undefined ? null : defaultTasks[(x+1)*2],
+        taskCatalog[(x+1)*3] === undefined ? null : defaultTasks[(x+1)*3],
       ]
     };
   });
@@ -184,7 +184,7 @@ const createTask = async (prefix, count, models) => {
         exp: (100+x),
         gold: (50+x),
         penalty: (5+x),
-        done: false
+        status: ""
       }
     };
   });

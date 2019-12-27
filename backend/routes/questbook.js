@@ -57,11 +57,12 @@ router.get('/:id/failed', async (req, res) => {
 router.put('/:id/task', async (req, res) => {
   const Questbook = res.locals.models.questbook;
   const Task = res.locals.models.task;
+  let task = new Task(req.body);
   const { error } = validateTask(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
-  questbookHandel.tasks.push(req.body);
+  questbookHandel.tasks.push(task);
 
   const questbook = await Questbook.findByIdAndUpdate(
     req.params.id,
@@ -97,7 +98,7 @@ router.post('/:id/task', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   
-  await task.save();
+  // await task.save();
   console.log(task);
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
   questbookHandel.tasks.push(task);
@@ -113,4 +114,31 @@ router.post('/:id/task', async (req, res) => {
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
   res.send(questbook);
 });
+
+
+router.put('/:id/task/:idTask', async (req, res) => {
+  const Questbook = res.locals.models.questbook;
+  console.log(Questbook);
+  
+
+  const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
+  console.log(req.params.id);
+  console.log(questbookHandel);
+  console.log(questbookHandel.tasks);
+  console.log(req.params.idTask);
+  const questbook = await Questbook.findOneAndUpdate(
+    {
+       "_id": req.params.id,
+     "task._id" : req.params.idTask
+  }, 
+    {"$set":
+      {"task.$.status": "in_progress"},
+    },
+    { new: true },
+  );
+
+  if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
+  res.send(questbook);
+});
+
 module.exports = router;

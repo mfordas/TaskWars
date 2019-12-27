@@ -17,7 +17,7 @@ const defaultCreatures = [
         exp: 100,
         gold: 100,
         penalty: 10,
-        done: false
+        status:""
     },
     {
         name: "Strengthen Things",
@@ -28,7 +28,7 @@ const defaultCreatures = [
         exp: 300,
         gold: 300,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Sweet Dreams",
@@ -39,7 +39,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Pushing the Earth",
@@ -50,7 +50,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Faster than the wind",
@@ -61,7 +61,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Burner",
@@ -72,7 +72,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
 //----------------------------Mental-----------------------------------
     {
@@ -84,7 +84,7 @@ const defaultCreatures = [
         exp: 100,
         gold: 100,
         penalty: 10,
-        done: false
+        status:""
     },
     {
         name: "Keyboarding",
@@ -95,7 +95,7 @@ const defaultCreatures = [
         exp: 300,
         gold: 300,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Codemancer's Wrath",
@@ -106,7 +106,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Calm down!",
@@ -117,7 +117,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Page-turner",
@@ -128,7 +128,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 70,
-        done: false
+        status:""
     },
 //----------------------------Utility-----------------------------------
     {
@@ -140,7 +140,7 @@ const defaultCreatures = [
         exp: 300,
         gold: 300,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Hell's Kitchen",
@@ -151,7 +151,7 @@ const defaultCreatures = [
         exp: 300,
         gold: 300,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Baggar",
@@ -162,7 +162,7 @@ const defaultCreatures = [
         exp: 300,
         gold: 300,
         penalty: 70,
-        done: false
+        status:""
     },
     {
         name: "Fifth horseman",
@@ -173,7 +173,7 @@ const defaultCreatures = [
         exp: 1200,
         gold: 1200,
         penalty: 150,
-        done: false
+        status:""
     },
     {
         name: "Suction!",
@@ -184,7 +184,7 @@ const defaultCreatures = [
         exp: 50,
         gold: 50,
         penalty: 150,
-        done: false
+        status:""
     },
     {
         name: "Wunderbaum",
@@ -195,7 +195,7 @@ const defaultCreatures = [
         exp: 1000,
         gold: 1000,
         penalty: 200,
-        done: false
+        status:""
     },
     {
         name: "Jack-o'-lantern",
@@ -206,7 +206,7 @@ const defaultCreatures = [
         exp: 1000,
         gold: 1000,
         penalty: 200,
-        done: false
+        status:""
     },
 ]
 

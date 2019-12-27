@@ -2,11 +2,14 @@ import React from 'react';
 import _ from 'lodash';
 import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
+import StartTask from './startTask';
+const axios = require('axios');
+
 
 class AllTasks extends React.Component {
 
   state = {
-    tasks: []
+    tasks: [],
   }
 
   
@@ -31,13 +34,18 @@ class AllTasks extends React.Component {
     getData = async (id) => {
       const response = await fetch(`/api/questbook/${id}/tasks`, setHeaders());
       const body = await response.json();
-      
+      console.log(body);
       this.setState(
         {
           tasks: body
         }
       )
       }
+
+      
+      
+
+      
   
 
   componentDidMount() {
@@ -68,10 +76,11 @@ class AllTasks extends React.Component {
       <Item.Description>Duration: {x.duration}</Item.Description>
       <Item.Description>Penalty: {x.penalty}</Item.Description>
       <Item.Extra>
-        <Button primary floated='right'>
+        {/* <Button primary floated='right' onClick={this.startTask}>
           Start task
           <Icon name='right chevron' />
-        </Button>
+        </Button> */}
+        <StartTask task={x}/>
         <Label color = 'brown'>{x.category}</Label>
         <Label color = 'yellow'>Gold: {x.gold}</Label>
         <Label color = 'teal'>Exp: {x.exp}</Label>
