@@ -4,19 +4,19 @@ import setHeaders from '../../utils/setHeaders';
 import TaskTable from './TasksTable';
 
 const tasksTypes = [
-    { key: 0, text: 'All', value: 0 },
-    { key: 1, text: 'Daily', value: 1 },
-    { key: 2, text: 'Weekly', value: 2 },
-    { key: 3, text: 'Monthly', value: 3 },
-    { key: 4, text: 'Events', value: 4 },
-    { key: 5, text: 'Encounters', value: 5 }
+    { key: 0, text: 'All' },
+    { key: 1, text: 'Daily' },
+    { key: 2, text: 'Weekly' },
+    { key: 3, text: 'Monthly' },
+    { key: 4, text: 'Events' },
+    { key: 5, text: 'Encounters' }
 ];
 
 const tasksCategories = [
-    { key: 0, text: 'All', value: 0 },
-    { key: 1, text: 'Physical', value: 1 },
-    { key: 2, text: 'Mental', value: 2 },
-    { key: 3, text: 'Utility', value: 3 }
+    { key: 0, text: 'All' },
+    { key: 1, text: 'Physical' },
+    { key: 2, text: 'Mental' },
+    { key: 3, text: 'Utility' }
 ];
 
 
@@ -70,8 +70,8 @@ class MenuTasksFilter extends React.Component {
     }
 
     fetchTasks = async () => {
-        const response = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders());
-        const tasks = await response.json();
+        const tasks = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders())
+            .then( response => response.json());
 
         this.setState({ results: tasks });
     }

@@ -14,10 +14,11 @@ class TaskPattern extends React.Component {
 
     handleButtonAddClick = async (e, { name }) => {
         this.setState({ open: true });
-        const userFetch = await fetch('/api/users/me', setHeaders());
-        const user = await userFetch.json();
-        const characterFetch = await fetch(`/api/characters/${user.character_id}`);
-        const character = await characterFetch.json();
+        const user = await fetch('/api/users/me', setHeaders())
+            .then(response => response.json());
+        const character = await fetch(`/api/characters/${user.character_id}`)
+            .then(response => response.json());
+            
         const taskToInsert = {
             "name": `${this.props.task.name}`,
             "description": `${this.props.task.description}`,
@@ -76,9 +77,9 @@ class TaskPattern extends React.Component {
 
                     <Item.Description>
                         <Segment.Group>
-                            <Segment 
-                                inverted 
-                                textAlign='center' 
+                            <Segment
+                                inverted
+                                textAlign='center'
                                 color='purple'
                                 style={{ padding: '2px 0px 0px 6px' }}>
                                 <Header as='h5'>
@@ -140,7 +141,7 @@ class TaskPattern extends React.Component {
                 <TopPortal
                     ref={this.portalRef}
                     header={'Success!'}
-                    description={`${this.props.task.name} has been added to your questbook`} 
+                    description={`${this.props.task.name} has been added to your questbook`}
                 />
 
             </Segment >
