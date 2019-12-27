@@ -54,7 +54,28 @@ class ShopContent extends React.Component {
         }
       },
       headers: setHeaders(),
-    }).then(res => console.log('Put item:',res))
+    }).then(res => {
+        console.log('Put item:',res);
+        let afterPay = this.state.gold - item.price;
+        this.setState({ gold: afterPay });
+        this.fetchPayGold(afterPay);
+      })
+    .catch(error => console.error(error));
+  }
+
+  fetchPayGold = async (gold) => {
+    await axios({
+      url: `/api/inventory/${this.state.id_inventory}/gold`,
+      method: 'put',
+      data: {
+        inventory: {
+          gold: gold,
+        }
+      },
+      headers: setHeaders(),
+    }).then(res => {
+        console.log('Pay for item:',res);
+      })
     .catch(error => console.error(error));
   }
 
