@@ -1,9 +1,13 @@
 import React from 'react';
-import { Segment, Icon, Item, Button, Grid  } from 'semantic-ui-react'
+import { Segment, Icon, Grid  } from 'semantic-ui-react';
+import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
+import PublicRoute from '../PublicRoute';
+import ItemView from './ItemView';
 
-class ViewItems extends React.Component {
-  state = { items: [], id_user: 0, id_inventory: 0 , gold: 0 }
+
+class ShopContent extends React.Component {
+  state = { items: [], id_user: 0, id_inventory: 0 , gold: 0, item: null }
 
   fetchItems = async () => {
     const response = await fetch('/api/item', setHeaders());
@@ -40,6 +44,21 @@ class ViewItems extends React.Component {
 
   }
 
+  fetchBuyItem = async (item) => {
+    const resp = await axios({
+      url: `/api/inventory/${this.state.id_inventory}/backpack`,
+      method: 'put',
+      data: {
+        item: {
+          _id: item._id,
+        }
+      },
+      headers: setHeaders(),
+    }).then(res => console.log('Put item:',res))
+    .catch(error => console.error(error));
+  }
+
+
   componentDidMount() {
     this.fetchItems();
     this.fetchUser();
@@ -51,7 +70,8 @@ class ViewItems extends React.Component {
 
   }
   render() {
-    let activeV,disabledV;
+    let activeV;
+    let disabledV;
     return (
       <Segment>
       <Grid doubling container centered columns='equal' padded>
@@ -59,39 +79,17 @@ class ViewItems extends React.Component {
            Your gold: { this.state.gold } 
          </Grid.Row>
 
-        {/* <Item.Group> */}
         {this.state.items.map(item => (
           <Grid.Column mobile={16} tablet={8} computer={4} stretched>
-          <Segment>
-
-          <Item key={item._id} >
-            <Item.Image src={item.picture} size="small" wrapped />
-            <Item.Content>
-              <Item.Header>{item.name}</Item.Header>
-              <Item.Meta>{item.description}</Item.Meta>
-              <Item.Description>Effect: {item.effect} Value: {item.effect_value} </Item.Description>
-              <Item.Description>slot: {item.slot}</Item.Description>
-              <Item.Description>price: {item.price}</Item.Description>
-              <Item.Extra>
-               { activeV = item.price <= this.state.gold ? true : false }
-               { disabledV = item.price > this.state.gold ? true : false}
-                <Button  primary animated='fade' floated='center' active={activeV} disabled={disabledV} >
-                <Button.Content visible>{ item.price <= this.state.gold ? 'Buy' : 'Not enough money' }</Button.Content>
-                <Button.Content hidden>{item.price}</Button.Content>
-                </Button>
-              </Item.Extra>
-            </Item.Content>
-        </Item>
-
-        </Segment>
-        </Grid.Column>
-          ))}
-          {/* </Item.Group> */}
-
-         </Grid>
-         </Segment> 
+            <Segment>
+              <ItemView item={item} gold={this.state.gold} buyItem={this.fetchBuyItem} />
+            </Segment>
+          </Grid.Column>
+        ))}
+      </Grid>
+      </Segment> 
     );
   }
 }
 
-export default ViewItems;
+export default ShopContent;
