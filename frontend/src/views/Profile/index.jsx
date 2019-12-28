@@ -8,6 +8,7 @@ class Profile extends React.Component {
 
   state = {
     id:'',
+    char_id: '',
     email: '',
     userName: '',
     name: "",
@@ -43,6 +44,7 @@ class Profile extends React.Component {
       const names = await this.fetchGuilds(body.guilds);
       this.setState({
         id: user._id,
+        char_id: user.character_id,
         email: user.email,
         userName: user.name,
         name: body.name,
@@ -83,7 +85,7 @@ class Profile extends React.Component {
       <div className="profileViewDiv">
         <div className="profileCharacterDetails">
           <h1>Character Details</h1>
-            <Avatar avatar={this.state.avatar} id={this.state.id}/>
+            <Avatar avatar={this.state.avatar} id={this.state.char_id}/>
             <Details name={this.state.name} level={this.state.level}/>
           <div className="progress">
             <HealthBar health={this.state.health} maxHealth={this.state.maxHealth}/>
