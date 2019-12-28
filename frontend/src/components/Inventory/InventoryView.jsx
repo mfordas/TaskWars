@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Grid, Item, Button  } from 'semantic-ui-react';
+import { Segment, Grid, Item, Label, Button  } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import ItemButton from './ItemButton';
@@ -73,8 +73,11 @@ class InventoryView extends React.Component {
   }
 
   setDescription = (des) => {
-    let description = <ItemDescription key={des._id} item={des} />;
+    let description = <ItemDescription key={des._id} item={des} closeFun={this.setDescToNull} />;
     this.setState({ itemDescription: description });
+  }
+  setDescToNull = () => {
+    this.setState({ itemDescription: null });
   }
 
   render(){
@@ -82,11 +85,13 @@ class InventoryView extends React.Component {
     return (
       <Segment>
       <Grid doubling container centered columns='equal' padded>
-        <Grid.Row textAlign='center' verticalAlign='top'> 
+        <Grid.Row textAlign='left' verticalAlign='top'> 
           <Segment>Gold: {this.state.gold}</Segment>
         </Grid.Row>
         <Grid.Row textAlign='center' verticalAlign='top'>
-          {this.state.itemDescription}
+          { (this.state.itemDescription !== null) ? 
+          <Segment>{this.state.itemDescription}</Segment> 
+          : null}
         </Grid.Row>
             {this.state.backpackItem.map( (item, id = 0) => (
               <Item key={id}>

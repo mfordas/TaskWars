@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Button, Label, Table } from 'semantic-ui-react';
 
 class ItemDescription extends React.Component {
   state = { item: null }
@@ -11,14 +11,33 @@ class ItemDescription extends React.Component {
 
   render() {
     return (
-      <Segment>
+      <div>
+        <Label attached='top right' >
+            <Button size="tiny" icon='x' onClick={this.props.closeFun}></Button>
+        </Label> 
         <h2>{this.state.item !== null ? this.state.item.name :' '}</h2>
         <p>{this.state.item !== null ? this.state.item.description :' '}</p>
-        <i>{this.state.item !== null ? this.state.item.effect :' '}</i>
-        <i>{this.state.item !== null ? ' value: '+this.state.item.effect_value :' '}</i><br></br>
-        <i>{this.state.item !== null ? this.state.item.slot :' '}</i><br></br>
-        <i>{this.state.item !== null ? 'Price: '+this.state.item.price :' '}</i>
-      </Segment>
+        <Table definition>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell width={2}><i>{this.state.item !== null ? 'Effect' :' '}</i></Table.Cell>
+              <Table.Cell>{this.state.item !== null ? this.state.item.effect :' '}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>{this.state.item !== null ? 'Value' :' '}</Table.Cell>
+              <Table.Cell>{this.state.item !== null ? this.state.item.effect_value :' '}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>{this.state.item !== null ? 'Slot' :' '}</Table.Cell>
+              <Table.Cell>{this.state.item !== null ? this.state.item.slot :' '}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>{this.state.item !== null ? 'Price' :' '}</Table.Cell>
+              <Table.Cell>{this.state.item !== null ? this.state.item.price :' '}</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </div>
     );
   }
 }
