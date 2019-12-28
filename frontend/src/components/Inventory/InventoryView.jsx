@@ -2,6 +2,8 @@ import React from 'react';
 import { Segment, Grid, Item, Button  } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
+import ItemButton from './ItemButton';
+import ItemDescription from './ItemDescription';
 
 class InventoryView extends React.Component {
   state = { 
@@ -10,7 +12,8 @@ class InventoryView extends React.Component {
     backpack: [],
     gold: null,
     items: [],
-    backpackItem: []
+    backpackItem: [],
+    itemDescription: null
   }
 
   fetchUser = async () => {
@@ -52,15 +55,30 @@ class InventoryView extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchUser();
-    this.fetchItems();
-
+    if( !this.props.id_user && !this.props.id_inventory && !this.props.backpack &&
+      !this.props.gold && !this.props.items ) {
+        this.fetchUser();
+        this.fetchItems();
+      }else {
+        this.setState({
+          id_user: this.props.id_user,
+          id_inventory: this.props.id_inventory,
+          backpack: this.props.backpack,
+          gold: this.props.gold,
+          items: this.props.items
+        });
+        this.putItemInBackpack();
+      }
     console.log('mounted');
   }
 
+  setDescription = (des) => {
+    let description = <ItemDescription key={des._id} item={des} />;
+    this.setState({ itemDescription: description });
+  }
 
   render(){
-    let itemDescription = null;
+    // let itemDescription = null;
     return (
       <Segment>
       <Grid doubling container centered columns='equal' padded>
@@ -68,14 +86,12 @@ class InventoryView extends React.Component {
           <Segment>Gold: {this.state.gold}</Segment>
         </Grid.Row>
         <Grid.Row textAlign='center' verticalAlign='top'>
-          {itemDescription}
+          {this.state.itemDescription}
         </Grid.Row>
             {this.state.backpackItem.map( (item, id = 0) => (
               <Item key={id}>
                 <Grid.Column mobile={4} tablet={2} computer={1} stretched> 
-                  <Button inverted circular color='grey' >
-                    <Item.Image src={ item.picture } size="mini" wrapped />
-                  </Button>
+                  <ItemButton item={item} setDescription={this.setDescription} />
                 </Grid.Column>
               </Item> 
             ))}
