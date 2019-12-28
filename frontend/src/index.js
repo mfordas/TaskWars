@@ -41,7 +41,6 @@ const App = () => {
         const data = await response.json();
         changeStore('isLogged', true);
         changeStore('me', data);
-        console.log(data.character_id);  
         if(data.character_id){
           changeStore('hasCharacter', true);
         } else {

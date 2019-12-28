@@ -53,7 +53,8 @@ class CharacterCreation extends React.Component {
     physical_power: '',
     magical_power: '',
     nameTaken: false,
-    charCreated: null
+    charCreated: null,
+    _id: null
   }
 
   static contextType = Store;
@@ -78,6 +79,19 @@ class CharacterCreation extends React.Component {
       headers: setHeaders(),
     }).then((response)=>{
       this.setState({inventory_id: response.data._id})
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  putCharId = async () =>{
+    await axios({
+      url: `api/users/${this.context.me._id}/character_id`,
+      method: 'put',
+      data: {character_id: this.state._id},
+      headers: setHeaders(),
+    }).then((response)=>{
+      console.log(response);
     }, (error) => {
       console.log(error);
     });
@@ -128,7 +142,7 @@ class CharacterCreation extends React.Component {
       headers: setHeaders(),
     }).then((response) =>{ 
       if(response.status === 200){
-        this.setState({charCreated: true});
+        this.setState({charCreated: true, _id: response.data._id});
       }else{
         this.setState({charCreated: false});
       }
@@ -158,7 +172,9 @@ class CharacterCreation extends React.Component {
     event.preventDefault();
     await this.checkName();
     if(this.state.nameTaken === false && this.state.name.length > 5) {
-      this.postCharacter();
+      await this.postCharacter();
+      await this.putCharId();
+      this.context.changeStore('hasCharacter', true)
     }
   }
 
