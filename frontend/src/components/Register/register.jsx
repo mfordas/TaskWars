@@ -14,7 +14,6 @@ import Store from '../../Store';
 import ErrorMessage from '../ErrorMessage';
 const axios = require('axios');
 
-
 class Login extends React.Component {
 
   state = {

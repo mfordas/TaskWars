@@ -5,11 +5,11 @@ import {
   Form,
   Grid,
   Header,
-  Message,
   Segment,
 } from 'semantic-ui-react'
 import jwt from 'jwt-decode';
 import Store from '../../Store';
+import ErrorMessage from '../ErrorMessage';
 const axios = require('axios');
 
 class Login extends React.Component {
@@ -51,6 +51,13 @@ class Login extends React.Component {
     }
   }
 
+  loginValidate = (e) => {
+    if (this.state.invalidData) {
+      return <ErrorMessage message='Invalid email or password' />
+    }
+    else { return null }
+  }
+
   render() {
     if (this.context.isLogged) return <Redirect to="/" />;
 
@@ -74,15 +81,11 @@ class Login extends React.Component {
               type='password'
               value={this.state.password}
               onChange={e => this.setState({ password: e.target.value })}
+              error={this.loginValidate()}
             />
             <Grid textAlign='center' padded>
               <Button color='purple' type='submit'>Submit</Button>
             </Grid>
-            {this.state.invalidData ? (
-              <Message
-                error
-                header='Invalid email or password'
-              />) : null}
           </Form>
         </Segment>
       </Grid >
