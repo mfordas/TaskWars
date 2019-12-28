@@ -173,7 +173,7 @@ class CharacterCreation extends React.Component {
     this.setState({nameTaken: false});
     event.preventDefault();
     await this.checkName();
-    if(this.state.nameTaken === false && this.state.name.length > 5) {
+    if(this.state.nameTaken === false && this.state.name.length >= 5) {
       await this.postCharacter();
       await this.putCharId();
       this.context.changeStore('hasCharacter', true);
