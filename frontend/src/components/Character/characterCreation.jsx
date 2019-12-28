@@ -6,9 +6,7 @@ import {
   Radio,
   Header,
   Segment,
-  Label,
   Image,
-  Message
 } from 'semantic-ui-react'
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
@@ -23,12 +21,12 @@ const classChosen = {
     stats: ''
   },
   'Warrior': {
-    avatar: 'https://images-na.ssl-images-amazon.com/images/I/718T-mBL9AL._SY500_.jpg',
+    avatar: 'https://cdna.artstation.com/p/assets/images/images/014/222/254/large/cesar-art-nurgl.jpg?1543048465',
     text: 'Mighty swordmaster',
     stats: '+5 additional maximum health and physical power per level'
   },
   'Hunter': {
-    avatar: 'https://i.pinimg.com/originals/9e/d3/b1/9ed3b13275b8ccc7908be73753b33842.jpg',
+    avatar: 'https://i.pinimg.com/originals/a2/05/34/a20534bec75f72bd837e77a52ca5c84d.jpg',
     text: 'Sneaky sniper',
     stats: '+10 additional physical power per level'
   },
@@ -94,7 +92,7 @@ class CharacterCreation extends React.Component {
       data: {character_id: this.state._id},
       headers: setHeaders(),
     }).then((response)=>{
-      console.log(response);
+      //console.log(response);
     }, (error) => {
       console.log(error);
     });
@@ -118,7 +116,7 @@ class CharacterCreation extends React.Component {
         magical_power: 11})
     }else if(this.state.charClass === 'Druid' ){
       this.setState({
-        health: 31,
+        health: 35,
         physical_power: 1,
         magical_power: 6})
     }
@@ -179,8 +177,6 @@ class CharacterCreation extends React.Component {
       await this.postCharacter();
       await this.putCharId();
       this.context.changeStore('hasCharacter', true);
-    }else{
-      return {content: <ErrorMessage message = 'Something went wrong'/>};
     }
   }
 
@@ -239,10 +235,10 @@ class CharacterCreation extends React.Component {
         </Form>
       </Segment>
       <Segment.Group horizontal>
-        <Segment floated = 'left' >
-          <Image size = 'medium' src = {avatar} />
+        <Segment style={{width: '45%', height:'60vh'}} floated = 'left' >
+          <Image style={{width: '100%', height: '100%'}}  src = {avatar} />
         </Segment>
-        <Segment floated = 'right' >
+        <Segment style={{width: '55%'}} floated = 'right' >
           <Header as='h1'>{charClass} {name}</Header>
           <Header>{text}</Header>
           <Header>{stats}</Header>
