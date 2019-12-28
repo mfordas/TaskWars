@@ -2,6 +2,7 @@ const Joi = require('@hapi/joi');
 const express = require('express');
 const router = express.Router();
 const { validateTask } = require('../models/task');
+const auth = require('../middleware/authorization');
 
 //add new task
 router.post('/', async (req, res) => {
@@ -49,6 +50,15 @@ router.get('/:category&:type&:tags?', async (req, res) => {
   const result = filterByValue(tasks, tagsArray)
 
   res.send(result);
+});
+
+router.get('/count', async (req, res) => {
+  res.send(process.env.TASKS_COMPLETED);
+});
+
+router.put('/count', auth, async (req, res) => {
+  process.env.TASKS_COMPLETED++;
+  res.send(process.env.TASKS_COMPLETED);
 });
 
 //get task by id
