@@ -83,7 +83,7 @@ class InventoryView extends React.Component {
   render(){
     // let itemDescription = null;
     return (
-      <Segment>
+      <Segment inverted>
       <Grid doubling container centered columns='equal' padded>
         <Grid.Row textAlign='left' verticalAlign='top'> 
           <Segment>Gold: {this.state.gold}</Segment>

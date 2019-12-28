@@ -104,7 +104,7 @@ class ShopContent extends React.Component {
     let activeV;
     let disabledV;
     return (
-      <Segment>
+      <Segment inverted>
       <Grid doubling container centered columns='equal' padded>
         <Grid.Row textAlign='center' verticalAlign='top'>
           <Grid.Column stretched>
@@ -114,7 +114,7 @@ class ShopContent extends React.Component {
 
         {this.state.items.map(item => (
           <Grid.Column mobile={16} tablet={8} computer={4} stretched>
-            <Segment>
+            <Segment inverted color='grey'>
               <ItemView item={item} gold={this.state.gold} buyItem={this.fetchBuyItem} />
             </Segment>
           </Grid.Column>
