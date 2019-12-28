@@ -2,6 +2,8 @@ import React from 'react';
 import { Segment, Button, Header, TransitionablePortal, Dimmer } from 'semantic-ui-react';
 
 class TopPortal extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -9,11 +11,20 @@ class TopPortal extends React.Component {
     }
 
     handleClose = () => this.setState({ portalOpen: false });
+    
     handleOpen = async () => {
+        this._isMounted = true;
         this.setState({ portalOpen: true });
+
         await new Promise(resolve => setTimeout(resolve, 10000));
-        this.setState({ portalOpen: false });
+
+        if (this._isMounted)
+            this.setState({ portalOpen: false });
     };
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
     render() {
         return (
