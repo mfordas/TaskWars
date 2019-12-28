@@ -5,12 +5,13 @@ import 'semantic-ui-css/semantic.min.css';
 import Store from '../../Store';
 
 const AppBar = () => {
-  const { isLogged, changeStore, me } = useContext(Store);
+  const { isLogged, changeStore, me, hasCharacter } = useContext(Store);
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('id');
     changeStore('isLogged', false);
     changeStore('me', null);
+    changeStore('hasCharacter', null)
   };
   return (
       <Menu secondary>
@@ -26,13 +27,25 @@ const AppBar = () => {
           </>
         )}
         
-        {isLogged && (
+        {(isLogged && !hasCharacter) && (
           <>
           <Menu.Menu>
             <Menu.Item as={NavLink} name="Create Character" to="/characterCreation" activeClassName="active" /> 
+          </Menu.Menu>
+          <Menu.Menu position="right">
+            <Menu.Item as={Link} name= {me ? me.name: 'user' } to="/profile" />
+            <Menu.Item as={Link} name="Log out" to="/" onClick={handleLogout} />
+          </Menu.Menu>
+          </>
+        )}
+
+        {(isLogged && hasCharacter) && (
+          <>
+          <Menu.Menu>
             <Menu.Item as={NavLink} name="Questbook" to="/questbook" activeClassName="active" /><br></br>
             <Menu.Item as={NavLink} name="Tasks" to="/tasks" activeClassName="active" /><br></br>
             <Menu.Item as={NavLink} name="Shop" to="/shop" activeClassName="active" /><br></br>
+            <Menu.Item as={NavLink} name="Inventory" to="/inventory" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item as={Link} name= {me ? me.name: 'user' } to="/profile" />
