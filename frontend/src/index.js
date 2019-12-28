@@ -15,6 +15,7 @@ import Tasks from './views/Tasks';
 import Character from './views/Character'
 import Questbook from './views/Questbook';
 import Shop from './views/Shop';
+import Inventory from './views/Inventory';
 import PublicRoute from './components/PublicRoute';
 import Confirmed from './components/Confirmed';
 
@@ -59,6 +60,7 @@ const App = () => {
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
           <PrivateRoute exact path="/shop" component={Shop} />
+          <PrivateRoute exact path="/inventory" component={Inventory} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
