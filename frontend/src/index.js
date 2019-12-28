@@ -35,11 +35,18 @@ const App = () => {
           localStorage.removeItem('token');
           changeStore('isLogged', false);
           changeStore('me', null);
+          changeStore('hasCharacter', null);
           return;
         }
         const data = await response.json();
         changeStore('isLogged', true);
         changeStore('me', data);
+        console.log(data.character_id);  
+        if(data.character_id){
+          changeStore('hasCharacter', true);
+        } else {
+          changeStore('hasCharacter', false);
+        }    
       } catch (ex) {
         console.error('Serwer nie odpowiada'); //Tu wyświetlić coś userowi że nie ma połączenia z serwerem
         console.error('Error', ex);
@@ -55,7 +62,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <PublicRoute path="/login" component={Login} />
           <PublicRoute path="/register" component={Register} />
-          <PrivateRoute exact path="/characterCreation" component={Character} />
+          <PrivateRoute exact path="/characterCreation" component={Character} /> 
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
           <PrivateRoute exact path="/shop" component={Shop} />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   Button,
   Form,
@@ -11,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
+import Store from '../../Store';
 
 const classChosen = {
   '': {
@@ -53,6 +55,8 @@ class CharacterCreation extends React.Component {
     nameTaken: false,
     charCreated: null
   }
+
+  static contextType = Store;
 
   postQuestbook = async () =>{
     await axios({
@@ -162,6 +166,8 @@ class CharacterCreation extends React.Component {
   handleRadioChange = (e, {charClass, value }) => this.setState({ charClass: value });
 
   render() {
+    if (this.context.hasCharacter) return <Redirect to="/" />;
+
     const {name, charClass} = this.state;
     const {text, avatar, stats} = classChosen[charClass];
     return(
