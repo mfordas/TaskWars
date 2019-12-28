@@ -3,6 +3,7 @@ const router = express.Router();
 const _ = require('lodash');
 const { validateTask } = require('../models/task');
 const { validateQuestbook } = require('../models/questbook');
+const mongoose = require('mongoose');
 
 router.post('/', async (req, res) => {
   const Questbook = res.locals.models.questbook;
@@ -118,24 +119,14 @@ router.post('/:id/task', async (req, res) => {
 
 router.put('/:id/task/:idTask', async (req, res) => {
   const Questbook = res.locals.models.questbook;
-  console.log(Questbook);
-  
 
-  const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
-  console.log(req.params.id);
-  console.log(questbookHandel);
-  console.log(questbookHandel.tasks);
-  console.log(req.params.idTask);
-  const questbook = await Questbook.findOneAndUpdate(
-    {
-       "_id": req.params.id,
-     "task._id" : req.params.idTask
-  }, 
-    {"$set":
-      {"task.$.status": "in_progress"},
-    },
-    { new: true },
-  );
+  const questbook = await Questbook.findByIdAndUpdate(
+  {  "_id": req.params.id },
+         {"$set": {"tasks.$[task].status": "in_progress"} },
+        { arrayFilters: [ { 
+          "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
+          } ], 
+         new: true })
 
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
   res.send(questbook);

@@ -14,83 +14,62 @@ class StartTask extends React.Component {
     status: ''
   }
 
-
-
-
-  fetchUser = async () => {
-    const response = await fetch('/api/users/me', setHeaders());
-    const body = await response.json();
-    console.log(body.character_id);
-    this.fetchCharacter(body.character_id);
-
-  }
-
-
-  fetchCharacter = async (id) => {
-    const response = await fetch(`/api/characters/${id}`, setHeaders());
-    const body = await response.json();
-    console.log(body.questbook_id);
-    this.postData(body.questbook_id, this.state);
-
-
-  }
-
-  putData = async (task_id, state) =>{
-    let data = state;
-    console.log(2);
-    console.log(data);
+  putData = async (task_id, questbook_id) =>{
     await axios({
-      url: `/api/questbook/5e0619edcb1d7f1df877b390/status`,
+      url: `/api/questbook/${questbook_id}/task/${task_id}`,
       method: 'put',
-      headers: setHeaders(),
-      data:  this.setState({status: "in_progress"})
+      headers: setHeaders()
+    }).then((response) => {
+      console.log(response);
+      this.setState({status: "in_progress"})
     })
   }
+
+  startTask = async () => {
+    const user = await fetch('/api/users/me', setHeaders());
+    const body = await user.json();
+    const response = await fetch(`/api/characters/${body.character_id}`, setHeaders());
+    const character = await response.json();
+    await this.putData(this.props.task._id, character.questbook_id)
+  }
   
 
   
-//   onButtonSubmit = async e => {
-//     e.preventDefault();
-//     console.log(this.state);
-//     await this.fetchUser();
+  onButtonSubmit = async e => {
+    e.preventDefault();
+    await this.startTask();
+    console.log(this.state);
 
+  }
 
-//   }
-//   handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-startTask = async (e, { name }) => {
-    const userFetch = await fetch('/api/users/me', setHeaders());
-    const user = await userFetch.json();
-    const characterFetch = await fetch(`/api/characters/${user.character_id}`);
-    const character = await characterFetch.json();
-    const taskToInsert = {
-        // "_id": `${this.props.task._id}`,
-        "name": `${this.props.task.name}`,
-        "description": `${this.props.task.description}`,
-        "type": `${this.props.task.type}`,
-        "category": `${this.props.task.category}`,
-        "duration": `${this.props.task.duration}`,
-        "exp": `${this.props.task.exp}`,
-        "gold": `${this.props.task.gold}`,
-        "penalty": `${this.props.task.penalty}`,
-        "status": "in_progress"
-    };
-    
-    await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
+pickColor() {
+  if (this.props.task.status === '')
+      return { color: 'blue' };
+  if (this.props.task.status === 'in_progress')
+      return { color: 'yellow' };
 }
 
+pickContent() {
+  if (this.props.task.status === '')
+      return 'Start task';
+  if (this.props.task.status === 'in_progress')
+      return 'Task in progress!';
+}
 
-
-  
-
+pickIcon() {
+  if (this.props.task.status === '')
+      return { name: 'chevron right' };
+  if (this.props.task.status === 'in_progress')
+      return { name: 'clock' };
+}
 
   render() {
     
     return (
       <div>
-        <Button primary floated='right' onClick={this.startTask}>
-          Start task
-          <Icon name='right chevron' />
+        <Button {...this.pickColor()} floated='right' onClick={this.onButtonSubmit}>
+          {this.pickContent()}
+          <Icon {...this.pickIcon()}/>
         </Button>
       </div>
     );

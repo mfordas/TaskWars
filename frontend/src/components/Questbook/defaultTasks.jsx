@@ -76,10 +76,6 @@ class AllTasks extends React.Component {
       <Item.Description>Duration: {x.duration}</Item.Description>
       <Item.Description>Penalty: {x.penalty}</Item.Description>
       <Item.Extra>
-        {/* <Button primary floated='right' onClick={this.startTask}>
-          Start task
-          <Icon name='right chevron' />
-        </Button> */}
         <StartTask task={x}/>
         <Label color = 'brown'>{x.category}</Label>
         <Label color = 'yellow'>Gold: {x.gold}</Label>
