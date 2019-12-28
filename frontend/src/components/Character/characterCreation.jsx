@@ -1,16 +1,18 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   Button,
   Form,
   Radio,
   Header,
   Segment,
-  Label,
   Image,
-  Message
 } from 'semantic-ui-react'
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
+import Store from '../../Store';
+import ErrorMessage from '../ErrorMessage';
+import SuccessMessage from '../SuccessMessage';
 
 const classChosen = {
   '': {
@@ -19,12 +21,12 @@ const classChosen = {
     stats: ''
   },
   'Warrior': {
-    avatar: 'https://images-na.ssl-images-amazon.com/images/I/718T-mBL9AL._SY500_.jpg',
+    avatar: 'https://cdna.artstation.com/p/assets/images/images/014/222/254/large/cesar-art-nurgl.jpg?1543048465',
     text: 'Mighty swordmaster',
     stats: '+5 additional maximum health and physical power per level'
   },
   'Hunter': {
-    avatar: 'https://i.pinimg.com/originals/9e/d3/b1/9ed3b13275b8ccc7908be73753b33842.jpg',
+    avatar: 'https://i.pinimg.com/originals/a2/05/34/a20534bec75f72bd837e77a52ca5c84d.jpg',
     text: 'Sneaky sniper',
     stats: '+10 additional physical power per level'
   },
@@ -51,8 +53,12 @@ class CharacterCreation extends React.Component {
     physical_power: '',
     magical_power: '',
     nameTaken: false,
-    charCreated: null
+    charCreated: null,
+    _id: null,
+    triedToSubmit: false
   }
+
+  static contextType = Store;
 
   postQuestbook = async () =>{
     await axios({
@@ -79,6 +85,19 @@ class CharacterCreation extends React.Component {
     });
   }
 
+  putCharId = async () =>{
+    await axios({
+      url: `api/users/${this.context.me._id}/character_id`,
+      method: 'put',
+      data: {character_id: this.state._id},
+      headers: setHeaders(),
+    }).then((response)=>{
+      //console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
   setStatistics = async () => {
     if(this.state.charClass === 'Warrior' ){
       this.setState({
@@ -97,7 +116,7 @@ class CharacterCreation extends React.Component {
         magical_power: 11})
     }else if(this.state.charClass === 'Druid' ){
       this.setState({
-        health: 31,
+        health: 35,
         physical_power: 1,
         magical_power: 6})
     }
@@ -124,7 +143,7 @@ class CharacterCreation extends React.Component {
       headers: setHeaders(),
     }).then((response) =>{ 
       if(response.status === 200){
-        this.setState({charCreated: true});
+        this.setState({charCreated: true, _id: response.data._id});
       }else{
         this.setState({charCreated: false});
       }
@@ -150,41 +169,52 @@ class CharacterCreation extends React.Component {
   }
 
   handleButtonClick = async (event) => {
-    this.setState({nameTaken: false})
+    this.setState({triedToSubmit: true});
+    this.setState({nameTaken: false});
     event.preventDefault();
     await this.checkName();
     if(this.state.nameTaken === false && this.state.name.length > 5) {
-      this.postCharacter();
+      await this.postCharacter();
+      await this.putCharId();
+      this.context.changeStore('hasCharacter', true);
     }
   }
 
-  handleInputChange = (e, {name, value}) => this.setState({ name: value});
+  handleInputChange = (e, {name, value}) => this.setState({ name: value, triedToSubmit: false});
   handleRadioChange = (e, {charClass, value }) => this.setState({ charClass: value });
 
+  nameValidate =(e) => {
+    if(this.state.name.length < 5 && this.state.triedToSubmit){
+      return {content: <ErrorMessage message = 'Name must be at least 5 characters long.'/>}
+    }else if(this.state.nameTaken && this.state.triedToSubmit && !this.state.charCreated){
+      return {content: <ErrorMessage message = 'This name is already taken.'/>}
+    } else {
+      return false;
+    }
+  }
+
   render() {
+    if (this.context.hasCharacter) return <Redirect to="/" />;
+
     const {name, charClass} = this.state;
     const {text, avatar, stats} = classChosen[charClass];
     return(
       <div> 
       {this.state.charCreated === true ?
-      <Message color = 'green' header ='Success' content = 'Character created'/> : null }
+      <SuccessMessage message = 'Character created'/> : null }
       <Segment>
         <Form onSubmit={this.handleButtonClick}>
           <Header>Character name</Header>
           <Form.Group inline >
             <Form.Input
+            error = {this.nameValidate()}
             required
             placeholder='Character Name'
             name = 'name'
             value = {this.name}
             onChange = {this.handleInputChange}
             />
-            {this.state.name.length < 5 ?
-            <Label>Name must be at least 5 characters long.</Label> : null}
           </Form.Group>
-
-          {this.state.nameTaken === true ?
-          <Message color = 'red' header ='Name taken' content = 'This name is already in use.'/> : null}
 
           <Header>Class</Header>
           <Form.Group inline>
@@ -205,10 +235,10 @@ class CharacterCreation extends React.Component {
         </Form>
       </Segment>
       <Segment.Group horizontal>
-        <Segment floated = 'left' >
-          <Image size = 'medium' src = {avatar} />
+        <Segment style={{width: '45%', height:'60vh'}} floated = 'left' >
+          <Image style={{width: '100%', height: '100%'}}  src = {avatar} />
         </Segment>
-        <Segment floated = 'right' >
+        <Segment style={{width: '55%'}} floated = 'right' >
           <Header as='h1'>{charClass} {name}</Header>
           <Header>{text}</Header>
           <Header>{stats}</Header>
