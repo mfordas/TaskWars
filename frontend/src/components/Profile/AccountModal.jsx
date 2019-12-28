@@ -3,6 +3,7 @@ import { Input, Button } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import "./style-accountModal.css";
 import setHeaders from '../../utils/setHeaders';
+import ErrorMessage from '../ErrorMessage';
 
 class AccountModal extends React.Component {
     constructor(props){
@@ -12,7 +13,7 @@ class AccountModal extends React.Component {
             oldPassword: '',
             newPassword: '',
             confirmPassword: '',
-            newName: '',
+            // newName: '',
             id: this.props.id,
             email: this.props.email,
             userName: this.props.userName
@@ -46,7 +47,13 @@ class AccountModal extends React.Component {
                     password: this.state.newPassword
                 };
                 let params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
-                const response = await fetch(`/api/users/${this.state.id}/password`, params);
+                fetch(`/api/users/${this.state.id}/password`, params)
+                    .then(() => {
+
+                    })
+                    .catch((err) => {
+                        
+                    })
             }
         }
     }
@@ -57,14 +64,14 @@ class AccountModal extends React.Component {
                 <div className="modalAccountHeader">
                         <h3>Change account data</h3>
                 </div>
-                <div id="modalAccountNameInput">
+                {/* <div id="modalAccountNameInput">
                     <h4>Change name</h4>
                     <Input onChange={this.handleChange} label="New name" placeholder='Enter new name' />
                     <Input onChange={this.handleChange} type="password" label="Password" placeholder='Enter password' />
                     <Button basic color='yellow' onClick={this.onNameButtonSubmit} value="">
                         Change name
                     </Button>
-                </div>
+                </div> */}
                 <div id="modalAccountPassInput">
                     <h4>Change password</h4>
                     {/* <Input onChange={this.handleChange} type="password" label="Old password" placeholder='Enter old password' /> */}

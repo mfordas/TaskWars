@@ -11,14 +11,14 @@
     border-bottom: 1px solid grey;
 }
 
-#modalAccountNameInput {
+/* #modalAccountNameInput {
     margin: 2.5%;
     width: 45%;
-}
+} */
 
 #modalAccountPassInput {
-    margin: 2.5%;
-    width: 45%;
+    margin: 5%;
+    width: 100%;
 }
 
 #modalAccountPassInput > * {
@@ -27,8 +27,8 @@
     font-weight: bold;
 }
 
-#modalAccountNameInput > * {
+/* #modalAccountNameInput > * {
     width: 95%;
     margin: 1%;
     font-weight: bold;
-}
+} */
