@@ -13,6 +13,8 @@ import {
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
+import ErrorMessage from '../ErrorMessage';
+import SuccessMessage from '../SuccessMessage';
 
 const classChosen = {
   '': {
@@ -54,7 +56,8 @@ class CharacterCreation extends React.Component {
     magical_power: '',
     nameTaken: false,
     charCreated: null,
-    _id: null
+    _id: null,
+    triedToSubmit: false
   }
 
   static contextType = Store;
@@ -168,18 +171,31 @@ class CharacterCreation extends React.Component {
   }
 
   handleButtonClick = async (event) => {
-    this.setState({nameTaken: false})
+    this.setState({triedToSubmit: true});
+    this.setState({nameTaken: false});
     event.preventDefault();
     await this.checkName();
     if(this.state.nameTaken === false && this.state.name.length > 5) {
       await this.postCharacter();
       await this.putCharId();
-      this.context.changeStore('hasCharacter', true)
+      this.context.changeStore('hasCharacter', true);
+    }else{
+      return {content: <ErrorMessage message = 'Something went wrong'/>};
     }
   }
 
-  handleInputChange = (e, {name, value}) => this.setState({ name: value});
+  handleInputChange = (e, {name, value}) => this.setState({ name: value, triedToSubmit: false});
   handleRadioChange = (e, {charClass, value }) => this.setState({ charClass: value });
+
+  nameValidate =(e) => {
+    if(this.state.name.length < 5 && this.state.triedToSubmit){
+      return {content: <ErrorMessage message = 'Name must be at least 5 characters long.'/>}
+    }else if(this.state.nameTaken && this.state.triedToSubmit && !this.state.charCreated){
+      return {content: <ErrorMessage message = 'This name is already taken.'/>}
+    } else {
+      return false;
+    }
+  }
 
   render() {
     if (this.context.hasCharacter) return <Redirect to="/" />;
@@ -189,24 +205,20 @@ class CharacterCreation extends React.Component {
     return(
       <div> 
       {this.state.charCreated === true ?
-      <Message color = 'green' header ='Success' content = 'Character created'/> : null }
+      <SuccessMessage message = 'Character created'/> : null }
       <Segment>
         <Form onSubmit={this.handleButtonClick}>
           <Header>Character name</Header>
           <Form.Group inline >
             <Form.Input
+            error = {this.nameValidate()}
             required
             placeholder='Character Name'
             name = 'name'
             value = {this.name}
             onChange = {this.handleInputChange}
             />
-            {this.state.name.length < 5 ?
-            <Label>Name must be at least 5 characters long.</Label> : null}
           </Form.Group>
-
-          {this.state.nameTaken === true ?
-          <Message color = 'red' header ='Name taken' content = 'This name is already in use.'/> : null}
 
           <Header>Class</Header>
           <Form.Group inline>
