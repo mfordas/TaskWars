@@ -4,10 +4,10 @@ import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import PublicRoute from '../PublicRoute';
 import ItemView from './ItemView';
-
+import InventoryView from '../Inventory/InventoryView';
 
 class ShopContent extends React.Component {
-  state = { items: [], id_user: 0, id_inventory: 0 , gold: 0, item: null }
+  state = { items: [], id_user: 0, id_inventory: 0 , gold: 0, item: null, backpack: [], inventory: null }
 
   fetchItems = async () => {
     const response = await fetch('/api/item', setHeaders());
@@ -40,8 +40,8 @@ class ShopContent extends React.Component {
     console.log(response);
     const body = await response.json();
     console.log(body);
-    this.setState({ gold: body.gold });
-
+    this.setState({ gold: body.gold, backpack: body.backpack });
+    this.getInventory();
   }
 
   fetchBuyItem = async (item) => {
@@ -90,14 +90,26 @@ class ShopContent extends React.Component {
 
 
   }
+  getInventory = () => {
+    let inventory = <InventoryView 
+    id_user={this.state.id_user}
+    id_inventory={this.state.id_inventory}
+    backpack={this.state.backpack}
+    gold={this.state.gold}
+    items={this.state.items}/>
+    this.setState({ inventory: inventory});
+  }
+
   render() {
     let activeV;
     let disabledV;
     return (
       <Segment>
       <Grid doubling container centered columns='equal' padded>
-        <Grid.Row textAlign='center' verticalAlign='top'> 
-           Your gold: { this.state.gold } 
+        <Grid.Row textAlign='center' verticalAlign='top'>
+          <Grid.Column stretched>
+            { this.state.inventory !== null ? this.state.inventory : `Your gold: ${this.state.gold}`}
+          </Grid.Column> 
          </Grid.Row>
 
         {this.state.items.map(item => (
