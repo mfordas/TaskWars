@@ -86,11 +86,11 @@ class InventoryView extends React.Component {
       <Segment inverted>
       <Grid doubling container centered columns='equal' padded>
         <Grid.Row textAlign='left' verticalAlign='top'> 
-          <Segment>Gold: {this.state.gold}</Segment>
+        {this.props.showGold !== false ? <Segment>Gold: {this.state.gold}</Segment> : null}
         </Grid.Row>
         <Grid.Row textAlign='center' verticalAlign='top'>
           { (this.state.itemDescription !== null) ? 
-          <Segment>{this.state.itemDescription}</Segment> 
+          <Segment inverted color='grey'>{this.state.itemDescription}</Segment> 
           : null}
         </Grid.Row>
             {this.state.backpackItem.map( (item, id = 0) => (
