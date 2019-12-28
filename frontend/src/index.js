@@ -16,6 +16,7 @@ import Character from './views/Character'
 import Profile from './views/Profile';
 import Questbook from './views/Questbook';
 import Shop from './views/Shop';
+import Inventory from './views/Inventory';
 import PublicRoute from './components/PublicRoute';
 import Confirmed from './components/Confirmed';
 
@@ -36,11 +37,17 @@ const App = () => {
           localStorage.removeItem('token');
           changeStore('isLogged', false);
           changeStore('me', null);
+          changeStore('hasCharacter', null);
           return;
         }
         const data = await response.json();
         changeStore('isLogged', true);
         changeStore('me', data);
+        if(data.character_id){
+          changeStore('hasCharacter', true);
+        } else {
+          changeStore('hasCharacter', false);
+        }    
       } catch (ex) {
         console.error('Serwer nie odpowiada'); //Tu wyświetlić coś userowi że nie ma połączenia z serwerem
         console.error('Error', ex);
@@ -56,11 +63,12 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <PublicRoute path="/login" component={Login} />
           <PublicRoute path="/register" component={Register} />
-          <PrivateRoute exact path="/characterCreation" component={Character} />
+          <PrivateRoute exact path="/characterCreation" component={Character} /> 
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/profile" component={Profile} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
           <PrivateRoute exact path="/shop" component={Shop} />
+          <PrivateRoute exact path="/inventory" component={Inventory} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>

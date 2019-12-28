@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:id/completed', async (req, res) => {
   const Questbook = res.locals.models.questbook;
-  const questbook = await Questbook.findById(req.params.id).populate('tasks');
+  const questbook = await Questbook.findById(req.params.id);
 
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
 
@@ -30,7 +30,7 @@ router.get('/:id/completed', async (req, res) => {
 
 router.get('/:id/uncompleted', async (req, res) => {
   const Questbook = res.locals.models.questbook;
-  const questbook = await Questbook.findById(req.params.id).populate('tasks');
+  const questbook = await Questbook.findById(req.params.id);
 
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
 
@@ -43,7 +43,7 @@ router.get('/:id/uncompleted', async (req, res) => {
 
 router.get('/:id/failed', async (req, res) => {
   const Questbook = res.locals.models.questbook;
-  const questbook = await Questbook.findById(req.params.id).populate('tasks');
+  const questbook = await Questbook.findById(req.params.id);
 
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
 
@@ -57,11 +57,11 @@ router.get('/:id/failed', async (req, res) => {
 router.put('/:id/task', async (req, res) => {
   const Questbook = res.locals.models.questbook;
   const Task = res.locals.models.task;
-  const task = await Task.findById(req.body._id);
-  if (!task) return res.status(400).send('Invalid task.');
+  const { error } = validateTask(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
-  questbookHandel.tasks.push(req.body._id);
+  questbookHandel.tasks.push(req.body);
 
   const questbook = await Questbook.findByIdAndUpdate(
     req.params.id,
@@ -79,8 +79,8 @@ router.put('/:id/task', async (req, res) => {
 //get all tasks
 router.get('/:id/tasks', async (req, res) => {
   const Questbook = res.locals.models.questbook;
-  const questbook = await Questbook.findById(req.params.id).populate('tasks');
-  console.log(questbook);
+  const questbook = await Questbook.findById(req.params.id);
+
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
 
   const tasks = _.filter(questbook.tasks);

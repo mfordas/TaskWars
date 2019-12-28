@@ -6,7 +6,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const questbookSchema = new mongoose.Schema({
   tasks: [
     {
-      type: ObjectId,
+      type: Object,
       ref: 'Task',
       default: [],
     },
