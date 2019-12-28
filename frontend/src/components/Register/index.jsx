@@ -5,16 +5,16 @@ import Register from './register';
 import ConfirmRegister from './confirmRegister';
 
 const RegisterContent = () => {
-    return (
-        <BrowserRouter>
-            <Container text>
-                <Switch>
-                    <Route exact path="/register" component={Register} />
-                    <Route exact path="/register/confirm" component={ConfirmRegister} />
-                </Switch>
-            </Container>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Container text>
+        <Switch>
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/register/confirm" component={ConfirmRegister} />
+        </Switch>
+      </Container>
+    </BrowserRouter>
+  );
 };
 
 export default RegisterContent;

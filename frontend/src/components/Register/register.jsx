@@ -11,6 +11,7 @@ import {
   Segment,
 } from 'semantic-ui-react'
 import Store from '../../Store';
+import ErrorMessage from '../ErrorMessage';
 const axios = require('axios');
 
 
@@ -84,8 +85,31 @@ class Login extends React.Component {
     }
   }
 
-  render() {
+  nameValidate = (e) => {
+    if (this.state.name.length < 3 && this.state.invalidData) {
+      return <ErrorMessage message='Name must be longer than three characters!' />
+    }
+    else { return null }
+  }
 
+  emailValidate = (e) => {
+    if (this.state.emailTaken === true) {
+      return <ErrorMessage message='A user with this email address already exists!' />
+    }
+    else { return null }
+  }
+
+  passwordValidate = (e) => {
+    if ((this.state.password !== this.state.confirmPassword) && this.state.invalidData) {
+      return <ErrorMessage message='Both passwords must be the same!' />
+    }
+    else if ((this.state.password.length < 8 || this.state.confirmPassword.length < 8) && this.state.invalidData) {
+      return <ErrorMessage message='Password must be longer than eight characters!' />
+    }
+    else { return null }
+  }
+
+  render() {
     return (
       <BrowserRouter>
         <Grid centered>
@@ -93,6 +117,7 @@ class Login extends React.Component {
             <Form success error onSubmit={this.onButtonSubmit}>
               <Header textAlign='center'>Register</Header>
               <Form.Input
+                error={this.nameValidate()}
                 label='Name'
                 placeholder='Name'
                 name='name'
@@ -101,15 +126,8 @@ class Login extends React.Component {
                 onChange={e => this.setState({ name: e.target.value })}
                 fluid
               />
-              {this.state.name.length < 3 && this.state.invalidData ? (
-                <Message
-                  error
-                  header='The name is too short!'
-                  content='Name must be longer than three characters!'
-                />)
-                : null
-              }
               <Form.Input
+                error={this.emailValidate()}
                 label='Email'
                 placeholder='Email'
                 name='email'
@@ -118,13 +136,6 @@ class Login extends React.Component {
                 onChange={e => this.setState({ email: e.target.value })}
                 fluid
               />
-              {this.state.emailTaken === true ?
-                (<Message
-                  error
-                  header='Email taken!'
-                  content='A user with this email address already exists!'
-                />)
-                : null}
               <Form.Input
                 label='Password'
                 placeholder='Password'
@@ -134,6 +145,7 @@ class Login extends React.Component {
                 onChange={e => this.setState({ password: e.target.value })}
               />
               <Form.Input
+                error={this.passwordValidate()}
                 label='Confirm Password'
                 placeholder='Confirm Password'
                 name='confirmPassword'
@@ -141,21 +153,6 @@ class Login extends React.Component {
                 value={this.state.confirmPassword}
                 onChange={e => this.setState({ confirmPassword: e.target.value })}
               />
-              {(this.state.password !== this.state.confirmPassword) && this.state.invalidData ? (
-                <Message
-                  error
-                  header='Both passwords must be the same!'
-                />)
-                : null
-              }
-              {(this.state.password.length < 8 || this.state.confirmPassword.length < 8) && this.state.invalidData ? (
-                <Message
-                  error
-                  header='The password is too short!'
-                  content='Password must be longer than eight characters!'
-                />)
-                : null
-              }
               <Grid textAlign='center' padded>
                 <Button color='purple' type='submit'>Submit</Button>
               </Grid>
