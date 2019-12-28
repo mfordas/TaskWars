@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import StartTask from './startTask';
-const axios = require('axios');
+import MeasureTime from './timeMeasure';
 
 
 class AllTasks extends React.Component {
@@ -77,6 +77,9 @@ class AllTasks extends React.Component {
       <Item.Description>Penalty: {x.penalty}</Item.Description>
       <Item.Extra>
         <StartTask task={x}/>
+        {x.status === 'in_progress' ?
+        <MeasureTime task={x}/>
+        : null}
         <Label color = 'brown'>{x.category}</Label>
         <Label color = 'yellow'>Gold: {x.gold}</Label>
         <Label color = 'teal'>Exp: {x.exp}</Label>

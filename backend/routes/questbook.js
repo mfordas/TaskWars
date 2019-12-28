@@ -122,11 +122,12 @@ router.put('/:id/task/:idTask', async (req, res) => {
 
   const questbook = await Questbook.findByIdAndUpdate(
   {  "_id": req.params.id },
-         {"$set": {"tasks.$[task].status": "in_progress"} },
+         {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].startDate": new Date()} },
         { arrayFilters: [ { 
           "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
           } ], 
          new: true })
+         
 
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
   res.send(questbook);

@@ -8,11 +8,16 @@ import axios from 'axios';
 
 
 
-class StartTask extends React.Component {
-
-  state = {
-    status: '',
-    date: ''
+class FinishTask extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      status: ''
+    } 
+  
+}
+  setStatus = async () => {
+    return this.props.time.timeToEnd ? this.setState({status: 'completed'}) : this.setState({status: 'failed'});
   }
 
   putData = async (task_id, questbook_id) =>{
@@ -20,27 +25,26 @@ class StartTask extends React.Component {
       url: `/api/questbook/${questbook_id}/task/${task_id}`,
       method: 'put',
       headers: setHeaders(),
-      data: {status: "in_progress"}
+      data: {status: this.state.status}
     }).then((response) => {
       console.log(response);
-      this.setState({status: "in_progress"})
     })
   }
 
-  startTask = async () => {
+  finishTask = async () => {
     const user = await fetch('/api/users/me', setHeaders());
     const body = await user.json();
     const response = await fetch(`/api/characters/${body.character_id}`, setHeaders());
     const character = await response.json();
     await this.putData(this.props.task._id, character.questbook_id);
-    this.setState({date: new Date()})
   }
   
 
   
   onButtonSubmit = async e => {
     e.preventDefault();
-    await this.startTask();
+    await this.setStatus();
+    await this.finishTask();
 
   }
 
@@ -51,41 +55,22 @@ class StartTask extends React.Component {
     
   }
 
-pickColor() {
-  if (this.props.task.status === '')
-      return { color: 'blue' };
-  if (this.props.task.status === 'in_progress')
-      return { color: 'yellow' };
-}
 
-pickContent() {
-  if (this.props.task.status === '')
-      return 'Start task';
-  if (this.props.task.status === 'in_progress')
-      return 'Task in progress!';
-}
-
-pickIcon() {
-  if (this.props.task.status === '')
-      return { name: 'chevron right' };
-  if (this.props.task.status === 'in_progress')
-      return { name: 'clock' };
-}
 
   render() {
     
     return (
       <div>
-        <Button {...this.pickColor()} floated='right' onClick={this.onButtonSubmit}>
-          {this.pickContent()}
-          <Icon {...this.pickIcon()}/>
+        <Button color="blue" floated='right' onClick={this.onButtonSubmit}>
+          Finish task
+          <Icon name="arrow"/>
         </Button>
       </div>
     );
   }
 }
 
-export default StartTask;
+export default FinishTask;
 
 
 
