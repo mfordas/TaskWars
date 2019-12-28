@@ -10,7 +10,6 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let task = new Task(req.body);
-  console.log(task);
   await task.save();
 
   res.send(task);
@@ -21,6 +20,35 @@ router.get('/', async (req, res) => {
   const Task = res.locals.models.task;
   const tasks = await Task.find().sort('name');
   res.send(tasks);
+});
+
+router.get('/:category&:type&:tags?', async (req, res) => {
+  const Task = res.locals.models.task;
+
+  const categoryParam = req.params.category;
+  const typeParam = req.params.type;
+  const tagsArray = req.params.tags ? req.params.tags.split('_') : '';
+
+  const searchObj = () => {
+    if (categoryParam != 'All' && typeParam != 'All')
+      return { category: categoryParam, type: typeParam};
+    else if (categoryParam != 'All')
+      return { category: categoryParam };
+    else if (typeParam != 'All')
+      return { type: typeParam };
+    else
+      return;
+  }
+
+  //console.log(tagsArray);
+
+  const tasks = await Task
+    .find(searchObj())
+    .sort('name');
+
+  const result = filterByValue(tasks, tagsArray)
+
+  res.send(result);
 });
 
 //get task by id
@@ -35,6 +63,7 @@ router.get('/:id', (req, res) => {
     }
   });
 });
+
 
 //change task duration
 
@@ -91,6 +120,16 @@ router.put('/:id/status', (req, res) => {
     }
   });
 });
+
+function filterByValue(tasks, tags) {
+  if (!tags)
+    return tasks;
+  return tasks.filter(o => {
+    return tags.every(t => {
+      return o.name.concat(o.description, o.type, o. category).toLowerCase().includes(t);
+    })
+  }) 
+}
 
 async function getTasks(Task, id) {
   if (id) {
