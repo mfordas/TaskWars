@@ -52,15 +52,6 @@ router.get('/:category&:type&:tags?', async (req, res) => {
   res.send(result);
 });
 
-router.get('/count', async (req, res) => {
-  res.send(process.env.TASKS_COMPLETED);
-});
-
-router.put('/count', auth, async (req, res) => {
-  process.env.TASKS_COMPLETED++;
-  res.send(process.env.TASKS_COMPLETED);
-});
-
 //get task by id
 router.get('/:id', (req, res) => {
   const Task = res.locals.models.task;

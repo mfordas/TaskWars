@@ -12,7 +12,7 @@ class Stats extends React.Component {
         const userCnt = await fetch('/api/users/count')
             .then(response => response.json());
 
-        const tasksCnt = await fetch('/api/tasks/count')
+        const tasksCnt = await fetch('/api/questbook/count')
             .then(response => response.json());
 
         this.setState({ userCount: userCnt, tasksCompleted: tasksCnt });

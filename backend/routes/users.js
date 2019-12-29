@@ -61,12 +61,11 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/count', async (req, res) => {
-  res.send(process.env.ACCOUNTS_COUNT);
-});
-
-router.put('/count', auth, async (req, res) => {
-  process.env.ACCOUNTS_COUNT++;
-  res.send(process.env.ACCOUNTS_COUNT);
+  const User = res.locals.models.user;
+  const usersCount = await User.find()
+    .then(response => response.length);
+    
+  res.send(`${usersCount}`);
 });
 
 router.get('/me', auth, async (req, res) => {
