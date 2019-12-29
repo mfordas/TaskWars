@@ -57,9 +57,12 @@ class Avatar extends React.Component {
     }
 
     addCreatureToFight = async (creature_id, guild_id, guild_name) => {
+        const creatureResponse = await fetch(`/api/creatures/${creature_id}`, setHeaders());
+        const creature = await creatureResponse.json();
+
         const data = {
             name: guild_name,
-            current_fight: creature_id
+            current_fight: creature
         }
         const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
         const response = await fetch(`/api/guilds/${guild_id}/current_fight`, params);
@@ -80,6 +83,7 @@ class Avatar extends React.Component {
             const member = await memberResponse.json();
             
             const memberTask = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
+            //modify current figthd
             console.log(memberTask._id)
         })
     }
