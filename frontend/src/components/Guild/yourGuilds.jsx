@@ -18,36 +18,36 @@ class YourGuilds extends React.Component {
     name: '',
   }
 
-  checkName = async () => {
-    await axios({
-      url: 'api/guilds',
-      method: 'get',
-      headers: setHeaders(),
-    }).then((response) => {
-      response.data.forEach((data) => {
-        if (data.leader === localStorage.id) {
-          this.setState({ guildExist: true })
-          this.setState({ name: data.name })
-        }
-      })
-    }, (error) => {
-      console.log(error);
-    });
-  }
+  // checkName = async () => {
+  //   await axios({
+  //     url: 'api/guilds',
+  //     method: 'get',
+  //     headers: setHeaders(),
+  //   }).then((response) => {
+  //     response.data.forEach((data) => {
+  //       if (data.leader === localStorage.id) {
+  //         this.setState({ guildExist: true })
+  //         this.setState({ name: data.name })
+  //       }
+  //     })
+  //   }, (error) => {
+  //     console.log(error);
+  //   });
+  // }
 
   render() {
-    this.checkName();
+    // this.checkName();
     return (
       <Grid centered>
         <Form>
-          <Segment textAlign='left'>
+          <Segment textAlign='left' inverted>
             <Header>Guilds, you are a leader of</Header>
             <List>
             <Container>{this.state.name}</Container>
             </List>
           </Segment>
 
-          <Segment  textAlign='left'>
+          <Segment textAlign='left' inverted>
             <Header>Guilds in which you are a member</Header>
           </Segment>
         </Form>

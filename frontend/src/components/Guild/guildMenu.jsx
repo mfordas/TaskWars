@@ -23,7 +23,7 @@ class GuildMenu extends React.Component {
             name="Completed"
             activeClassName="active"
             to="/guildJoin"
-            color='blue'
+            color='purple'
             exact
           >
             Join to the Guild
@@ -34,7 +34,7 @@ class GuildMenu extends React.Component {
             name="Completed"
             activeClassName="active"
             to="/guildCreate"
-            color='green'
+            color='purple'
             exact
           >
             Create a Guild

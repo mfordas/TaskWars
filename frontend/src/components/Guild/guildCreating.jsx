@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, Component } from 'react';
 import {
   Button,
   Form,
   Grid,
   Header,
+  Radio,
   Segment,
+  TextArea,
 } from 'semantic-ui-react'
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
@@ -17,6 +19,8 @@ class GuildCreate extends React.Component {
     name: '',
     nameTaken: false,
     leader: null,
+    description: '',
+    type: '',
   }
 
   postGuild = async () => {
@@ -27,6 +31,8 @@ class GuildCreate extends React.Component {
         data: {
           name: this.state.name,
           leader: localStorage.id,
+          type: this.state.type,
+          description: this.state.description,
         },
         headers: setHeaders(),
       });
@@ -41,7 +47,7 @@ class GuildCreate extends React.Component {
       console.error('Error Guild Creation:', error);
       this.setState({ invalidData: true });
     }
-  }
+  };
 
   checkName = async () => {
     await axios({
@@ -57,7 +63,7 @@ class GuildCreate extends React.Component {
     }, (error) => {
       console.log(error);
     });
-  }
+  };
 
   onButtonSubmit = async e => {
     e.preventDefault();
@@ -66,7 +72,7 @@ class GuildCreate extends React.Component {
     if (this.state.nameTaken === false) {
       this.postGuild();
     }
-  }
+  };
 
   nameValidate = (e) => {
     if (this.state.name.length < 5 && this.state.invalidData) {
@@ -75,10 +81,27 @@ class GuildCreate extends React.Component {
       return <ErrorMessage message='A guild with this name already exists!' />
     }
     else { return null }
-  }
+  };
+
+  descriptionValidate = (e) => {
+    if (this.state.description === '' && this.state.submitStatus) {
+      return { content: <ErrorMessage message='Description shoud have between 5 and 50 characters' /> }
+    }
+    else { return null }
+
+  };
+
+  typeValidate = (e) => {
+    if (this.state.type === '' && this.state.submitStatus) {
+      return <ErrorMessage message='Choose type' />
+    }
+    else { return null }
+  };
+
+  handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   render() {
-
+    const { type } = this.state
     return (
       <Grid centered>
         <Segment compact textAlign='left' inverted>
@@ -93,10 +116,49 @@ class GuildCreate extends React.Component {
               value={this.state.name}
               onChange={e => this.setState({ name: e.target.value })}
             />
+            <Form.Field
+              error={this.descriptionValidate()}
+              control={TextArea}
+              label='Description'
+              placeholder='Write description of the guild...'
+              value={this.state.description}
+              name='description'
+              onChange={e => this.setState({ description: e.target.value })}
+            />
+
+            <Form.Group inline >
+              <label>Type</label>
+              <div>{this.typeValidate()}</div>
+              <Form.Field
+                control={Radio}
+                label='Physical'
+                value='Physical'
+                name='type'
+                checked={type === 'Physical'}
+                onChange={this.handleChange}
+              />
+              <Form.Field
+                control={Radio}
+                label='Mental'
+                value='Mental'
+                name='type'
+                checked={type === 'Mental'}
+                onChange={this.handleChange}
+              />
+              <Form.Field
+                control={Radio}
+                label='Utility'
+                value='Utility'
+                name='type'
+                checked={type === 'Utility'}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+
             <Grid textAlign='center' padded>
               <Button color='purple' type='submit'>Submit</Button>
             </Grid>
-          </Form>
+          </Form >
         </Segment>
       </Grid >
     )

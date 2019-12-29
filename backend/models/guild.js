@@ -14,7 +14,7 @@ const guildSchema = new mongoose.Schema({
   leader: {
     type: ObjectId,
     ref: 'Character',
-    default: null,
+    required: true,
   },
   members: {
     type: [ObjectId],
@@ -31,6 +31,12 @@ const guildSchema = new mongoose.Schema({
     ref: 'Creature',
     default: null,
   },
+  description: {
+    type: String,
+    default: '',
+    trim: true,
+    maxlength: 1024,
+  },
   flag: {
     type: String,
     default: '',
@@ -43,18 +49,16 @@ function validateGuild(guild) {
       .min(5)
       .max(50)
       .required(),
-    leader: Joi.objectId(),
+    leader: Joi.objectId().required(),
     members: Joi.array().items(Joi.objectId()),
     type: Joi.valid('Physical', 'Mental', 'Utility'),
     current_fight: Joi.objectId(),
+    description: Joi.string().max(1024),
     flag: Joi.string(),
   });
 
   return schema.validate(guild);
 }
 
-// const Guild = mongoose.model('Guild', guildSchema);
-
-// exports.Guild = Guild;
 exports.guild = guildSchema;
 exports.validateGuild = validateGuild;

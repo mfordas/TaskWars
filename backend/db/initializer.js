@@ -92,6 +92,7 @@ const createGuilds = async (prefix, count,  models, creatureCatalog) => {
       leader: null,
       members: [],
       type: "Utility",
+      description: "",
       current_fight: creatureCatalog[x] === undefined ? null : creatureCatalog[x],
     };
   });
