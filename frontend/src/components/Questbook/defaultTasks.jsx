@@ -1,88 +1,173 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Icon, Item, Label, Segment, Step, Popup, Header } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
+import StartTask from './startTask';
+import MeasureTime from './timeMeasure';
+import TopPortal from '../Utils/TopPortal';
+import FailedTasks from './failedTasks';
+import CompletedTasks from './completedTasks';
+
 
 class AllTasks extends React.Component {
 
   state = {
     tasks: []
   }
-
   
 
-  fetchUser = async () => {
-    const response = await fetch('/api/users/me', setHeaders());
-    const body = await response.json();
-    this.fetchCharacter(body.character_id);
-    
-  }
-
-
-  fetchCharacter = async (id) => {
-    const response = await fetch(`/api/characters/${id}`, setHeaders());
-    const body = await response.json();
-    this.getData(body.questbook_id);
-    
-    
+    getData = async (type) => {
+      const user = await fetch('/api/users/me', setHeaders())
+            .then(response => response.json());
+        const character = await fetch(`/api/characters/${user.character_id}`)
+            .then(response => response.json());
+      let response;
+      console.log(type);
+      if (type === 'all' ){
+      response = await fetch(`/api/questbook/${character.questbook_id}/tasks`, setHeaders());
     }
-
-
-    getData = async (id) => {
-      const response = await fetch(`/api/questbook/${id}/tasks`, setHeaders());
+      else if (type === 'completed' ){
+        response = await fetch(`/api/questbook/${character.questbook_id}/completed`, setHeaders());} else if (type === 'failed' ){
+          response = await fetch(`/api/questbook/${character.questbook_id}/failed`, setHeaders());} else {
+            response = await fetch(`/api/questbook/${character.questbook_id}/uncompleted`, setHeaders());}
       const body = await response.json();
-      
+      console.log(body);
       this.setState(
         {
           tasks: body
         }
       )
       }
-  
+
 
   componentDidMount() {
-    this.fetchUser()
+    this.getData(this.props.type)
     console.log('mounted')
   }
   
-  componentDidUpdate() {
-    
+  componentDidUpdate(prevProps) {
+    if (this.props.type !== prevProps.type) {
+      this.getData(this.props.type);
+    }
   }
     
+  pickImage(type) {
+    
+    if (type === 'Physical')
+        return { name: 'bicycle', color: 'red', size: 'big' };
 
-  render() {
+    if (type === 'Mental')
+        return { name: 'book', color: 'brown', size: 'big' };
+
+    if (type === 'Utility')
+        return { name: 'globe', color: 'blue', size: 'big' };
+
+    return { name: 'object group', color: 'orange', size: 'big' };
+}
+
+render() {
     return (
-      <Segment>
-        <Item.Group divided>
-        {this.state.tasks.map(x => (
+      <div>
+      {this.state.tasks.map(x => (
+        <Segment key={x._id} inverted>
+            <Item>
+                <Item.Image style={{ display: 'inline-block' }}>
+                    <Icon {...this.pickImage(x.type)} />
+                </Item.Image>
+                <Item.Header style={{ display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
+                    {x.name}
+                </Item.Header>
 
-    <Item key={x._id}>
-    <Item.Image src='https://icons-for-free.com/iconfiles/png/128/description+note+problem+task+tasks+icon-1320168114384620466.png'  />
+                <Popup content='Type' trigger={
+                    <Label color='orange'>
+                        {x.type}
+                    </Label>
+                } />
 
-    <Item.Content>
-      <Item.Header as='a'>{x.name}</Item.Header>
-      <Item.Meta>
-        <span className='type'>{x.type}</span>
-      </Item.Meta>
-      <Item.Description>{x.description}</Item.Description>
-      <Item.Description>Duration: {x.duration}</Item.Description>
-      <Item.Description>Penalty: {x.penalty}</Item.Description>
-      <Item.Extra>
-        <Button primary floated='right'>
-          Start task
-          <Icon name='right chevron' />
-        </Button>
-        <Label color = 'brown'>{x.category}</Label>
-        <Label color = 'yellow'>Gold: {x.gold}</Label>
-        <Label color = 'teal'>Exp: {x.exp}</Label>
+                <Popup content='Category' trigger={
+                    <Label color='olive'>
+                        {x.category}
+                    </Label>
+                } />
+
+                <Item.Description>
+                    <Segment.Group>
+                        <Segment
+                            inverted
+                            textAlign='center'
+                            color='purple'
+                            style={{ padding: '2px 0px 0px 6px' }}>
+                            <Header as='h5'>
+                                Description
+                            </Header>
+                        </Segment>
+                        <Segment>
+                            {x.description}<br />
+                        </Segment>
+                    </Segment.Group>
+                </Item.Description>
+
+                <Step.Group widths={4} size='tiny'>
+                    <Step style={{ padding: '2px' }}>
+                        <Icon name='dot circle' color='yellow' />
+                        <Step.Content>
+                            <Step.Title>Gold</Step.Title>
+                            <Step.Description>{x.gold}</Step.Description>
+                        </Step.Content>
+                    </Step>
+                    <Step style={{ padding: '2px' }}>
+                        <Icon name='star' color='violet' />
+                        <Step.Content>
+                            <Step.Title>Experience</Step.Title>
+                            <Step.Description>{x.exp}</Step.Description>
+                        </Step.Content>
+                    </Step>
+                    <Step style={{ padding: '2px' }}>
+                        <Icon name='clock' color='teal' />
+                        <Step.Content>
+                            <Step.Title>Duration</Step.Title>
+                            <Step.Description>{x.duration}</Step.Description>
+                        </Step.Content>
+                    </Step>
+                    <Step style={{ padding: '2px' }}>
+                        <Icon name='wheelchair' />
+                        <Step.Content>
+                            <Step.Title>Penalty</Step.Title>
+                            <Step.Description>{x.penalty}</Step.Description>
+                        </Step.Content>
+                    </Step>
+                </Step.Group>
+                <Item.Extra >
+                {x.status === '' ?
+              <StartTask task={x}/>
+              : null}
+                {x.status === 'in_progress' ?
+              <MeasureTime task={x}/>
+              : null}
+                {x.status === 'failed' ? 
+                <FailedTasks/> 
+                : null}
+                {x.status === 'completed' ? 
+                <CompletedTasks/> 
+                : null}
+                </Item.Extra>
+                <Item.Extra>
+        
+        
       </Item.Extra>
-    </Item.Content>
-  </Item>
-          ))}
-         </Item.Group> 
-         </Segment>  
+
+            </Item>
+
+            <TopPortal
+                ref={this.portalRef}
+                header={'Success!'}
+                description={`${x.name} has been added to your questbook`}
+            />
+
+        </Segment >
+      ))}</div>
     );
-  }
+}
 }
 
 export default AllTasks;    

@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Radio,
@@ -16,6 +15,7 @@ import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
 import ErrorMessage from '../ErrorMessage';
 import { number } from 'joi';
+import TopPortal from '../Utils/TopPortal';
 
 const options = [
   { key: 'd', text: 'Daily', value: 'Daily' },
@@ -26,8 +26,10 @@ const options = [
 ]
 
 class AddTask extends React.Component {
-
-  state = {
+  constructor(props) {
+    super(props);
+    this.portalRef= React.createRef();
+  this.state = {
     name: '',
     description: '',
     type: '',
@@ -40,9 +42,11 @@ class AddTask extends React.Component {
     submitStatus: false,
     days: '',
     hours: '',
-    taskAdded: null
+    taskAdded: null,
+     open: false,
+    
   }
-
+  }
 
 
 
@@ -84,9 +88,12 @@ class AddTask extends React.Component {
       }
     }).then((response) =>{ 
       if(response.status === 200){
-        this.setState({taskAdded: true});
-      }else{
-        this.setState({taskAdded: false});
+        // this.setState({taskAdded: true});
+            this.portalRef.current.handleOpen();
+        new Promise(res => setTimeout(res, 3500));
+        this.setState({ open: false });
+      } else {
+        this.setState({ open: false });
       }
     }, (error) => {
       console.log(error)
@@ -310,6 +317,11 @@ class AddTask extends React.Component {
             <Form.Field control={Button} >Submit</Form.Field>
           </Form>
         </Segment>
+        <TopPortal
+                    ref={this.portalRef}
+                    header={'Success!'}
+                    description={`${this.state.name} has been added to your questbook`}
+                />
       </div>
     );
   }

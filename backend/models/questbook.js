@@ -6,7 +6,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const questbookSchema = new mongoose.Schema({
   tasks: [
     {
-      type: ObjectId,
+      type: Object,
       ref: 'Task',
       default: [],
     },
@@ -17,7 +17,7 @@ const questbookSchema = new mongoose.Schema({
 
 function validateQuestbook(questbook) {
   const schema = Joi.object({
-    tasks: Joi.array().items(Joi.objectId),
+    tasks: Joi.array().items(Joi.object),
   });
 
   return schema.validate(questbook);

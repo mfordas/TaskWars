@@ -66,12 +66,12 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
     return {
       name: prefix + x,
       level: 10 + x,
-      maxHealth: 10*x,
-      health: 10*(x+1),
+      maxHealth: 100*(x+1),
+      health: 50*(x+1),
       expRequired: 120*(x+1),
       exp_points: 100*(x+1),
       physical_power: 15 + x,
-      magical_power: 20 + x, 
+      magical_power: 20 + x,
       charClass: "Druid",
       avatar: 'http://icons.iconarchive.com/icons/chanut/role-playing/256/Villager-icon.png',
       questbook_id: questbookCatalog[x] === undefined ? null : questbookCatalog[x],
@@ -159,12 +159,12 @@ const createItem = async (prefix, count, models) => {
 
 const createQuestbook = async (count, models, taskCatalog) => {
   const questbookData = arrayWithCount(count)(x => {
+    tasks = [];
+    tasks.push(taskCatalog[(x+1)*1] === undefined ? null : defaultTasks[(x+1)*1]);
+    tasks.push(taskCatalog[(x+1)*2] === undefined ? null : defaultTasks[(x+1)*2]);
+    tasks.push(taskCatalog[(x+1)*3] === undefined ? null : defaultTasks[(x+1)*3]);
     return {
-      tasks: [
-        taskCatalog[(x+1)*1] === undefined ? null : taskCatalog[(x+1)*1],
-        taskCatalog[(x+1)*2] === undefined ? null : taskCatalog[(x+1)*2],
-        taskCatalog[(x+1)*3] === undefined ? null : taskCatalog[(x+1)*3],
-      ]
+      tasks
     };
   });
   return await createModelBatch(models.questbook, questbookData);
@@ -184,7 +184,7 @@ const createTask = async (prefix, count, models) => {
         exp: (100+x),
         gold: (50+x),
         penalty: (5+x),
-        done: false
+        status: ""
       }
     };
   });

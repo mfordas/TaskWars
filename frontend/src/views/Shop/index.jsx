@@ -1,10 +1,10 @@
 import React from 'react';
-import ViewItems from '../../components/Shop/viewItems'
+import ShopContent from '../../components/Shop/ShopContent'
 
 const Shop = () => {
   return (
     <div>
-      <ViewItems/>
+      <ShopContent/>
     </div>
   );
 };
