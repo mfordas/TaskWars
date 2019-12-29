@@ -26,7 +26,7 @@ class Quote extends React.Component {
             <Segment textAlign='center' color='purple' inverted>
                 <Grid columns={8} verticalAlign='middle'>
                     <Grid.Column width={14}>
-                        <Segment style={{ color: 'purple' }}>
+                        <Segment inverted>
                             <h1>''{this.state.quote.text}''</h1>
                         </Segment>
                     </Grid.Column>
