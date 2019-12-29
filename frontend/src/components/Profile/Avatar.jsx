@@ -48,10 +48,10 @@ class Avatar extends React.Component {
     onModalClose = () => {
         // this.setState({avatar: this.img});
         // this.putAvatar(this.img);
-        const creature_id = "5e08e8b862ef1f4040257d7c";
-        const guild_id = "5e08e8b862ef1f4040257d87";
+        const creature_id = "5e091f6fbd2d8c0e68880044";
+        const guild_id = "5e091f6fbd2d8c0e68880050";
         const guild_name = "Guild_0";
-        const task_id = "5e08e8b862ef1f4040257d58"
+        const task_id = "5e091444a55839319cc93964"
         // this.addCreatureToFight(creature_id, guild_id, guild_name);
         this.addTaskToMemebers(task_id, guild_id);
     }
@@ -79,7 +79,8 @@ class Avatar extends React.Component {
             const memberResponse = await fetch(`/api/characters/${member_id}`, setHeaders());
             const member = await memberResponse.json();
             
-            const response = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
+            const memberTask = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
+            console.log(memberTask._id)
         })
     }
 

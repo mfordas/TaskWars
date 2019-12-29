@@ -61,7 +61,8 @@ router.put('/:id/task', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
-  questbookHandel.tasks.push(req.body);
+  let task = new Task(req.body);
+  questbookHandel.tasks.push(task);
 
   const questbook = await Questbook.findByIdAndUpdate(
     req.params.id,
