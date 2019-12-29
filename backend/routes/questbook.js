@@ -122,7 +122,7 @@ router.put('/:id/task/:idTask', async (req, res) => {
 
   const questbook = await Questbook.findByIdAndUpdate(
   {  "_id": req.params.id },
-         {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].startDate": new Date()} },
+         {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].startFinishDate": new Date()} },
         { arrayFilters: [ { 
           "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
           } ], 

@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Button, Icon
+  Button, Icon, Label, Segment
   } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
@@ -76,11 +76,14 @@ pickIcon() {
     
     return (
       <div>
-        <Button {...this.pickColor()} floated='right' onClick={this.onButtonSubmit}>
+        {this.props.task.status === '' ? 
+        <Button fluid icon labelPosition='right' {...this.pickColor()} onClick={this.onButtonSubmit}>
           {this.pickContent()}
           <Icon {...this.pickIcon()}/>
-        </Button>
-      </div>
+        </Button> : <Segment fluid icon inverted textAlign='center' {...this.pickColor()}>
+          {this.pickContent()}
+          <Icon {...this.pickIcon()}/>
+  </Segment>}</div>
     );
   }
 }

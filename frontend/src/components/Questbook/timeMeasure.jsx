@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Button, Icon
+  Button, Icon, Segment
   } from 'semantic-ui-react';
   import FinishTask from './finishTask';
 
@@ -19,7 +19,7 @@ class MeasureTime extends React.Component {
 
   setTime = () => {
     const currentDate = new Date();
-    this.setState({now: currentDate, startDate: this.props.task.startDate, taskDuration: this.props.task.duration});
+    this.setState({now: currentDate, startDate: this.props.task.startFinishDate, taskDuration: this.props.task.duration});
   }
 
  
@@ -44,34 +44,39 @@ class MeasureTime extends React.Component {
 
 measureTime = async () => {
     await this.setTime();
-    console.log(this.state.now);
-    console.log(this.state.startDate);
     const timeFromBegining = (Date.parse(this.state.now) - Date.parse(this.state.startDate));
     const tillEnd = this.state.taskDuration*3600000 - timeFromBegining;
     this.setState({timeToEnd: tillEnd});
     this.showDaysHoursMinutesTillEnd(this.state.timeToEnd);
+    console.log(this.state.timeToEnd);
 }
   
-  onButtonSubmit = async e => {
+  onChange = async e => {
     await this.measureTime();
   }
 
   
   componentDidMount() {
-      this.measureTime();
+    this.measureTime();
+     this.Time = setInterval (() => this.measureTime(), 60000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.Time);
   }
   
   componentDidUpdate() {
-  }
+}
 
   render() {
     
     return (
       <div>
-        <Button color='red' floated='right' onChange={this.onButtonSubmit}>
-          Time to end: {this.state.days} Days {this.state.hours} Hours {this.state.minutes} Minutes 
+        <Segment inverted fluid textAlign='center' color='red' onChange={this.onChange}>
+          Time to end: {this.state.days} Days {this.state.hours} Hours {this.state.minutes} Minutes
+           
           <Icon name='bell'/>
-        </Button>
+        </Segment>
         <FinishTask time={this.state} task={this.props.task}/>
       </div>
     );
