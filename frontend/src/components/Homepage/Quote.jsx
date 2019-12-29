@@ -21,6 +21,7 @@ class Quote extends React.Component {
     }
 
     render() {
+        
         return (
             <Segment textAlign='center' color='purple' inverted>
                 <Grid columns={8} verticalAlign='middle'>

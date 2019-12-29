@@ -24,18 +24,21 @@ class Stats extends React.Component {
 
     render() {
         return (
-            <Segment compact textAlign='center'>
-                <Item>
-                    <Header as='h1'>JOIN</Header>
-                    <Header as='h4'>coumunity which has</Header>
-                    <Header as='h1'>{this.state.userCount} users</Header>
-                </Item>
-                <Divider />
-                <Item>
-                    <Header as='h1'>TOGETHER</Header>
-                    <Header as='h4'>we were able to complete</Header>
-                    <Header as='h1'>{this.state.tasksCompleted} tasks</Header>
-                </Item>
+            <Segment compact textAlign='center' inverted>
+                <Segment>
+                    <Item>
+                        <Header as='h1'>JOIN</Header>
+                        <Header as='h4'>coumunity which has</Header>
+                        <Header as='h1'>{this.state.userCount} users</Header>
+                    </Item>
+                    <Divider />
+                    <Item>
+                        <Header as='h1'>TOGETHER</Header>
+                        <Header as='h4'>we were able to complete</Header>
+                        <Header as='h1'>{this.state.tasksCompleted} tasks</Header>
+                    </Item>
+                </Segment>
+
             </Segment>
         );
     }

@@ -11,6 +11,7 @@ const AppBar = () => {
     localStorage.removeItem('id');
     changeStore('isLogged', false);
     changeStore('me', null);
+    window.location.reload();
   };
   return (
       <Menu secondary>
