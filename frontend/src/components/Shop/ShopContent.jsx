@@ -96,7 +96,8 @@ class ShopContent extends React.Component {
     id_inventory={this.state.id_inventory}
     backpack={this.state.backpack}
     gold={this.state.gold}
-    items={this.state.items}/>
+    items={this.state.items}
+    showGold={false}/>
     this.setState({ inventory: inventory});
   }
 
@@ -104,17 +105,18 @@ class ShopContent extends React.Component {
     let activeV;
     let disabledV;
     return (
-      <Segment>
+      <Segment inverted>
       <Grid doubling container centered columns='equal' padded>
         <Grid.Row textAlign='center' verticalAlign='top'>
           <Grid.Column stretched>
+            Your gold: ${this.state.gold}
             { this.state.inventory !== null ? this.state.inventory : `Your gold: ${this.state.gold}`}
           </Grid.Column> 
          </Grid.Row>
 
         {this.state.items.map(item => (
           <Grid.Column mobile={16} tablet={8} computer={4} stretched>
-            <Segment>
+            <Segment inverted color='grey'>
               <ItemView item={item} gold={this.state.gold} buyItem={this.fetchBuyItem} />
             </Segment>
           </Grid.Column>

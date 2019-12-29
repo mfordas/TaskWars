@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item } from 'semantic-ui-react';
+import { Item, Label } from 'semantic-ui-react';
 import BuyItem from './BuyItems';
 
 class ItemView extends React.Component {
@@ -21,7 +21,7 @@ class ItemView extends React.Component {
     let activeV = this.props.item.price <= this.props.gold ? true : false;
     let disabledV = this.props.item.price > this.props.gold ? true : false;
     return (
-      <Item key={ this.props.item._id} >
+      <Item key={ this.props.item._id} color='grey' >
         <Item.Image src={ this.props.item.picture} size="small" wrapped />
           <Item.Content>
             <Item.Header>{ this.props.item.name}</Item.Header>
@@ -33,12 +33,14 @@ class ItemView extends React.Component {
               price: { this.props.item.price} <br/>
             </Item.Description>
             <Item.Extra>
-              <BuyItem  item={this.props.item} 
-                        active={activeV}
-                        disabled={disabledV}
-                        value1={this.props.item.price} 
-                        value2={this.props.gold}
-                        BuyItemFun={this.BuyItemFun} />
+              <Label attached='bottom'>
+                <BuyItem  item={this.props.item} 
+                          active={activeV}
+                          disabled={disabledV}
+                          value1={this.props.item.price} 
+                          value2={this.props.gold}
+                          BuyItemFun={this.BuyItemFun} />
+              </Label>
             </Item.Extra>
           </Item.Content>
       </Item>

@@ -5,7 +5,8 @@ class BuyItem extends React.Component {
   render() {
     return (
       <Button size="small"
-              primary toggle
+              toggle 
+              color='black'
               animated='fade' 
               floated='center' 
               active={this.props.active} 
