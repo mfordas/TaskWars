@@ -1,4 +1,6 @@
-const { validateGuild } = require('../models/guild');
+const {
+  validateGuild
+} = require('../models/guild');
 const express = require('express');
 const router = express.Router();
 
@@ -15,12 +17,25 @@ router.get('/:id', async (req, res) => {
   res.send(guild);
 });
 
+router.get('/leader/:leader', async (req, res) => {
+  const Guild = res.locals.models.guild;
+  const guild = await Guild.find({
+    leader: req.params.leader
+  });
+  if (!guild) res.status(404).send(`Guild with leader id ${req.params.leader} not found`);
+  res.send(guild);
+});
+
 router.post('/', async (req, res) => {
   const Guild = res.locals.models.guild;
-  const { error } = validateGuild(req.body);
+  const {
+    error
+  } = validateGuild(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let guild = await Guild.findOne({ name: req.body.name });
+  let guild = await Guild.findOne({
+    name: req.body.name
+  });
   if (guild) return res.status(400).send('Guild with this name already registered.');
 
   guild = new Guild(req.body);
@@ -32,7 +47,9 @@ router.put('/:id/members', async (req, res) => {
   const Guild = res.locals.models.guild;
   const Character = res.locals.models.character;
 
-  const { error } = validateGuild(req.body);
+  const {
+    error
+  } = validateGuild(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let guild = await Guild.findById(req.params.id);
@@ -41,7 +58,11 @@ router.put('/:id/members', async (req, res) => {
   const character = await Character.findById(req.body.members);
   if (!character) return res.status(404).send('The character with given ID was not found');
 
-  guild = await Guild.findByIdAndUpdate(req.params.id, { members: req.body.members }, { new: true });
+  guild = await Guild.findByIdAndUpdate(req.params.id, {
+    members: req.body.members
+  }, {
+    new: true
+  });
 
   res.send(guild);
 });
@@ -50,7 +71,9 @@ router.put('/:id/current_fight', async (req, res) => {
   const Guild = res.locals.models.guild;
   const Creature = res.locals.models.creature;
 
-  const { error } = validateGuild(req.body);
+  const {
+    error
+  } = validateGuild(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let guild = await Guild.findById(req.params.id);
@@ -59,7 +82,11 @@ router.put('/:id/current_fight', async (req, res) => {
   const creature = await Creature.findById(req.body.current_fight);
   if (!creature) return res.status(404).send('The creature with given ID was not found');
 
-  guild = await Guild.findByIdAndUpdate(req.params.id, { current_fight: req.body.current_fight }, { new: true });
+  guild = await Guild.findByIdAndUpdate(req.params.id, {
+    current_fight: req.body.current_fight
+  }, {
+    new: true
+  });
 
   res.send(guild);
 });
@@ -67,13 +94,19 @@ router.put('/:id/current_fight', async (req, res) => {
 router.put('/:id/flag', async (req, res) => {
   const Guild = res.locals.models.guild;
 
-  const { error } = validateGuild(req.body);
+  const {
+    error
+  } = validateGuild(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let guild = await Guild.findById(req.params.id);
   if (!guild) return res.status(404).send('The guild with given ID was not found');
 
-  guild = await Guild.findByIdAndUpdate(req.params.id, { flag: req.body.flag }, { new: true });
+  guild = await Guild.findByIdAndUpdate(req.params.id, {
+    flag: req.body.flag
+  }, {
+    new: true
+  });
 
   res.send(guild);
 });

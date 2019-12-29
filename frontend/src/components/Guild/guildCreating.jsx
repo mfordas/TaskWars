@@ -19,8 +19,18 @@ class GuildCreate extends React.Component {
     name: '',
     nameTaken: false,
     leader: null,
-    description: '',
+    description: ' ',
     type: '',
+  }
+
+  fetchUser = async () => {
+    const response = await fetch('/api/users/me', setHeaders());
+    const body = await response.json();
+    this.setState(
+      {
+        leader: body.character_id
+      }
+    )
   }
 
   postGuild = async () => {
@@ -30,7 +40,7 @@ class GuildCreate extends React.Component {
         method: 'post',
         data: {
           name: this.state.name,
-          leader: localStorage.id,
+          leader: this.state.leader,
           type: this.state.type,
           description: this.state.description,
         },
@@ -67,6 +77,7 @@ class GuildCreate extends React.Component {
 
   onButtonSubmit = async e => {
     e.preventDefault();
+    this.fetchUser();
     this.setState({ nameTaken: false })
     await this.checkName();
     if (this.state.nameTaken === false) {
@@ -84,7 +95,7 @@ class GuildCreate extends React.Component {
   };
 
   descriptionValidate = (e) => {
-    if (this.state.description === '' && this.state.submitStatus) {
+    if (this.state.description === '' && this.state.invalidData) {
       return { content: <ErrorMessage message='Description shoud have between 5 and 50 characters' /> }
     }
     else { return null }
@@ -92,7 +103,7 @@ class GuildCreate extends React.Component {
   };
 
   typeValidate = (e) => {
-    if (this.state.type === '' && this.state.submitStatus) {
+    if (this.state.type === '' && this.state.invalidData) {
       return <ErrorMessage message='Choose type' />
     }
     else { return null }
