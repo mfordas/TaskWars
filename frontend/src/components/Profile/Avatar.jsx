@@ -4,6 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import AvatarModal from './AvatarModal';
 import { compareSync } from 'bcryptjs';
 import setHeaders from '../../utils/setHeaders';
+const _ = require('lodash')
 
 class Avatar extends React.Component {
     constructor(props) {
@@ -45,8 +46,45 @@ class Avatar extends React.Component {
     }
 
     onModalClose = () => {
-        this.setState({avatar: this.img});
-        this.putAvatar(this.img);
+        // this.setState({avatar: this.img});
+        // this.putAvatar(this.img);
+        const creature_id = "5e08e8b862ef1f4040257d7c";
+        const guild_id = "5e08e8b862ef1f4040257d87";
+        const guild_name = "Guild_0";
+        const task_id = "5e08e8b862ef1f4040257d58"
+        // this.addCreatureToFight(creature_id, guild_id, guild_name);
+        this.addTaskToMemebers(task_id, guild_id);
+    }
+
+    addCreatureToFight = async (creature_id, guild_id, guild_name) => {
+        const data = {
+            name: guild_name,
+            current_fight: creature_id
+        }
+        const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
+        const response = await fetch(`/api/guilds/${guild_id}/current_fight`, params);
+    }
+
+    addTaskToMemebers = async (task_id, guild_id) => {
+        const guildResponse = await fetch(`/api/guilds/${guild_id}`, setHeaders());
+        const guild = await guildResponse.json();
+
+        const taskResponse = await fetch(`/api/tasks/${task_id}`, setHeaders());
+        const task = await taskResponse.json();
+
+        const data = _.omit(task, ['_id', '__v', '__proto']);
+        const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
+
+        guild.members.map(async (member_id) => {
+            const memberResponse = await fetch(`/api/characters/${member_id}`, setHeaders());
+            const member = await memberResponse.json();
+            
+            const response = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
+        })
+    }
+
+    atackCreature(creature_id) {
+        
     }
 
     putAvatar = async (img) => {
