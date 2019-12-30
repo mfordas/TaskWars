@@ -85,16 +85,32 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
 };
 
 const createGuilds = async (prefix, count,  models, creatureCatalog) => {
-  const guildData = arrayWithCount(count)(x => {
+  const guildData = arrayWithCount(count)( x => {
     return {
       name: prefix + x,
       //leader and members field's cannot be initilized befor character
       leader: null,
       members: [],
       type: "Utility",
-      current_fight: creatureCatalog[x] === undefined ? null : creatureCatalog[x],
+      current_fight: {},
     };
   });
+
+  let arr = [];
+  for(let i = 0; i<count; i++) {
+    const creature = await models['creature'].findById(creatureCatalog[i]);
+    console.log(creatureCatalog[i])
+    console.log(creature)
+    arr.push(creature);
+  }
+  
+  let x = 0;
+  guildData.forEach(element => {
+    // creatureCatalog[x] === undefined ? null : 
+    element.current_fight = arr[x];
+    console.log(x)
+    x+=1;
+  }); 
   return await createModelBatch(models.guild, guildData);
 };
 

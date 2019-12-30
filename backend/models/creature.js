@@ -48,11 +48,13 @@ const creatureSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  task_to_dmg: {
+  task_to_dmg: [
+    {
     type: ObjectId,
     ref: 'Task',
-    default: null,
-  },
+    default: [],
+    }
+  ],
   picture: {
     type: String,
     default: ''
@@ -76,7 +78,7 @@ function validateCreature(creature) {
     exp: Joi.number().min(0),
     gold: Joi.number().min(0),
     duration: Joi.number().min(0),
-    task_to_dmg: Joi.objectId(),
+    task_to_dmg: Joi.array(),
     picture: Joi.string()
   });
 
