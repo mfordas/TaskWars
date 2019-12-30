@@ -40,6 +40,7 @@ class StartTask extends React.Component {
   onButtonSubmit = async e => {
     e.preventDefault();
     await this.startTask();
+    this.props.taskStateChanged(this.state.status);
 
   }
 
@@ -76,7 +77,7 @@ pickIcon() {
     return (
       <div>
         {this.props.task.status === '' ? 
-        <Button fluid icon labelPosition='right' {...this.pickColor()} onClick={this.onButtonSubmit}>
+        <Button fluid icon labelPosition='right' {...this.pickColor()} onClick={this.onButtonSubmit} >
           {this.pickContent()}
           <Icon {...this.pickIcon()}/>
         </Button> : <Segment fluid icon inverted textAlign='center' {...this.pickColor()}>
