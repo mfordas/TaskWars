@@ -77,7 +77,7 @@ measureTime = async () => {
           `Time's up!`}
           <Icon name='bell'/>
         </Segment>
-        <FinishTask time={this.state} task={this.props.task}/>
+        <FinishTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged}/>
       </div>
     );
   }

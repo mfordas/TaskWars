@@ -14,6 +14,7 @@ class AllTasks extends React.Component {
     super(props);
   this.state = {
     tasks: [],
+    taskStateChange: null
   }
 }
 
@@ -44,13 +45,18 @@ class AllTasks extends React.Component {
     console.log('mounted')
   }
 
+  onTaskStateChange = (taskStateChange) => {
+    this.setState({taskStateChange});
+    this.setState({taskStateChange: null});
+  }
   
-  
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.type !== prevProps.type) {
       this.getData(this.props.type);
     }
-
+    if (this.state.taskStateChange !== prevState.taskStateChange){
+      this.getData(this.props.type);
+    }
    
   }
     
@@ -156,10 +162,10 @@ render() {
                 </Step.Group>
                 <Item.Extra >
                 {x.status === '' ?
-              <StartTask task={x}/>
+              <StartTask task={x} taskStateChanged={this.onTaskStateChange}/>
               : null}
                 {x.status === 'in_progress' ?
-              <MeasureTime task={x}/>
+              <MeasureTime task={x} taskStateChanged={this.onTaskStateChange}/>
               : null}
                 {x.status === 'failed' ? 
                 <FailedTasks/> 
