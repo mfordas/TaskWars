@@ -3,11 +3,11 @@ import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import { Header, Menu, Popup, Icon, Grid } from 'semantic-ui-react';
 
 class GuildMenu extends React.Component {
+
   render() {
     return (
-      <Grid centered padded>
-        <Menu inverted compact>
-        <Menu.Item
+        <Menu inverted>
+          <Menu.Item
             as={NavLink}
             name="Completed"
             activeClassName="active"
@@ -26,7 +26,7 @@ class GuildMenu extends React.Component {
             color='purple'
             exact
           >
-            Join to the Guild
+            Find Guild
           </Menu.Item>
 
           <Menu.Item
@@ -40,7 +40,6 @@ class GuildMenu extends React.Component {
             Create a Guild
           </Menu.Item>
         </Menu>
-      </Grid>
     );
   }
 };

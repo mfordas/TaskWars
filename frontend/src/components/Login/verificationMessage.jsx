@@ -15,7 +15,7 @@ class Verified extends React.Component {
               header='Your email has not been verified yet. Go to your e-mail account and click on the verification link.'
             />
           <Container fluid>
-            Emial: {localStorage.email} is not verified!
+            Emial {localStorage.email} is not verified!
           </Container>
           </Segment>
         </Form>

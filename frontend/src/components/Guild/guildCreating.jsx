@@ -114,8 +114,7 @@ class GuildCreate extends React.Component {
   render() {
     const { type } = this.state
     return (
-      <Grid centered>
-        <Segment compact textAlign='left' inverted>
+        <Segment textAlign='left' inverted>
           <Form error inverted onSubmit={this.onButtonSubmit}>
             <Header inverted>Create a guild!</Header>
             <Form.Input
@@ -171,7 +170,6 @@ class GuildCreate extends React.Component {
             </Grid>
           </Form >
         </Segment>
-      </Grid >
     )
   }
 }
