@@ -6,16 +6,29 @@ import axios from 'axios';
 class CreaturePattern extends React.Component {
   state = {
     guild_id: '5e09501790ddee12645725ec',
-    description: 'temp desc' //this,props.creature.task_to_dmg.description
+    description: 'temp desc' //this.props.creature.task_to_dmg.description
     
   };
 
-  addCreatureToFight = async (creature_id, guild_id, guild_name) => {
-    const data = this.props.creature 
+  addCreatureToFight = async () => {
+    const data = {
+      "name": `${this.props.creature.name}`,
+      //"level": `${this.props.creature.level}`,
+     // health: this.props.creature.health,
+      //physical_power: this.props.creature.physical_power,
+     // physical_resistance: this.props.creature.physcical_resistance,
+     // magical_power: this.props.creature.magical_power,
+      //magical_resistance: this.props.creature.magical_resistance,
+      //exp: this.props.creature.exp,
+     // gold: this.props.creature.gold,
+      //duration: this.props.creature.duration,
+      //task_to_dmg: [],
+      //picture: this.props.creature.picture
+    }
     await axios({
       url: `api/guilds/${this.state.guild_id}/current_fight`,
       method: 'put',
-      data: { data },
+      data: data,
       headers: setHeaders(),
     }).then((response)=>{
       console.log(response)
