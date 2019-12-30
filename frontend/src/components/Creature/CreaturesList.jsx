@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Header, Segment, Input } from 'semantic-ui-react';
+import { Header, Segment, Input, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
@@ -44,6 +44,10 @@ class CreatureList extends React.Component {
     this.setState({ name: input.split(" ").join("_") });
   }
 
+  onSearchButtonClick = (e) =>{
+    this.getCreatures();
+  }
+
   render() {
     if (!this.context.hasCharacter) return <Redirect to="/" />;
 
@@ -52,6 +56,9 @@ class CreatureList extends React.Component {
         <Segment>
           <Header>Creature Type</Header>
           <Input fluid placeholder="Name" icon="search" onChange={this.onSearchChange} />
+          <Button color = 'blue' onClick ={this.onSearchButtonClick}>
+            Search
+          </Button>
         </Segment>
         <Segment>
           <CreaturesTable ref={this.creaturesTableRef} />

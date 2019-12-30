@@ -4,36 +4,52 @@ import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
 
 class CreaturePattern extends React.Component {
-  state = {};
+  state = {
+    guild_id: '5e09501790ddee12645725ec',
+    description: 'temp desc' //this,props.creature.task_to_dmg.description
+    
+  };
 
-  handleButtonAddClick = async e => {};
+  addCreatureToFight = async (creature_id, guild_id, guild_name) => {
+    const data = this.props.creature 
+    await axios({
+      url: `api/guilds/${this.state.guild_id}/current_fight`,
+      method: 'put',
+      data: { data },
+      headers: setHeaders(),
+    }).then((response)=>{
+      console.log(response)
+    }, (error) => {
+      console.log(error);
+    });
+  };
 
+  handleFightButtonClick = async (event) => {
+    console.log(this.props.creature);
+    await this.addCreatureToFight();
+  };
+
+  
   render() {
     return (
       <Segment.Group horizontal>
-        <Segment style={{width: '35%'}}>
+        <Segment style={{ width: '35%' }}>
           <Image src={this.props.creature.picture} />
         </Segment>
         <Segment>
           <Item>
-            <Item.Image style={{ display: 'inline-block' }}>
-              <Icon name="bug" />
-            </Item.Image>
-
             <Item.Header
               style={{ display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }}
               as={'h1'}
             >
               {this.props.creature.name}
             </Item.Header>
-
             <Item.Header
               style={{ display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }}
               as={'h1'}
             >
               level {this.props.creature.level}
             </Item.Header>
-
             <Item.Description>
               <Segment.Group>
                 <Segment inverted textAlign="center" color="purple" style={{ padding: '2px 0px 0px 6px' }}>
@@ -42,7 +58,7 @@ class CreaturePattern extends React.Component {
                 <Segment>
                   Complete following quest to deal damage:
                   <br />
-                  nazwa questa/description questa
+                  {this.state.description} 
                 </Segment>
               </Segment.Group>
             </Item.Description>
