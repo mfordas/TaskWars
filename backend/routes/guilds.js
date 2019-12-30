@@ -59,7 +59,7 @@ router.put('/:id/current_fight', async (req, res) => {
   // const creature = await Creature.findById(req.body.current_fight);
   // if (!creature) return res.status(404).send('The creature with given ID was not found');
 
-  guild = await Guild.findByIdAndUpdate(req.params.id, { current_fight: req.body }, { new: true });
+  guild = await Guild.findByIdAndUpdate(req.params.id, { current_fight: req.body.current_fight }, { new: true });
 
   res.send(guild);
 });

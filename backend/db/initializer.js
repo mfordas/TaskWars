@@ -99,8 +99,8 @@ const createGuilds = async (prefix, count,  models, creatureCatalog) => {
   let arr = [];
   for(let i = 0; i<count; i++) {
     const creature = await models['creature'].findById(creatureCatalog[i]);
-    console.log(creatureCatalog[i])
-    console.log(creature)
+    // console.log(creatureCatalog[i])
+    // console.log(creature)
     arr.push(creature);
   }
   
@@ -108,7 +108,7 @@ const createGuilds = async (prefix, count,  models, creatureCatalog) => {
   guildData.forEach(element => {
     // creatureCatalog[x] === undefined ? null : 
     element.current_fight = arr[x];
-    console.log(x)
+    // console.log(x)
     x+=1;
   }); 
   return await createModelBatch(models.guild, guildData);
