@@ -60,6 +60,14 @@ router.get('/', async (req, res) => {
   res.send(users);
 });
 
+router.get('/count', async (req, res) => {
+  const User = res.locals.models.user;
+  const usersCount = await User.find()
+    .then(response => response.length);
+    
+  res.send(`${usersCount}`);
+});
+
 router.get('/me', auth, async (req, res) => {
   const User = res.locals.models.user;
 
