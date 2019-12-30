@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Button, Icon
+  Button, Icon, Segment, Grid
   } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
@@ -68,9 +68,7 @@ class FinishTask extends React.Component {
     const response = await fetch(`/api/inventory/${inventory_id}`, setHeaders());
       const inventory = await response.json();
       const gold = inventory.gold + this.props.task.gold
-      console.log(gold);
       const exp_points = character.exp_points + this.props.task.exp
-      console.log(exp_points);
       await this.putGold(inventory_id, gold)
       await this.putExp(character_id, exp_points)
   }
@@ -100,23 +98,55 @@ class FinishTask extends React.Component {
     await this.finishTask();
 
   }
+  onButtonSubmitCompletedTask = async e => {
+    e.preventDefault();
+    await this.setState({status: 'completed'});
+    await this.finishTask();
+
+  }
+  onButtonSubmitFailedTask = async e => {
+    e.preventDefault();
+    await this.setState({status: 'failed'});
+    await this.finishTask();
+
+  }
 
   componentDidMount() {
   }
   
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     
   }
 
   render() {
     
     return (
+      this.props.time.timeToEnd >0 ? 
       <div>
-        <Button fluid icon labelPosition='right' color="blue" onClick={this.onButtonSubmit}>
+        <Button fluid icon color="blue" onClick={this.onButtonSubmit}>
           Finish task
-          <Icon name="arrow"/>
+          <Icon name="check circle"/>
         </Button>
-      </div>
+        </div> : 
+        <div>
+          <Segment inverted textAlign='center' color='grey'>
+          Did you finished this task?
+        </Segment>
+        <Grid columns={2}>
+          <Grid.Column>
+        <Button fluid color="green" onClick={this.onButtonSubmitCompletedTask}>
+          Yes!
+          <Icon name="check circle"/>
+        </Button>
+        </Grid.Column>
+        <Grid.Column>
+        <Button fluid color="red" onClick={this.onButtonSubmitFailedTask}>
+          No
+          <Icon name="check circle"/>
+        </Button>
+        </Grid.Column>
+        </Grid>
+        </div>
     );
   }
 }

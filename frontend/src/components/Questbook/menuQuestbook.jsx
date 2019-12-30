@@ -1,6 +1,7 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, Redirect } from 'react-router-dom';
 import { Menu, Popup, Icon } from 'semantic-ui-react';
+
 
 
 class MenuQuestbook extends React.Component {
@@ -57,13 +58,13 @@ class MenuQuestbook extends React.Component {
           <Icon name='add' />
           Add new task
         </Menu.Item>} />
-        {/* <Popup content='Add your own task now!' trigger={
+        <Popup content='Add your own task now!' trigger={
         <Menu.Item
-        as={NavLink} name="Tasks" to="/tasks" activeClassName="active"
+        as={Link} to='/questbook/addCustomTask'
         >
           <Icon name='add' />
           Add task from our library
-        </Menu.Item>} /> */}
+        </Menu.Item>} />
       </Menu>
  
   );

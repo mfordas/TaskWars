@@ -174,11 +174,12 @@ const createItem = async (prefix, count, models) => {
 };
 
 const createQuestbook = async (count, models, taskCatalog) => {
+  const Task = models.task;
   const questbookData = arrayWithCount(count)(x => {
     tasks = [];
-    tasks.push(taskCatalog[(x+1)*1] === undefined ? null : defaultTasks[(x+1)*1]);
-    tasks.push(taskCatalog[(x+1)*2] === undefined ? null : defaultTasks[(x+1)*2]);
-    tasks.push(taskCatalog[(x+1)*3] === undefined ? null : defaultTasks[(x+1)*3]);
+    tasks.push(taskCatalog[(x+1)*1] === undefined ? null : new Task(defaultTasks[(x+1)*1]));
+    tasks.push(taskCatalog[(x+1)*2] === undefined ? null : new Task(defaultTasks[(x+1)*2]));
+    tasks.push(taskCatalog[(x+1)*3] === undefined ? null : new Task(defaultTasks[(x+1)*3]));
     return {
       tasks
     };

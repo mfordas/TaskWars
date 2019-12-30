@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Icon, Item, Label, Segment, Step, Popup, Header } from 'semantic-ui-react';
+import { Icon, Item, Label, Segment, Step, Popup, Header } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import StartTask from './startTask';
 import MeasureTime from './timeMeasure';
@@ -10,11 +10,12 @@ import CompletedTasks from './completedTasks';
 
 
 class AllTasks extends React.Component {
-
-  state = {
-    tasks: []
+  constructor(props) {
+    super(props);
+  this.state = {
+    tasks: [],
   }
-  
+}
 
     getData = async (type) => {
       const user = await fetch('/api/users/me', setHeaders())
@@ -22,7 +23,6 @@ class AllTasks extends React.Component {
         const character = await fetch(`/api/characters/${user.character_id}`)
             .then(response => response.json());
       let response;
-      console.log(type);
       if (type === 'all' ){
       response = await fetch(`/api/questbook/${character.questbook_id}/tasks`, setHeaders());
     }
@@ -31,7 +31,6 @@ class AllTasks extends React.Component {
           response = await fetch(`/api/questbook/${character.questbook_id}/failed`, setHeaders());} else {
             response = await fetch(`/api/questbook/${character.questbook_id}/uncompleted`, setHeaders());}
       const body = await response.json();
-      console.log(body);
       this.setState(
         {
           tasks: body
@@ -44,11 +43,15 @@ class AllTasks extends React.Component {
     this.getData(this.props.type)
     console.log('mounted')
   }
+
+  
   
   componentDidUpdate(prevProps) {
     if (this.props.type !== prevProps.type) {
       this.getData(this.props.type);
     }
+
+   
   }
     
   pickImage(type) {
@@ -63,6 +66,20 @@ class AllTasks extends React.Component {
         return { name: 'globe', color: 'blue', size: 'big' };
 
     return { name: 'object group', color: 'orange', size: 'big' };
+}
+
+convertToDaysAndHours(t){
+  let time = t *3600000;
+  const cd = 24 * 60 * 60 * 1000,
+      ch = 60 * 60 * 1000,
+      d = Math.floor(time / cd),
+      h = Math.floor( (time - d * cd) / ch),
+      pad = function(n){ return n < 10 ? '0' + n : n; };
+if( h === 24 ){
+  d++;
+  h = 0;
+}
+return `${d} days ${h} hours`
 }
 
 render() {
@@ -126,7 +143,7 @@ render() {
                         <Icon name='clock' color='teal' />
                         <Step.Content>
                             <Step.Title>Duration</Step.Title>
-                            <Step.Description>{x.duration}</Step.Description>
+                            <Step.Description>{this.convertToDaysAndHours(x.duration)}</Step.Description>
                         </Step.Content>
                     </Step>
                     <Step style={{ padding: '2px' }}>
