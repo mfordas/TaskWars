@@ -44,15 +44,15 @@ router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
   res.send(creature);
 });
 
-router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (req, res) => {
+router.put('/:id/task_to_dmg', /*[authorization, [validateObjectId],*/ async (req, res) => {
   const Creature = res.locals.models.creature;
-  const Task = res.locals.models.task;
+  // const Task = res.locals.models.task;
 
   const { error } = validateCreature(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const task = await Task.findById(req.body.task_to_dmg);
-  if (!task) return res.status(404).send('The task with given ID was not found');
+  // const task = await Task.findById(req.body.task_to_dmg);
+  // if (!task) return res.status(404).send('The task with given ID was not found');
 
   let creature = await Creature.findById(req.params.id);
   if (!creature) return res.status(404).send('The creature with given ID was not found');

@@ -48,7 +48,7 @@ router.put('/:id/members', async (req, res) => {
 
 router.put('/:id/current_fight', async (req, res) => {
   const Guild = res.locals.models.guild;
-  const Creature = res.locals.models.creature;
+  // const Creature = res.locals.models.creature;
 
   const { error } = validateGuild(req.body);
   if (error) return res.status(400).send(error.details[0].message);
