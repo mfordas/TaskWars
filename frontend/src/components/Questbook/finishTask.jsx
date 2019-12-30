@@ -27,7 +27,7 @@ class FinishTask extends React.Component {
       headers: setHeaders(),
       data: {status: this.state.status}
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
     })
   }
 
@@ -38,7 +38,7 @@ class FinishTask extends React.Component {
       headers: setHeaders(),
       data: {inventory: {gold: gold}}
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
     })
   }
 
@@ -49,7 +49,7 @@ class FinishTask extends React.Component {
       headers: setHeaders(),
       data: {exp_points: exp_points}
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
     })
   }
 
@@ -60,7 +60,7 @@ class FinishTask extends React.Component {
       headers: setHeaders(),
       data: {health: health}
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
     })
   }
 
@@ -75,7 +75,7 @@ class FinishTask extends React.Component {
 
     taskFailed = async (character_id, character) => {
       const health = character.health - this.props.task.penalty
-      console.log(health);
+      // console.log(health);
       await this.putHealth(character_id, health)
   }
 
@@ -87,17 +87,48 @@ class FinishTask extends React.Component {
     await this.putData(this.props.task._id, character.questbook_id);
     if(this.state.status === 'completed'){
       this.taskCompleted(character.inventory_id, body.character_id, character);
+      const guild = await this.checkGuild(character, this.props.task._id);
+      if(guild !== undefined) {
+        let hp = guild.current_fight.health;
+
+        hp = hp - 50;     //change
+
+        guild.current_fight.health = hp;
+        const data = {
+          name: guild.name,
+          current_fight: guild.current_fight
+        }
+        const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
+
+        const tmp = '5e0a32dee79d0d3624105fec'  //change
+
+        const response = await fetch(`/api/guilds/${tmp}/current_fight`, params);
+      }
     } else if (this.state.status === 'failed'){
       this.taskFailed(body.character_id, character);
     }
+  }
+
+  checkGuild = async (character, task_id) => {
+    return new Promise((res,rej) => {
+      character.guilds.map(async (guild_id) => {
+        const guildResponse = await fetch(`/api/guilds/${guild_id}`, setHeaders());
+        const guild = await guildResponse.json();
+        guild.current_fight.task_to_dmg.map((id) => {
+          if(id === task_id) {
+            res(guild);
+          }
+        })
+      })
+    })
   }
   
   onButtonSubmit = async e => {
     e.preventDefault();
     await this.setStatus();
     await this.finishTask();
-
   }
+
   onButtonSubmitCompletedTask = async e => {
     e.preventDefault();
     await this.setState({status: 'completed'});

@@ -106,7 +106,7 @@ addTaskToMemebers = async (task_id, guild_id) => {
     }
     const guild_id = "5e0a32dee79d0d3624105fec";
     const guild_name = "Guild_0";
-    const task_id = "5e0a32dde79d0d3624105fbc";
+    const task_id = "5e0a32dce79d0d3624105fbb";
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
   
