@@ -73,6 +73,7 @@ const App = () => {
           <PrivateRoute exact path="/guild" component={Guild} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
+          
         </Switch>
       </Container>
     </BrowserRouter>

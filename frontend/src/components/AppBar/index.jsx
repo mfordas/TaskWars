@@ -12,6 +12,7 @@ const AppBar = () => {
     changeStore('isLogged', false);
     changeStore('me', null);
     changeStore('hasCharacter', null)
+    window.location.reload();
   };
   return (
       <Menu secondary>

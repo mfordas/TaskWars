@@ -2,6 +2,7 @@ const Joi = require('@hapi/joi');
 const express = require('express');
 const router = express.Router();
 const { validateTask } = require('../models/task');
+const auth = require('../middleware/authorization');
 
 //add new task
 router.post('/', async (req, res) => {

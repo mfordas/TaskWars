@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { Button, Icon, Item, Label } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
+import StartTask from './startTask';
 
 class UncompletedTasks extends React.Component {
 
@@ -70,10 +71,7 @@ class UncompletedTasks extends React.Component {
       <Item.Description>Duration: {x.duration}</Item.Description>
       <Item.Description>Penalty: {x.penalty}</Item.Description>
       <Item.Extra>
-        <Button primary floated='right'>
-          Start task
-          <Icon name='right chevron' />
-        </Button>
+        <StartTask task={x}/>
         <Label color = 'brown'>{x.category}</Label>
         <Label color = 'yellow'>Gold: {x.gold}</Label>
         <Label color = 'teal'>Exp: {x.exp}</Label>

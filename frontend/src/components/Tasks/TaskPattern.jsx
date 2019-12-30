@@ -12,6 +12,13 @@ class TaskPattern extends React.Component {
         this.state = { open: false }
     }
 
+    parseTime = (hours) => {
+        const days = Math.floor(hours / 24);
+        const hr = hours - (days * 24);
+    
+        return (`${days > 0 ? days + 'd' : ''} ${hr >= 0 ? hr + 'h' : ''}`)
+    }    
+
     handleButtonAddClick = async (e, { name }) => {
         this.setState({ open: true });
         const user = await fetch('/api/users/me', setHeaders())
@@ -28,7 +35,7 @@ class TaskPattern extends React.Component {
             "exp": `${this.props.task.exp}`,
             "gold": `${this.props.task.gold}`,
             "penalty": `${this.props.task.penalty}`,
-            "status": "in_progress"
+            "status": ""
         };
 
         const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
@@ -111,14 +118,14 @@ class TaskPattern extends React.Component {
                             <Icon name='clock' color='teal' />
                             <Step.Content>
                                 <Step.Title>Duration</Step.Title>
-                                <Step.Description>{this.props.task.duration}</Step.Description>
+                                <Step.Description>{this.parseTime(this.props.task.duration)}</Step.Description>
                             </Step.Content>
                         </Step>
                         <Step style={{ padding: '2px' }}>
                             <Icon name='wheelchair' />
                             <Step.Content>
                                 <Step.Title>Penalty</Step.Title>
-                                <Step.Description>{this.props.task.penalty}</Step.Description>
+                                <Step.Description>{this.props.task.penalty} hp</Step.Description>
                             </Step.Content>
                         </Step>
                     </Step.Group>
