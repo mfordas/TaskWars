@@ -48,7 +48,7 @@ router.put('/:id/members', async (req, res) => {
 
 router.put('/:id/current_fight', async (req, res) => {
   const Guild = res.locals.models.guild;
-  const Creature = res.locals.models.creature;
+  // const Creature = res.locals.models.creature;
 
   const { error } = validateGuild(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -56,8 +56,8 @@ router.put('/:id/current_fight', async (req, res) => {
   let guild = await Guild.findById(req.params.id);
   if (!guild) return res.status(404).send('The guild with given ID was not found');
 
-  const creature = await Creature.findById(req.body.current_fight);
-  if (!creature) return res.status(404).send('The creature with given ID was not found');
+  // const creature = await Creature.findById(req.body.current_fight);
+  // if (!creature) return res.status(404).send('The creature with given ID was not found');
 
   guild = await Guild.findByIdAndUpdate(req.params.id, { current_fight: req.body.current_fight }, { new: true });
 
