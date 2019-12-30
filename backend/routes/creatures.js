@@ -17,6 +17,17 @@ router.get(
   },
 );
 
+router.get('/:name', async (req, res) => {
+    const Creature = res.locals.models.creature;
+
+    const nameArray = req.params.name ? req.params.name.split('_') : '';
+   
+    const creatures = await Creature.find().sort({ level: 1, name: 1 });
+    const filteredCreatures = filterByName(creatures, nameArray)
+    res.send(filteredCreatures);
+  },
+);
+
 router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
   const Creature = res.locals.models.creature;
 
@@ -78,5 +89,15 @@ router.put('/:id/duration', /*[authorization,*/ [validateObjectId], async (req, 
 
   res.send(creature);
 });
+
+filterByName = (creatures, name) => {
+  if (!name)
+    return creatures;
+  return creatures.filter(cre => {
+    return name.every(n => {
+      return cre.name.toLowerCase().includes(n);
+    })
+  }) 
+}
 
 module.exports = router;

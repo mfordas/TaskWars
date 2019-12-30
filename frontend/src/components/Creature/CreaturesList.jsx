@@ -21,7 +21,7 @@ class CreatureList extends React.Component {
 
   getCreatures = async () =>{
     await axios({
-      url: 'api/creatures',
+      url:`api/creatures/${this.state.name}`,
       method: 'get',
       headers: setHeaders(),
     }).then((response) => {
