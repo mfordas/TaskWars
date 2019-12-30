@@ -5,7 +5,7 @@ class Stats extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { userCount: 0, tasksCompleted: 0 };
+        this.state = { userCount: '', tasksCompleted: '' };
     }
 
     getUsersAndTasks = async () => {
@@ -24,7 +24,7 @@ class Stats extends React.Component {
 
     render() {
         return (
-            <Segment compact textAlign='center' inverted>
+            <Segment compact textAlign='center' color='purple' inverted>
                 <Segment>
                     <Item>
                         <Header as='h1'>JOIN</Header>
