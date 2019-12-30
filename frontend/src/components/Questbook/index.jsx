@@ -1,16 +1,13 @@
 import React from 'react';
-import { NavLink, BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Container, Menu, Popup, Icon } from 'semantic-ui-react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Container } from 'semantic-ui-react';
 import AllTasks from './defaultTasks';
 import MenuQuestbook from './menuQuestbook';
 import AddTask from './addTask';
 import Tasks from '../../views/Tasks';
 
 const QuestbookContent = () => {
-
-
   return (
-    <div>
     <BrowserRouter>
     <Container text>
       <MenuQuestbook />
@@ -20,11 +17,10 @@ const QuestbookContent = () => {
           <Route exact path="/questbook/uncompleted" render={(props) => <AllTasks {...props} type={'uncompleted'} />} />
           <Route exact path="/questbook/failed" render={(props) => <AllTasks {...props} type={'failed'} />}/>
           <Route exact path="/questbook/addtask" component={AddTask} />
+          <Route exact path="/questbook/addCustomTask" render={() => <Redirect to="/tasks" />} />
         </Switch>
   </Container>
   </BrowserRouter>
-  <Route exact path="/tasks" component={Tasks} />
-  </div>
   );
 };
 

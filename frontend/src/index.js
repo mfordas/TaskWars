@@ -71,6 +71,7 @@ const App = () => {
           <PrivateRoute exact path="/inventory" component={Inventory} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
+          
         </Switch>
       </Container>
     </BrowserRouter>

@@ -48,7 +48,6 @@ measureTime = async () => {
     const tillEnd = this.state.taskDuration*3600000 - timeFromBegining;
     this.setState({timeToEnd: tillEnd});
     this.showDaysHoursMinutesTillEnd(this.state.timeToEnd);
-    console.log(this.state.timeToEnd);
 }
   
   onChange = async e => {
@@ -72,9 +71,10 @@ measureTime = async () => {
     
     return (
       <div>
-        <Segment inverted fluid textAlign='center' color='red' onChange={this.onChange}>
-          Time to end: {this.state.days} Days {this.state.hours} Hours {this.state.minutes} Minutes
-           
+        <Segment inverted textAlign='center' color='red' onChange={this.onChange}>
+          {this.state.timeToEnd>= 0 ? 
+          `Time to end: ${this.state.days} Days ${this.state.hours} Hours ${this.state.minutes} Minutes` : 
+          `Time's up!`}
           <Icon name='bell'/>
         </Segment>
         <FinishTask time={this.state} task={this.props.task}/>

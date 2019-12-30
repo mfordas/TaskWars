@@ -21,8 +21,7 @@ class StartTask extends React.Component {
       method: 'put',
       headers: setHeaders(),
       data: {status: "in_progress"}
-    }).then((response) => {
-      console.log(response);
+    }).then(() => {
       this.setState({status: "in_progress"})
     })
   }
@@ -47,7 +46,7 @@ class StartTask extends React.Component {
   componentDidMount() {
   }
   
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     
   }
 
