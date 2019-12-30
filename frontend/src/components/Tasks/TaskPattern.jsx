@@ -28,7 +28,7 @@ class TaskPattern extends React.Component {
             "exp": `${this.props.task.exp}`,
             "gold": `${this.props.task.gold}`,
             "penalty": `${this.props.task.penalty}`,
-            "status": "in_progress"
+            "status": ""
         };
 
         const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
