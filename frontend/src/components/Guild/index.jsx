@@ -5,6 +5,7 @@ import GuildCreating from './guildCreating';
 import GuildJoin from './guildJoin';
 import GuildMenu from './guildMenu';
 import YourGuilds from './yourGuilds';
+import GuildDetails from './guildDetails';
 
 const GuildContent = () => {
   return (
@@ -15,6 +16,7 @@ const GuildContent = () => {
           <Route exact path="/guildCreate" component={GuildCreating} />
           <Route exact path="/guildJoin" component={GuildJoin} />
           <Route exact path="/guild" component={YourGuilds} />
+          <Route exact path="/guildDetails" component={GuildDetails} />
         </Switch>
       </Container>
     </BrowserRouter>

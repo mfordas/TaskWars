@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { Button, Container, Header, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { NavLink} from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
 
 class YourGuilds extends React.Component {
@@ -39,6 +40,8 @@ class YourGuilds extends React.Component {
     this.fetchUser()
   }
 
+
+
   render() {
     return (
       <Container>
@@ -52,7 +55,7 @@ class YourGuilds extends React.Component {
                   <Item.Header as='a'>{x.name}</Item.Header>
                   <Item.Meta>
                     <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right'>
+                    <Button color='green' floated='right' as={NavLink} to="/guildDetails">
                       View
                   <Icon name='right chevron' />
                     </Button>
@@ -74,7 +77,7 @@ class YourGuilds extends React.Component {
                   <Item.Header as='a'>{x.name}</Item.Header>
                   <Item.Meta>
                     <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right'>
+                    <Button color='green' floated='right' as={NavLink} to="/guildDetails">
                       View
                   <Icon name='right chevron' />
                     </Button>
