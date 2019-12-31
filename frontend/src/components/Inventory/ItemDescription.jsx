@@ -9,6 +9,10 @@ class ItemDescription extends React.Component {
     this.setState({ item: this.props.item });
   }
 
+  equipped = () => {
+    this.props.equippedThisItem(this.state.item);
+  }
+
   render() {
     return (
       <div>
@@ -37,6 +41,9 @@ class ItemDescription extends React.Component {
             </Table.Row>
           </Table.Body>
         </Table>
+        <Segment inverted>
+            <Button size="small" onClick={this.equipped}>Equipped</Button>
+        </Segment> 
       </div>
     );
   }

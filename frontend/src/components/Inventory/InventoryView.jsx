@@ -13,7 +13,8 @@ class InventoryView extends React.Component {
     gold: null,
     items: [],
     backpackItem: [],
-    itemDescription: null
+    itemDescription: null,
+    equippedItems: []
   }
 
   fetchUser = async () => {
@@ -59,25 +60,56 @@ class InventoryView extends React.Component {
       !this.props.gold && !this.props.items ) {
         this.fetchUser();
         this.fetchItems();
+        
       }else {
         this.setState({
           id_user: this.props.id_user,
           id_inventory: this.props.id_inventory,
           backpack: this.props.backpack,
           gold: this.props.gold,
-          items: this.props.items
+          items: this.props.items,
         });
         this.putItemInBackpack();
+        console.log('Inventory as component');
       }
     console.log('mounted');
   }
 
   setDescription = (des) => {
-    let description = <ItemDescription key={des._id} item={des} closeFun={this.setDescToNull} />;
+    let description = <ItemDescription key={des._id} item={des} closeFun={this.setDescToNull} equippedThisItem={this.equippedItem} />;
     this.setState({ itemDescription: description });
   }
   setDescToNull = () => {
     this.setState({ itemDescription: null });
+  }
+
+  equippedItem = (item) => {
+    console.log('Equipped item button click');
+    this.fetchEquipped(item);
+  }
+
+  fetchEquipped = async (item) => {
+    const resp = await axios({
+      url: `/api/inventory/${this.state.id_inventory}/equippedItems`,
+      method: 'put',
+      data: {
+        item: {
+          _id: item._id,
+        }
+      },
+      headers: setHeaders(),
+    }).then(res => {
+        console.log('Put item equippedItems:',res);
+        // let backpackAfterRemove = this.state.backpack.find((it) => {it._id === item._id});
+        // this.setState({ backpack: backpackAfterRemove });
+        // this.fetchRemoveFromBackpack(afterPay);
+      })
+    .catch(error => console.error(error));
+    console.log(resp);
+  }
+
+  fetchRemoveFromBackpack = () => {
+
   }
 
   render(){
@@ -96,7 +128,7 @@ class InventoryView extends React.Component {
             {this.state.backpackItem.map( (item, id = 0) => (
               <Item key={id}>
                 <Grid.Column mobile={4} tablet={2} computer={1} stretched> 
-                  <ItemButton item={item} setDescription={this.setDescription} />
+                  <ItemButton item={item} setDescription={this.setDescription} bnActive={this.props.buttonActive} />
                 </Grid.Column>
               </Item> 
             ))}

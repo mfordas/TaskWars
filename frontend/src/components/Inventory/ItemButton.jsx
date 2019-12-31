@@ -14,7 +14,7 @@ class ItemButton extends React.Component {
 
   render(){
     return (
-      <Button inverted circular color='grey' onClick={this.chooseItem} >
+      <Button inverted circular color='grey' onClick={this.chooseItem} disabled={this.props.bnActive} >
         <Item.Image src={ this.props.item.picture } size="mini" wrapped />
       </Button>
     );

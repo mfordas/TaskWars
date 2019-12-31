@@ -133,6 +133,7 @@ const createInventories = async (count, models, itemCatalog) => {
         itemCatalog[(x+1)*3] === undefined ? null : itemCatalog[(x+1)*3],
       ],
       gold: (x+1) * 500,
+      equippedItems: [],
     };
   });
   return await createModelBatch(models.inventory, inventoryData);

@@ -31,10 +31,6 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  equipped: { 
-    type: Boolean,
-    default: false
-  },
   picture: {
     type: String,
     default: ''

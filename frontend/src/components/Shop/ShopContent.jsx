@@ -91,13 +91,13 @@ class ShopContent extends React.Component {
 
   }
   getInventory = () => {
-    let inventory = <InventoryView 
-    id_user={this.state.id_user}
-    id_inventory={this.state.id_inventory}
-    backpack={this.state.backpack}
-    gold={this.state.gold}
-    items={this.state.items}
-    showGold={false}/>
+    let inventory = <InventoryView showGold={false} buttonActive={false} />
+    // id_user={this.state.id_user}
+    // id_inventory={this.state.id_inventory}
+    // backpack={this.state.backpack}
+    // gold={this.state.gold}
+    // items={this.state.items}
+    // showGold={false}/>
     this.setState({ inventory: inventory});
   }
 
@@ -117,7 +117,7 @@ class ShopContent extends React.Component {
         {this.state.items.map(item => (
           <Grid.Column mobile={16} tablet={8} computer={4} stretched>
             <Segment inverted color='grey'>
-              <ItemView item={item} gold={this.state.gold} buyItem={this.fetchBuyItem} />
+              <ItemView item={item} gold={this.state.gold} buyItem={this.fetchBuyItem} buttonActive={true} />
             </Segment>
           </Grid.Column>
         ))}
