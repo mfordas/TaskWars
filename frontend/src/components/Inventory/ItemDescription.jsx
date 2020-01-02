@@ -10,7 +10,11 @@ class ItemDescription extends React.Component {
   }
 
   equipped = () => {
-    this.props.equippedThisItem(this.state.item);
+    if(this.state.item.slot === 'Usable') {
+      console.log('Use item and remove from inventory');
+    } else {
+      this.props.equippedThisItem(this.state.item);
+    }
   }
 
   render() {
@@ -42,7 +46,19 @@ class ItemDescription extends React.Component {
           </Table.Body>
         </Table>
         <Segment inverted>
-            <Button size="small" onClick={this.equipped}>Equipped</Button>
+            {this.props.eq === 'false' ?
+                          <Button size="small" onClick={this.equipped}>
+                          { this.props.item.slot != null && this.props.item.slot === 'Usable' 
+                          ? 'Use' : 
+                          'Equipped'}
+                        </Button> :
+                        <Button size="small" onClick={this.equipped}>
+                        { this.props.item.slot != null && this.props.item.slot === 'Usable' 
+                          ? 'None' : 
+                          'Unequipped'}
+                        </Button>
+            }
+
         </Segment> 
       </div>
     );

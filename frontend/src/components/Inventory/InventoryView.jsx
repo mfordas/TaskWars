@@ -4,7 +4,7 @@ import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import ItemButton from './ItemButton';
 import ItemDescription from './ItemDescription';
-
+import ItemView from './ItemView';
 class InventoryView extends React.Component {
   state = { 
     id_user: null,
@@ -14,7 +14,8 @@ class InventoryView extends React.Component {
     items: [],
     backpackItem: [],
     itemDescription: null,
-    equippedItems: []
+    equippedItems: [],
+    equipped: []
   }
 
   fetchUser = async () => {
@@ -34,7 +35,8 @@ class InventoryView extends React.Component {
   fetchGetInventory = async (id_inventory) => {
     const response = await fetch('/api/inventory/'+id_inventory, setHeaders());
     const body = await response.json();
-    this.setState({ backpack: body.backpack, gold: body.gold });
+    console.log(body);
+    this.setState({ backpack: body.backpack, gold: body.gold, equippedItems: body.equippedItems });
     console.log(this.state);
     this.putItemInBackpack();
   }
@@ -48,11 +50,16 @@ class InventoryView extends React.Component {
 
   putItemInBackpack(){
     let bag = [];
+    let equipped = [];
     this.state.backpack.forEach(itemId => {
       let itemInInven =  this.state.items.find((it) => { if(it._id === itemId) return it;});
       bag.push(itemInInven);
     });
-    this.setState({ backpackItem: bag });
+    this.state.equippedItems.forEach(itemId => {
+      let itemInInven =  this.state.items.find((it) => { if(it._id === itemId) return it;});
+      equipped.push(itemInInven);
+    });
+    this.setState({ backpackItem: bag, equipped: equipped });
   }
 
   componentDidMount() {
@@ -75,8 +82,13 @@ class InventoryView extends React.Component {
     console.log('mounted');
   }
 
-  setDescription = (des) => {
-    let description = <ItemDescription key={des._id} item={des} closeFun={this.setDescToNull} equippedThisItem={this.equippedItem} />;
+  setDescription = (des,eq) => {
+    let description = <ItemDescription  key={des._id} 
+                                        item={des} 
+                                        closeFun={this.setDescToNull} 
+                                        equippedThisItem={this.equippedItem} 
+                                        eq={eq}
+                                        />;
     this.setState({ itemDescription: description });
   }
   setDescToNull = () => {
@@ -84,11 +96,15 @@ class InventoryView extends React.Component {
   }
 
   equippedItem = (item) => {
-    console.log('Equipped item button click');
+    console.log('Equipped item button click', item);
     this.fetchEquipped(item);
+    let equipped = this.state.equipped;
+    equipped.push(item);
+    this.setState({ equipped: equipped });
   }
 
   fetchEquipped = async (item) => {
+    console.log('Przesłany obiekt, equipped:', item);
     const resp = await axios({
       url: `/api/inventory/${this.state.id_inventory}/equippedItems`,
       method: 'put',
@@ -116,7 +132,6 @@ class InventoryView extends React.Component {
     // let itemDescription = null;
     return (
       <Segment inverted>
-      <Grid doubling container centered columns='equal' padded>
         <Grid.Row textAlign='left' verticalAlign='top'> 
         {this.props.showGold !== false ? <Segment>Gold: {this.state.gold}</Segment> : null}
         </Grid.Row>
@@ -125,15 +140,20 @@ class InventoryView extends React.Component {
           <Segment inverted color='grey'>{this.state.itemDescription}</Segment> 
           : null}
         </Grid.Row>
-            {this.state.backpackItem.map( (item, id = 0) => (
-              <Item key={id}>
-                <Grid.Column mobile={4} tablet={2} computer={1} stretched> 
-                  <ItemButton item={item} setDescription={this.setDescription} bnActive={this.props.buttonActive} />
-                </Grid.Column>
-              </Item> 
-            ))}
-      </Grid>
-      </Segment> 
+        <ItemView
+          backpackItem={this.state.backpackItem} 
+          setDescription={this.setDescription} 
+          buttonActive={this.props.buttonActive}
+          eq={true} 
+        />
+        <Label>Equipped</Label>
+        <ItemView itemDescription={this.state.itemDescription} 
+          setDescription={this.setDescription} 
+          backpackItem={this.state.equipped}
+          eq={false}
+        />
+
+      </Segment>
     );
   }
 }

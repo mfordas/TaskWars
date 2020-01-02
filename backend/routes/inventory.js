@@ -67,7 +67,7 @@ router.put('/:id/backpack', async (req, res) => {
     return res.status(404).send(`Bad request. The given ID: ${req.params.id} was not valid.`);
 
   inventoryHandel.backpack.push(req.body.item._id);
-
+  console.log('Inventoryandel backpack: ', inventoryHandel.backpack );
   const inventory = await Inventory.findByIdAndUpdate(
     req.params.id,
     {
@@ -98,13 +98,15 @@ router.put('/:id/equippedItems', async (req, res) => {
   });
   if (!item) return res.status(400).send(`Item with given id ${req.body.item._id} was not found`);
 
-  const inventoryHandel = await Inventory.findById(req.params.id, 'equippedItems', { lean: true }).catch(err => {
+  const inventoryHandel = await Inventory.findById(req.params.id, 'equippedItems', { lean: true })
+  .catch(err => {
     console.error(`Bad request. The given ID: ${req.params.id} was not valid. ${err}`);
     return null;
   });
+  
   if (inventoryHandel === null)
     return res.status(404).send(`Bad request. The given ID: ${req.params.id} was not valid.`);
-
+  
   inventoryHandel.equippedItems.push(req.body.item._id);
 
   const inventory = await Inventory.findByIdAndUpdate(
