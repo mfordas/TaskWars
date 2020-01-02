@@ -92,6 +92,7 @@ class FinishTask extends React.Component {
     const character = await response.json();
     await this.putData(this.props.task._id, character.questbook_id);
     if(this.state.status === 'completed'){
+    // if(this.state.status === 'failed'){
       this.taskCompleted(character.inventory_id, body.character_id, character);
       const guild = await this.checkGuild(character, this.props.task._id);
       if(guild !== undefined) {
@@ -134,11 +135,20 @@ class FinishTask extends React.Component {
         }
       }
     } else if (this.state.status === 'failed'){
+    // } else if (this.state.status === 'completed'){
       const guild = await this.checkGuild(character, this.props.task._id);
       this.taskFailed(body.character_id, character);
-      // if(guild !== undefined) {
-
-      // }
+      if(guild !== undefined) {
+        let fight = guild.current_fight;
+        console.log(fight);
+        fight.duration = -2147483647;
+        const data = {
+          name: guild.name,
+          current_fight: fight
+        }
+        let params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
+        fetch(`/api/guilds/${guild._id}/current_fight`, params);
+      }
     }
   }
 

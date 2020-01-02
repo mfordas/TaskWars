@@ -126,9 +126,10 @@ router.put('/:id/current_fight', async (req, res) => {
     new: true
   });
 
-  // if(guild.current_fight.health <= 0) {
-  //   updateMembersStats(guild, Character, Inventory)
-  // }
+  if(guild.current_fight.duration === -2147483647) {
+    console.log("done");
+    // updateMembersStats(guild, Character, Inventory)
+  }
   
   res.send(guild);
 });

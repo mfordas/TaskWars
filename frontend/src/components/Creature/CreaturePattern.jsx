@@ -94,8 +94,8 @@ addTaskToMemebers = async (task_id, guild_id) => {
   handleFightButtonClick = async (event) => {
     // console.log(this.props.creature);
      const creatureData = {
-      "name": `${this.props.creature.name}`,
-      "level": `${this.props.creature.level}`,
+      name: `${this.props.creature.name}`,
+      level: this.props.creature.level,
      health: this.props.creature.health,
       physical_power: this.props.creature.physical_power,
      physical_resistance: this.props.creature.physcical_resistance,
@@ -107,9 +107,9 @@ addTaskToMemebers = async (task_id, guild_id) => {
       task_to_dmg: [],
       picture: this.props.creature.picture
     }
-    const guild_id = "5e0e1f0b81c5f52fbc933d29";        //change
+    const guild_id = "5e0e3a128d57233de44d75fb";        //change
     const guild_name = "Guild_0";                       //change
-    const task_id = "5e0e1f0a81c5f52fbc933ce8";         //change
+    const task_id = "5e0e3a128d57233de44d75c0";         //change
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
   
