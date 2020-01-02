@@ -38,6 +38,29 @@ router.post('/', async (req, res) => {
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 
+router.post('/email', async (req, res) => {
+  function validate(req) {
+    const schema = {
+      email: Joi.string()
+        .min(5)
+        .max(255)
+        .required()
+        .email(),
+      token: Joi.string()
+    };
+    return Joi.validate(req, schema);
+  }
+
+  const { error, value } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  
+  // // send email -----------------
+  const url = `http://127.0.0.1:8080/api/users/confirmation/${req.body.token}`;
+  sednEmail(req.body.email, url);
+
+  res.send('Email sent');
+});
+
 router.get('/confirmation/:token', async (req, res) => {
   const User = res.locals.models.user;
 
@@ -58,6 +81,14 @@ router.get('/', async (req, res) => {
     .sort('email');
 
   res.send(users);
+});
+
+router.get('/count', async (req, res) => {
+  const User = res.locals.models.user;
+  const usersCount = await User.find()
+    .then(response => response.length);
+    
+  res.send(`${usersCount}`);
 });
 
 router.get('/me', auth, async (req, res) => {

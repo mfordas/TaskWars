@@ -160,19 +160,20 @@ class FinishTask extends React.Component {
     e.preventDefault();
     await this.setStatus();
     await this.finishTask();
+    this.props.taskStateChanged(this.state.status);
   }
 
   onButtonSubmitCompletedTask = async e => {
     e.preventDefault();
     await this.setState({status: 'completed'});
     await this.finishTask();
-
+    this.props.taskStateChanged(this.state.status);
   }
   onButtonSubmitFailedTask = async e => {
     e.preventDefault();
     await this.setState({status: 'failed'});
     await this.finishTask();
-
+    this.props.taskStateChanged(this.state.status);
   }
 
   componentDidMount() {

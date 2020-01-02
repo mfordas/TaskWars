@@ -16,6 +16,21 @@ router.post('/', async (req, res) => {
   res.send(questbook);
 });
 
+router.get('/count', async (req, res) => {
+  const Questbook = res.locals.models.questbook;
+  const questbooks = await Questbook.find();
+
+  let counter = 0;
+  questbooks.forEach(questbook => {
+    questbook.tasks.forEach(task => {
+      if (task.status === 'completed')
+        counter++;
+    });
+  });
+
+  res.send(`${counter}`);
+});
+
 router.get('/:id/completed', async (req, res) => {
   const Questbook = res.locals.models.questbook;
   const questbook = await Questbook.findById(req.params.id);
