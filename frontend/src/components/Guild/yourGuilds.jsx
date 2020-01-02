@@ -1,16 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
 import { Button, Container, Header, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import { NavLink} from 'react-router-dom';
+import { NavLink, Route, Redirect} from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
+import Store from '../../Store';
 
 class YourGuilds extends React.Component {
 
   state = {
+    guildChosen: false,
     name: '',
     guildsLeader: [],
     guildsMember: [],
   }
+
+  static contextType = Store;
 
   fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
@@ -40,9 +44,17 @@ class YourGuilds extends React.Component {
     this.fetchUser()
   }
 
+  updateStore = async (id) => {
+    this.context.changeStore('guild_id', id);
+    this.state.guildChosen = true;
+  }
 
+  handleViewButtonClick = async (id) => {
+    await this.updateStore(id);
+  }
 
   render() {
+    if(this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
       <Container>
         <Segment textAlign='left'>
@@ -55,7 +67,7 @@ class YourGuilds extends React.Component {
                   <Item.Header as='a'>{x.name}</Item.Header>
                   <Item.Meta>
                     <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right' as={NavLink} to="/guildDetails">
+                    <Button color='green' floated='right' onClick={async ()=>{await this.handleViewButtonClick(x._id)}}>
                       View
                   <Icon name='right chevron' />
                     </Button>
@@ -77,7 +89,7 @@ class YourGuilds extends React.Component {
                   <Item.Header as='a'>{x.name}</Item.Header>
                   <Item.Meta>
                     <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right' as={NavLink} to="/guildDetails">
+                    <Button color='green' floated='right' onClick={async ()=>{await this.handleViewButtonClick(x._id)}}>
                       View
                   <Icon name='right chevron' />
                     </Button>
