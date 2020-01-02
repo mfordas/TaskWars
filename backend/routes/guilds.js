@@ -3,6 +3,7 @@ const {
 } = require('../models/guild');
 const express = require('express');
 const router = express.Router();
+const { gameOver } = require('../db/utils/gameOver');
 
 router.get('/', async (req, res) => {
   const Guild = res.locals.models.guild;
@@ -127,27 +128,25 @@ router.put('/:id/current_fight', async (req, res) => {
   });
 
   if(guild.current_fight.duration === -2147483647) {
-    console.log("done");
-    // updateMembersStats(guild, Character, Inventory)
+    downgradeMembersStats(guild, Character)
   }
   
   res.send(guild);
 });
 
-// updateMembersStats = (guild, characterModel, inventoryModel) => {
-//   const expReward = guild.current_fight.exp/guild.members.length;
-//   const goldReward = guild.current_fight.gold/guild.members.length;
-//   guild.members.map(async (memberID) => {
-//     const member = await characterModel.findById(memberID);
-//     const memberInventory = await inventoryModel.findById(member.inventory_id);
-//     const memberExp = member.exp_points;
-//     const memberGold = memberInventory.gold;
-
-//     // await characterModel.findByIdAndUpdate(memberID, { exp_points: (memberExp + expReward)});
-//     await inventoryModel.findByIdAndUpdate(member.inventory_id, { gold: (memberGold + goldReward)});
-    
-//   })
-// }
+downgradeMembersStats = (guild, characterModel) => {
+  const hpPenalty = guild.current_fight.health/guild.members.length;
+  // console.log(hpPenalty);
+  guild.members.map(async (memberID) => {
+    const member = await characterModel.findById(memberID);
+    const memberHP = member.health;
+    if(memberHP - hpPenalty > 0) {
+      await characterModel.findByIdAndUpdate(memberID, { health: (memberHP - hpPenalty)});
+    } else {
+      gameOver(characterModel, member);
+    }
+  })
+}
 
 
 router.put('/:id/flag', async (req, res) => {
