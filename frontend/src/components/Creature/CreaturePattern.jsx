@@ -14,13 +14,13 @@ class CreaturePattern extends React.Component {
   addCreatureToFight = async (creature, guild_id, guild_name, task_id) => {
     // const creatureResponse = await fetch(`/api/creatures/${creature_id}`, setHeaders());
     // const creature = await creatureResponse.json();
-    console.log(creature)
+    // console.log(creature)
 
     let task_to_dmg = await this.addTaskToMemebers(task_id, guild_id)
-    console.log(task_to_dmg);
+    // console.log(task_to_dmg);
     creature.task_to_dmg = task_to_dmg;
 
-    console.log(creature)
+    // console.log(creature)
     const data = {
         name: guild_name,
         current_fight: creature
@@ -36,8 +36,10 @@ addTaskToMemebers = async (task_id, guild_id) => {
 
     const taskResponse = await fetch(`/api/tasks/${task_id}`, setHeaders());
     const task = await taskResponse.json();
+    // console.log(task);
 
     let data = _.omit(task, ['_id', '__v', '__proto']);
+    // console.log(data)
     let params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
 
     const task_to_dmg = [];
@@ -45,11 +47,12 @@ addTaskToMemebers = async (task_id, guild_id) => {
         const memberResponse = await fetch(`/api/characters/${member_id}`, setHeaders());
         const member = await memberResponse.json();
         
+        // console.log(params)
         const memberTasksResponse = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
         const memberTasks = await memberTasksResponse.json();
+        // console.log(memberTasks);
         return memberTasks.tasks[memberTasks.tasks.length-1]._id;
         // task_to_dmg.push(memberTasks.tasks[memberTasks.tasks.length-1]._id);
-
     })
 
     return Promise.all(requests)
@@ -104,9 +107,9 @@ addTaskToMemebers = async (task_id, guild_id) => {
       task_to_dmg: [],
       picture: this.props.creature.picture
     }
-    const guild_id = "5e0a32dee79d0d3624105fec";
-    const guild_name = "Guild_0";
-    const task_id = "5e0a32dce79d0d3624105fbb";
+    const guild_id = "5e0dfba38de86521d0d5448b";        //change
+    const guild_name = "Guild_0";                       //change
+    const task_id = "5e0dfba28de86521d0d54449";         //change
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
   

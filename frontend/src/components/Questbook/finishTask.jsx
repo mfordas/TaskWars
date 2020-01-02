@@ -76,8 +76,14 @@ class FinishTask extends React.Component {
     taskFailed = async (character_id, character) => {
       const health = character.health - this.props.task.penalty
       // console.log(health);
-      await this.putHealth(character_id, health)
+      await this.putHealth(character_id, health);
   }
+
+//   guildFightFailed = async (character_id, character) => {
+//     const health = character.health - this.props.task.penalty
+//     // console.log(health);
+//     await this.putHealth(character_id, health)
+// }
 
   finishTask = async () => {
     const user = await fetch('/api/users/me', setHeaders());
@@ -91,7 +97,7 @@ class FinishTask extends React.Component {
       if(guild !== undefined) {
         let hp = guild.current_fight.health;
 
-        hp = hp - 50;     //change
+        hp = hp - 5000;     //change
 
         guild.current_fight.health = hp;
         const data = {
@@ -100,12 +106,14 @@ class FinishTask extends React.Component {
         }
         const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
 
-        const tmp = '5e0a32dee79d0d3624105fec'  //change
-
-        const response = await fetch(`/api/guilds/${tmp}/current_fight`, params);
+        const response = await fetch(`/api/guilds/${guild._id}/current_fight`, params);
       }
     } else if (this.state.status === 'failed'){
+      const guild = await this.checkGuild(character, this.props.task._id);
       this.taskFailed(body.character_id, character);
+      // if(guild !== undefined) {
+
+      // }
     }
   }
 

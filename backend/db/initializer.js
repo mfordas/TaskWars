@@ -65,7 +65,7 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
   const characterData = arrayWithCount(count)(x => {
     return {
       name: prefix + x,
-      level: 10 + x,
+      level: 1 + x,
       maxHealth: 100*(x+1),
       health: 50*(x+1),
       expRequired: 120*(x+1),

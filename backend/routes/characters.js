@@ -37,7 +37,7 @@ router.put('/:id/level', (req, res) => {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
       const stats = getStatsOnLevelUp(result, req.body.level);
-      console.log(stats);
+      // console.log(stats);
       Character.findByIdAndUpdate(
         req.params.id,
         {
@@ -167,7 +167,30 @@ router.put('/:id/exp_points', (req, res) => {
         },
         { new: true },
       ).then(
-        r => {
+        async r => {
+          console.log(r);
+          if(r.exp_points >= r.expRequired){
+            let stats = [0, 0, 0, 0];
+            let nextLevel = r.level;
+            let reqExp = r.expRequired;
+            while(r.exp_points > reqExp) {
+              nextLevel++;
+              stats = getStatsOnLevelUp(result, nextLevel);
+              reqExp = stats[1];
+            }
+
+            await Character.findByIdAndUpdate(
+              req.params.id,
+              {
+                level: nextLevel,
+                health: stats[0],
+                maxHealth: stats[0],
+                expRequired: stats[1],
+                physical_power: stats[2],
+                magical_power: stats[3],
+              }
+            )
+          }
           res.send('Experience points updated!');
         },
         err => {
@@ -177,6 +200,7 @@ router.put('/:id/exp_points', (req, res) => {
     }
   });
 });
+
 
 //[working]
 router.put('/:id/physical_power', (req, res) => {
