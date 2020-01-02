@@ -70,8 +70,27 @@ class MenuTasksFilter extends React.Component {
     }
 
     fetchTasks = async () => {
-        const tasks = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders())
-            .then( response => response.json());
+        const user = await fetch('/api/users/me', setHeaders())
+            .then(response => response.json());
+        const character = await fetch(`/api/characters/${user.character_id}`)
+            .then(response => response.json());
+
+        const usersTasks = await fetch(`/api/questbook/${character.questbook_id}/tasks`, setHeaders())
+            .then(response => response.json());
+
+        const completedTasks = await fetch(`/api/questbook/${character.questbook_id}/completed`, setHeaders())
+            .then(response => response.json());
+
+        const allTasks = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders())
+            .then(response => response.json());
+
+        
+
+        const tasks = allTasks.filter(task => {
+            return (usersTasks.every(uTask => {
+                return (uTask.name !== task.name && uTask.description !== task.description)
+            }));
+        });
 
         this.setState({ results: tasks });
     }
@@ -96,7 +115,7 @@ class MenuTasksFilter extends React.Component {
                                     fluid
                                     placeholder='Tags...'
                                     icon='search'
-                                    onChange={this.onSearchChange} 
+                                    onChange={this.onSearchChange}
                                 />
 
                                 <Menu vertical inverted>
