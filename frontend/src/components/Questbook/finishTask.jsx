@@ -76,8 +76,14 @@ class FinishTask extends React.Component {
     taskFailed = async (character_id, character) => {
       const health = character.health - this.props.task.penalty
       // console.log(health);
-      await this.putHealth(character_id, health)
+      await this.putHealth(character_id, health);
   }
+
+//   guildFightFailed = async (character_id, character) => {
+//     const health = character.health - this.props.task.penalty
+//     // console.log(health);
+//     await this.putHealth(character_id, health)
+// }
 
   finishTask = async () => {
     const user = await fetch('/api/users/me', setHeaders());
@@ -91,7 +97,7 @@ class FinishTask extends React.Component {
       if(guild !== undefined) {
         let hp = guild.current_fight.health;
 
-        hp = hp - 50;     //change
+        hp = hp - 5000;     //change
 
         guild.current_fight.health = hp;
         const data = {
@@ -99,13 +105,40 @@ class FinishTask extends React.Component {
           current_fight: guild.current_fight
         }
         const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
+        const response = await fetch(`/api/guilds/${guild._id}/current_fight`, params);
 
-        const tmp = '5e0a32dee79d0d3624105fec'  //change
-
-        const response = await fetch(`/api/guilds/${tmp}/current_fight`, params);
+        if(hp <= 0) {     
+          const expReward = guild.current_fight.exp/guild.members.length;
+          const goldReward = guild.current_fight.gold/guild.members.length;
+          console.log(guild);
+          guild.members.map(async (memberID) => {
+            const memberResponse = await fetch(`/api/characters/${memberID}`, setHeaders());
+            const member = await memberResponse.json();
+            const memberInventoryResponse = await fetch(`/api/inventory/${member.inventory_id}`, setHeaders());
+            const memberInventory = await memberInventoryResponse.json();
+            const memberExp = await member.exp_points;
+            const memberGold = await memberInventory.gold;
+            const dataExp = {
+              exp_points: (memberExp + expReward)
+            };
+            let paramsExp = {...setHeaders(), body: JSON.stringify(dataExp), method: "PUT"};
+            console.log(dataExp);
+            fetch(`/api/characters/${memberID}/exp_points`, paramsExp);
+            const dataGold = {
+              inventory: {gold: (memberGold + goldReward)}
+            };
+            let paramsGold = {...setHeaders(), body: JSON.stringify(dataGold), method: "PUT"};
+            console.log(dataGold)
+            fetch(`/api/inventory/${member.inventory_id}/gold`, paramsGold);
+          });
+        }
       }
     } else if (this.state.status === 'failed'){
+      const guild = await this.checkGuild(character, this.props.task._id);
       this.taskFailed(body.character_id, character);
+      // if(guild !== undefined) {
+
+      // }
     }
   }
 

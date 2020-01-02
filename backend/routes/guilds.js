@@ -106,7 +106,8 @@ router.put('/:id/members', async (req, res) => {
 
 router.put('/:id/current_fight', async (req, res) => {
   const Guild = res.locals.models.guild;
-  // const Creature = res.locals.models.creature;
+  const Character = res.locals.models.character;
+  const Inventory = res.locals.models.inventory;
 
   const {
     error
@@ -125,8 +126,28 @@ router.put('/:id/current_fight', async (req, res) => {
     new: true
   });
 
+  // if(guild.current_fight.health <= 0) {
+  //   updateMembersStats(guild, Character, Inventory)
+  // }
+  
   res.send(guild);
 });
+
+// updateMembersStats = (guild, characterModel, inventoryModel) => {
+//   const expReward = guild.current_fight.exp/guild.members.length;
+//   const goldReward = guild.current_fight.gold/guild.members.length;
+//   guild.members.map(async (memberID) => {
+//     const member = await characterModel.findById(memberID);
+//     const memberInventory = await inventoryModel.findById(member.inventory_id);
+//     const memberExp = member.exp_points;
+//     const memberGold = memberInventory.gold;
+
+//     // await characterModel.findByIdAndUpdate(memberID, { exp_points: (memberExp + expReward)});
+//     await inventoryModel.findByIdAndUpdate(member.inventory_id, { gold: (memberGold + goldReward)});
+    
+//   })
+// }
+
 
 router.put('/:id/flag', async (req, res) => {
   const Guild = res.locals.models.guild;

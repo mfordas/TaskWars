@@ -52,7 +52,6 @@ function validateGuild(guild) {
     members: Joi.array().items(Joi.objectId()),
     type: Joi.valid('Physical', 'Mental', 'Utility'),
     current_fight: Joi.object(),
-    //current_fight: Joi.objectId(),
     description: Joi.string().max(1024),
     flag: Joi.string(),
   });
