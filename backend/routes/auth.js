@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
   if (!validPassword) return res.status(400).send('Invalid email or password.');
 
   if (!user.isVerified) {
-    return res.status(400).send('You must first confirm the registration.');
+    return res.status(203).send('You must first confirm the registration.');
   }
 
   const token = jwt.sign(

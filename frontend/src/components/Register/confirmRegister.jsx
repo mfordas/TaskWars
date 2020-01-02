@@ -1,13 +1,18 @@
 import React from 'react'
-import { Message, Grid } from 'semantic-ui-react'
+import { Menu, Popup, Icon, Message, Grid } from 'semantic-ui-react'
+import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 
-const Confirmed = () => (
-  <Grid centered>
-    <Message
-      success
-      header='Account created, check your email'
-    />
-  </Grid>
-)
+class Confirmed extends React.Component {
+  render() {
+    return (
+      <Grid centered>
+      <Message
+        success
+        header='Account created, check your email'
+      />
+    </Grid>
+    );
+  }
+};
 
 export default Confirmed

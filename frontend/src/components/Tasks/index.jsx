@@ -3,6 +3,7 @@ import { Container } from 'semantic-ui-react';
 import MenuTasksFilter from './MenuTasksFilter';
 
 const TasksContent = () => {
+
     return (
         <Container>
             <MenuTasksFilter />

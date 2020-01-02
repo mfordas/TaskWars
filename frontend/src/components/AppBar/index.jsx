@@ -12,6 +12,7 @@ const AppBar = () => {
     changeStore('isLogged', false);
     changeStore('me', null);
     changeStore('hasCharacter', null)
+    window.location.reload();
   };
   return (
       <Menu secondary>
@@ -46,6 +47,7 @@ const AppBar = () => {
             <Menu.Item as={NavLink} name="Tasks" to="/tasks" activeClassName="active" /><br></br>
             <Menu.Item as={NavLink} name="Shop" to="/shop" activeClassName="active" /><br></br>
             <Menu.Item as={NavLink} name="Inventory" to="/inventory" activeClassName="active" /><br></br>
+            <Menu.Item as={NavLink} name="Guild" to="/guild" activeClassName="active" /><br></br>
             <Menu.Item as={NavLink} name="Creatures" to="/creatures" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
