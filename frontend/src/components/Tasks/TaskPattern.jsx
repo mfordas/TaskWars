@@ -9,7 +9,8 @@ class TaskPattern extends React.Component {
         super(props);
 
         this.portalRef = React.createRef();
-        this.state = { open: false }
+        this.portalFailRef = React.createRef();
+        this.state = { open: false, fail: false }
     }
 
     parseTime = (hours) => {
@@ -38,12 +39,14 @@ class TaskPattern extends React.Component {
             "status": ""
         };
 
-        const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
-
-        if (res.status == 200)
-            this.portalRef.current.handleOpen();
-        else
+        const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert)
+        .catch(err => {
+            this.portalFailRef.current.handleOpen();
             this.setState({ open: false });
+        });
+
+        if (res && res.status == 200)
+            this.portalRef.current.handleOpen();
     }
 
     pickImage() {
@@ -149,6 +152,12 @@ class TaskPattern extends React.Component {
                     ref={this.portalRef}
                     header={'Success!'}
                     description={`${this.props.task.name} has been added to your questbook`}
+                />
+
+                <TopPortal
+                    ref={this.portalFailRef}
+                    header={'Fail!'}
+                    description={`We were unable to add ${this.props.task.name} to your questbook`}
                 />
 
             </Segment >
