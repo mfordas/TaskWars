@@ -2,7 +2,9 @@ import React from 'react';
 import { Item, Segment, Icon, Button, Step, Header, Image } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
+import Store from '../../Store';
 const _ = require('lodash')
+
 
 class CreaturePattern extends React.Component {
   state = {
@@ -10,6 +12,7 @@ class CreaturePattern extends React.Component {
     description: 'temp desc' //this.props.creature.task_to_dmg.description
     
   };
+  static contextType = Store;
 
   addCreatureToFight = async (creature, guild_id, guild_name, task_id) => {
     // const creatureResponse = await fetch(`/api/creatures/${creature_id}`, setHeaders());
@@ -107,9 +110,9 @@ addTaskToMemebers = async (task_id, guild_id) => {
       task_to_dmg: [],
       picture: this.props.creature.picture
     }
-    const guild_id = "5e0e1f0b81c5f52fbc933d29";        //change
+    const guild_id = this.context.guild_id;        //change
     const guild_name = "Guild_0";                       //change
-    const task_id = "5e0e1f0a81c5f52fbc933ce8";         //change
+    const task_id = "5e09501790ddee12645725b1";         //change
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
   
