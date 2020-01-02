@@ -4,6 +4,7 @@ import {
   Button, Icon, Segment
   } from 'semantic-ui-react';
   import FinishTask from './finishTask';
+  import PauseTask from './pauseTask';
 
 class MeasureTime extends React.Component {
 
@@ -22,10 +23,12 @@ class MeasureTime extends React.Component {
     this.setState({now: currentDate, startDate: this.props.task.startFinishDate, taskDuration: this.props.task.duration});
   }
 
- 
+  setTimeToEnd = (timeToEnd) => {
+    this.setState({timeToEnd});
+  }
   
    showDaysHoursMinutesTillEnd(t){
-    var cd = 24 * 60 * 60 * 1000,
+    let cd = 24 * 60 * 60 * 1000,
         ch = 60 * 60 * 1000,
         d = Math.floor(t / cd),
         h = Math.floor( (t - d * cd) / ch),
@@ -47,6 +50,7 @@ measureTime = async () => {
     const timeFromBegining = (Date.parse(this.state.now) - Date.parse(this.state.startDate));
     const tillEnd = this.state.taskDuration*3600000 - timeFromBegining;
     this.setState({timeToEnd: tillEnd});
+    // console.log(this.state.timeToEnd);
     this.showDaysHoursMinutesTillEnd(this.state.timeToEnd);
 }
   
@@ -55,9 +59,12 @@ measureTime = async () => {
   }
 
   
+
+  
   componentDidMount() {
     this.measureTime();
      this.Time = setInterval (() => this.measureTime(), 60000);
+     
   }
 
   componentWillUnmount(){
@@ -77,8 +84,10 @@ measureTime = async () => {
           `Time's up!`}
           <Icon name='bell'/>
         </Segment>
+        <PauseTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged} setTimeToEnd={this.setTimeToEnd}/>
         <FinishTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged}/>
       </div>
+         
     );
   }
 }
