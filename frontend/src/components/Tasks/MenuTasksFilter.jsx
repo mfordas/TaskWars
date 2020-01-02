@@ -78,17 +78,15 @@ class MenuTasksFilter extends React.Component {
         const usersTasks = await fetch(`/api/questbook/${character.questbook_id}/tasks`, setHeaders())
             .then(response => response.json());
 
-        const completedTasks = await fetch(`/api/questbook/${character.questbook_id}/completed`, setHeaders())
-            .then(response => response.json());
-
         const allTasks = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders())
             .then(response => response.json());
 
-        
-
         const tasks = allTasks.filter(task => {
             return (usersTasks.every(uTask => {
-                return (uTask.name !== task.name && uTask.description !== task.description)
+                return (
+                    uTask.name !== task.name &&
+                    uTask.description !== task.description ||
+                    (uTask.status !== 'in_progress' && uTask.status !== ''))
             }));
         });
 
