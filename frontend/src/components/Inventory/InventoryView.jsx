@@ -103,7 +103,7 @@ class InventoryView extends React.Component {
     equipped.push(item);
     this.setState({ equipped: equipped });
   }
-  
+
   unequippedItem = (item) => {
     console.log('Unequipped item button click', item);
     this.fetchBackpack(item);
@@ -120,40 +120,40 @@ class InventoryView extends React.Component {
 
   fetchRemoveFromEquipped = async (item) => {
     console.log('Remove from equippedItems: endpoint');
-    // const resp = await axios({
-//       url: `/api/inventory/${this.state.id_inventory}/equippedItems`,
-//       method: 'delete',
-//       data: {
-//         item: {
-//           _id: item._id,
-//         }
-//       },
-//       headers: setHeaders(),
-//     }).then(res => {
-//         console.log('Put item equippedItems:',res);
-// // remoe from state?
-//       })
-//     .catch(error => console.error(error));
-//     console.log(resp);
+    const resp = await axios({
+      url: `/api/inventory/${this.state.id_inventory}/equippedItems/${item._id}`,
+      method: 'put',
+      data: {
+        item: {
+          _id: item._id,
+        }
+      },
+      headers: setHeaders(),
+    }).then(res => {
+        console.log('Put item equippedItems:',res);
+// remoe from state?
+      })
+    .catch(error => console.error(error));
+    console.log(resp);
   }
 
   fetchRemoveFromBackpack = async (item) => {
     console.log('Remove from backpack: endpoint');
-//     const resp = await axios({
-//       url: `/api/inventory/${this.state.id_inventory}/backpack`,
-//       method: 'delete',
-//       data: {
-//         item: {
-//           _id: item._id,
-//         }
-//       },
-//       headers: setHeaders(),
-//     }).then(res => {
-//         console.log('Put item equippedItems:',res);
-// // remove from state?
-//       })
-//     .catch(error => console.error(error));
-//     console.log(resp);
+    const resp = await axios({
+      url: `/api/inventory/${this.state.id_inventory}/backpack/${item._id}`,
+      method: 'put',
+      data: {
+        item: {
+          _id: item._id,
+        }
+      },
+      headers: setHeaders(),
+    }).then(res => {
+        console.log('Put item equippedItems:',res);
+// remove from state?
+      })
+    .catch(error => console.error(error));
+    console.log(resp);
   }
 
   fetchEquipped = async (item) => {
@@ -212,19 +212,25 @@ class InventoryView extends React.Component {
           <Segment inverted color='grey'>{this.state.itemDescription}</Segment> 
           : null}
         </Grid.Row>
-        <ItemView
+        <Segment> 
+        { this.props.ViewEquipped === true ? 
+                <ItemView
+                backpackItem={this.state.backpackItem} 
+                setDescription={this.setDescription} 
+                buttonActive={this.props.buttonActive}
+                eq={true} 
+              />
+          <Label>Equipped</Label>
+          <ItemView itemDescription={this.state.itemDescription} 
+            setDescription={this.setDescription} backpackItem={this.state.equipped} eq={false} />
+            : 
+          <ItemView
           backpackItem={this.state.backpackItem} 
           setDescription={this.setDescription} 
           buttonActive={this.props.buttonActive}
           eq={true} 
-        />
-        <Label>Equipped</Label>
-        <ItemView itemDescription={this.state.itemDescription} 
-          setDescription={this.setDescription} 
-          backpackItem={this.state.equipped}
-          eq={false}
-        />
-
+        /> }
+        </Segment>
       </Segment>
     );
   }
