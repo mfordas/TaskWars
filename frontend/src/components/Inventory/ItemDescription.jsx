@@ -10,11 +10,17 @@ class ItemDescription extends React.Component {
   }
 
   equipped = () => {
-    if(this.state.item.slot === 'Usable') {
-      console.log('Use item and remove from inventory');
-    } else {
-      this.props.equippedThisItem(this.state.item);
+    if(this.props.eq === true) {
+      if(this.state.item.slot === 'Usable') {
+        console.log('Use item and remove from inventory');
+      } else {
+        this.props.equippedThisItem(this.state.item);
+      }
+    } else { 
+      this.props.unequippedThisItem(this.state.item);
+      console.log('Unequipped item: getback to backpack');
     }
+
   }
 
   render() {

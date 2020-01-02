@@ -86,7 +86,8 @@ class InventoryView extends React.Component {
     let description = <ItemDescription  key={des._id} 
                                         item={des} 
                                         closeFun={this.setDescToNull} 
-                                        equippedThisItem={this.equippedItem} 
+                                        equippedThisItem={this.equippedItem}
+                                        unequippedThisItem={this.unequippedItem} 
                                         eq={eq}
                                         />;
     this.setState({ itemDescription: description });
@@ -102,9 +103,60 @@ class InventoryView extends React.Component {
     equipped.push(item);
     this.setState({ equipped: equipped });
   }
+  
+  unequippedItem = (item) => {
+    console.log('Unequipped item button click', item);
+    this.fetchBackpack(item);
+    let equipped = this.state.equipped;
+    let backpack = this.state.backpackItem;
+    backpack.push(item);
+
+    const index = equipped.indexOf(item._id);
+    const it = equipped.splice(index, 1);
+    console.log(it, 'Bez tego obiektu', equipped);
+    this.setState({ equipped: equipped, backpackItem: backpack });
+    this.fetchRemoveFromEquipped(item);
+  }
+
+  fetchRemoveFromEquipped = async (item) => {
+    console.log('Remove from equippedItems: endpoint');
+    // const resp = await axios({
+//       url: `/api/inventory/${this.state.id_inventory}/equippedItems`,
+//       method: 'delete',
+//       data: {
+//         item: {
+//           _id: item._id,
+//         }
+//       },
+//       headers: setHeaders(),
+//     }).then(res => {
+//         console.log('Put item equippedItems:',res);
+// // remoe from state?
+//       })
+//     .catch(error => console.error(error));
+//     console.log(resp);
+  }
+
+  fetchRemoveFromBackpack = async (item) => {
+    console.log('Remove from backpack: endpoint');
+//     const resp = await axios({
+//       url: `/api/inventory/${this.state.id_inventory}/backpack`,
+//       method: 'delete',
+//       data: {
+//         item: {
+//           _id: item._id,
+//         }
+//       },
+//       headers: setHeaders(),
+//     }).then(res => {
+//         console.log('Put item equippedItems:',res);
+// // remove from state?
+//       })
+//     .catch(error => console.error(error));
+//     console.log(resp);
+  }
 
   fetchEquipped = async (item) => {
-    console.log('Przesłany obiekt, equipped:', item);
     const resp = await axios({
       url: `/api/inventory/${this.state.id_inventory}/equippedItems`,
       method: 'put',
@@ -116,6 +168,26 @@ class InventoryView extends React.Component {
       headers: setHeaders(),
     }).then(res => {
         console.log('Put item equippedItems:',res);
+        // let backpackAfterRemove = this.state.backpack.find((it) => {it._id === item._id});
+        // this.setState({ backpack: backpackAfterRemove });
+        // this.fetchRemoveFromBackpack(afterPay);
+      })
+    .catch(error => console.error(error));
+    console.log(resp);
+  }
+
+  fetchBackpack = async (item) => {
+    const resp = await axios({
+      url: `/api/inventory/${this.state.id_inventory}/backpack`,
+      method: 'put',
+      data: {
+        item: {
+          _id: item._id,
+        }
+      },
+      headers: setHeaders(),
+    }).then(res => {
+        console.log('Put item backpack:',res);
         // let backpackAfterRemove = this.state.backpack.find((it) => {it._id === item._id});
         // this.setState({ backpack: backpackAfterRemove });
         // this.fetchRemoveFromBackpack(afterPay);
