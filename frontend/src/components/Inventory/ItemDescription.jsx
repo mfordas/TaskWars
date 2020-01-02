@@ -46,7 +46,7 @@ class ItemDescription extends React.Component {
           </Table.Body>
         </Table>
         <Segment inverted>
-            {this.props.eq === 'false' ?
+            {this.props.eq === true ?
                           <Button size="small" onClick={this.equipped}>
                           { this.props.item.slot != null && this.props.item.slot === 'Usable' 
                           ? 'Use' : 
