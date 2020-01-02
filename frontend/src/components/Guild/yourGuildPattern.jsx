@@ -1,10 +1,10 @@
 import React from 'react';
 import { Item, Grid, Container, Segment, Icon, Button, Label, Popup, Step, Header } from 'semantic-ui-react';
-import TopPortal from '../Utils/TopPortal';
 import setHeaders from '../../utils/setHeaders';
+import { Redirect, NavLink } from 'react-router-dom';
 const axios = require('axios');
 
-class GuildPattern extends React.Component {
+class YourGuildPattern extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,23 +13,7 @@ class GuildPattern extends React.Component {
   }
 
   handleButtonAddClick = async (e, { name }) => {
-    this.setState({ open: true });
-    const user = await fetch('/api/users/me', setHeaders())
-      .then(response => response.json());
-    const character = await fetch(`/api/characters/${user.character_id}`)
-      .then(response => response.json());
-
-    const memberToInsert = {
-      "name": `${this.props.guild.name}`,
-      "members": [`${character._id}`],
-    };
-
-    const res = await axios.put(`/api/guilds/${this.props.guild._id}/members`, memberToInsert);
-
-    if (res.status == 200)
-      this.portalRef.current.handleOpen();
-    await new Promise(res => setTimeout(res, 3500));
-    this.setState({ open: false });
+    { localStorage.setItem('currentGuild', this.props.guild._id) }
   }
 
   render() {
@@ -38,11 +22,12 @@ class GuildPattern extends React.Component {
         <Item.Group divided>
           <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
           <Item.Content>
-            <Button color='purple' floated='right'
+            <Button as={NavLink} color='green' floated='right'
               onClick={this.handleButtonAddClick}
-              disabled={this.state.open}>
-              <Icon name='plus' />
-              Join to Guild
+              disabled={this.state.open}
+              to="/guildDetails" >
+              View
+              <Icon name='right chevron' />
               </Button>
             <Item.Header as='h3'>{this.props.guild.name}</Item.Header>
             <Item.Meta>
@@ -51,15 +36,9 @@ class GuildPattern extends React.Component {
             <Item.Description>{this.props.guild.description}</Item.Description>
           </Item.Content>
         </Item.Group>
-
-        <TopPortal
-          ref={this.portalRef}
-          header={'Success!'}
-          description={`You join to guild ${this.props.guild.name}`}
-        />
       </Segment >
     );
   }
 }
 
-export default GuildPattern;
+export default YourGuildPattern;

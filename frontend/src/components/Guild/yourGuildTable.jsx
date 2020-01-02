@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
-import GuildPattern from './guildPattern';
+import YourGuildPattern from './yourGuildPattern';
 
-class GuildTable extends React.Component {
+class YourGuildTable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -14,7 +14,7 @@ class GuildTable extends React.Component {
     let key = 0;
     return arr.map(elem => {
       return (
-        <GuildPattern guild={elem} key={key++} />
+        <YourGuildPattern guild={elem} key={key++} />
       );
     })
   })
@@ -30,4 +30,4 @@ class GuildTable extends React.Component {
   }
 }
 
-export default GuildTable;
+export default YourGuildTable;
