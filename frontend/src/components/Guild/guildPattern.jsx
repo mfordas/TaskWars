@@ -47,7 +47,6 @@ class GuildPattern extends React.Component {
   render() {
     return (
       <Container>
-        <Header as='h2'>Guilds, you are a leader of</Header>
         <Segment textAlign='left' inverted>
           <Item>
             <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
