@@ -1,18 +1,55 @@
 import React from 'react';
-import _ from 'lodash';
-import { Button, Container, Header, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import { NavLink} from 'react-router-dom';
+import { Menu, Icon, Container, Input, Button, Segment, Form, Grid, Header } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
+import YourGuildTable from './yourGuildTable';
 
-class YourGuilds extends React.Component {
+const guildCategories = [
+  { key: 0, text: 'All' },
+  { key: 1, text: 'Physical' },
+  { key: 2, text: 'Mental' },
+  { key: 3, text: 'Utility' }
+];
 
-  state = {
-    name: '',
-    guildsLeader: [],
-    guildsMember: [],
+
+class MenuGuildFilter extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.guildTableRefLeader = React.createRef();
+    this.guildTableRefMember = React.createRef();
+
+    this.state = {
+      type: 'All',
+      tags: '',
+      resultsLeader: [],
+      resultsMember: [],
+    };
   }
 
-  fetchUser = async () => {
+  handleItemClickType = (e, { name }) => this.setState({ type: name });
+
+  arrayToMenuType = ((arr) => {
+    return arr.map(elem => {
+      return (<Menu.Item
+        name={elem.text}
+        active={this.state.type === elem.text}
+        icon={this.state.type === elem.text ? 'check circle outline' : 'circle outline'}
+        onClick={this.handleItemClickType}
+        key={elem.key}
+      />);
+    })
+  })
+
+  onSearchChange = (event) => {
+    const str = event.target.value.toLowerCase();
+    this.setState({ tags: str.split(" ").join("_") });
+  }
+
+  onSearchButtonClick = (event) => {
+    this.fetchGuild();
+  }
+
+  fetchGuild = async () => {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.getData(body.character_id);
@@ -23,7 +60,7 @@ class YourGuilds extends React.Component {
     const body = await response.json();
     this.setState(
       {
-        guildsLeader: body
+        resultsLeader: body
       }
     )
 
@@ -31,66 +68,33 @@ class YourGuilds extends React.Component {
     const body2 = await response2.json();
     this.setState(
       {
-        guildsMember: body2
+        resultsMember: body2
       }
     )
   }
 
   componentDidMount() {
-    this.fetchUser()
+    this.fetchGuild();
   }
 
-
+  componentDidUpdate() {
+    this.guildTableRefLeader.current.setState({ results: this.state.resultsLeader });
+    this.guildTableRefMember.current.setState({ results: this.state.resultsMember });
+  }
 
   render() {
     return (
-      <Container>
-        <Segment textAlign='left'>
+      <Grid>
+        <Grid.Column mobile={16} computer={10}>
           <Header as='h2'>Guilds, you are a leader of</Header>
-          <Item.Group divided>
-            {this.state.guildsLeader.map(x => (
-              <Item key={x._id} >
-                <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
-                <Item.Content>
-                  <Item.Header as='a'>{x.name}</Item.Header>
-                  <Item.Meta>
-                    <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right' as={NavLink} to="/guildDetails">
-                      View
-                  <Icon name='right chevron' />
-                    </Button>
-                  </Item.Meta>
-                  <Item.Description>{x.description}</Item.Description>
-                </Item.Content>
-              </Item>
-            ))}
-          </Item.Group>
-        </Segment>
-
-        <Segment textAlign='left'>
+          <YourGuildTable ref={this.guildTableRefLeader} />
+          
           <Header as='h2'>Guilds in which you are a member</Header>
-          <Item.Group divided>
-            {this.state.guildsMember.map(x => (
-              <Item key={x._id} >
-                <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
-                <Item.Content>
-                  <Item.Header as='a'>{x.name}</Item.Header>
-                  <Item.Meta>
-                    <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right' as={NavLink} to="/guildDetails">
-                      View
-                  <Icon name='right chevron' />
-                    </Button>
-                  </Item.Meta>
-                  <Item.Description>{x.description}</Item.Description>
-                </Item.Content>
-              </Item>
-            ))}
-          </Item.Group>
-        </Segment>
-      </Container>
+          <YourGuildTable ref={this.guildTableRefMember} />
+        </Grid.Column>
+      </Grid>
     );
   }
 }
 
-export default YourGuilds;    
+export default MenuGuildFilter;

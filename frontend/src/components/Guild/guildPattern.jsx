@@ -22,7 +22,7 @@ class GuildPattern extends React.Component {
       .then(response => response.json());
 
     const memberToInsert = {
-      "name": `${this.props.task.name}`,
+      "name": `${this.props.guild.name}`,
       "members": [`${character._id}`],
     };
 
@@ -59,16 +59,16 @@ class GuildPattern extends React.Component {
 
             <Item.Header as='h3'>{this.props.task.name}</Item.Header>
             <Item.Meta>
-              <span className='type'>{this.props.task.type}</span>
+              <span className='type'>{this.props.guild.type}</span>
             </Item.Meta>
-            <Item.Description>{this.props.task.description}</Item.Description>
+            <Item.Description>{this.props.guild.description}</Item.Description>
           </Item.Content>
         </Item.Group>
 
         <TopPortal
           ref={this.portalRef}
           header={'Success!'}
-          description={`You join to guild ${this.props.task.name}`}
+          description={`You join to guild ${this.props.guild.name}`}
         />
         <TopPortal
           ref={this.portalRef2}
