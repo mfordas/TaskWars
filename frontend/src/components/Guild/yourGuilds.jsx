@@ -1,7 +1,9 @@
 import React from 'react';
-import { Menu, Icon, Container, Input, Button, Segment, Form, Grid, Header } from 'semantic-ui-react';
+import _ from 'lodash';
+import { Button, Container, Header, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { NavLink, Route, Redirect} from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
-import YourGuildTable from './yourGuildTable';
+import Store from '../../Store';
 
 const guildCategories = [
   { key: 0, text: 'All' },
@@ -10,46 +12,16 @@ const guildCategories = [
   { key: 3, text: 'Utility' }
 ];
 
-
-class MenuGuildFilter extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.guildTableRefLeader = React.createRef();
-    this.guildTableRefMember = React.createRef();
-
-    this.state = {
-      type: 'All',
-      tags: '',
-      resultsLeader: [],
-      resultsMember: [],
-    };
+  state = {
+    guildChosen: false,
+    name: '',
+    guildsLeader: [],
+    guildsMember: [],
   }
 
-  handleItemClickType = (e, { name }) => this.setState({ type: name });
+  static contextType = Store;
 
-  arrayToMenuType = ((arr) => {
-    return arr.map(elem => {
-      return (<Menu.Item
-        name={elem.text}
-        active={this.state.type === elem.text}
-        icon={this.state.type === elem.text ? 'check circle outline' : 'circle outline'}
-        onClick={this.handleItemClickType}
-        key={elem.key}
-      />);
-    })
-  })
-
-  onSearchChange = (event) => {
-    const str = event.target.value.toLowerCase();
-    this.setState({ tags: str.split(" ").join("_") });
-  }
-
-  onSearchButtonClick = (event) => {
-    this.fetchGuild();
-  }
-
-  fetchGuild = async () => {
+  fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.getData(body.character_id);
@@ -77,22 +49,63 @@ class MenuGuildFilter extends React.Component {
     this.fetchGuild();
   }
 
-  componentDidUpdate() {
-    this.guildTableRefLeader.current.setState({ results: this.state.resultsLeader });
-    this.guildTableRefMember.current.setState({ results: this.state.resultsMember });
+  updateStore = async (id) => {
+    this.context.changeStore('guild_id', id);
+    this.state.guildChosen = true;
+  }
+
+  handleViewButtonClick = async (id) => {
+    await this.updateStore(id);
   }
 
   render() {
+    if(this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
       <Grid>
         <Grid.Column mobile={16} computer={10}>
           <Header as='h2'>Guilds, you are a leader of</Header>
-          <YourGuildTable ref={this.guildTableRefLeader} />
-          
+          <Item.Group divided>
+            {this.state.guildsLeader.map(x => (
+              <Item key={x._id} >
+                <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
+                <Item.Content>
+                  <Item.Header as='a'>{x.name}</Item.Header>
+                  <Item.Meta>
+                    <span className='type'>{x.type}</span>
+                    <Button color='green' floated='right' onClick={async ()=>{await this.handleViewButtonClick(x._id)}}>
+                      View
+                  <Icon name='right chevron' />
+                    </Button>
+                  </Item.Meta>
+                  <Item.Description>{x.description}</Item.Description>
+                </Item.Content>
+              </Item>
+            ))}
+          </Item.Group>
+        </Segment>
+
+        <Segment textAlign='left'>
           <Header as='h2'>Guilds in which you are a member</Header>
-          <YourGuildTable ref={this.guildTableRefMember} />
-        </Grid.Column>
-      </Grid>
+          <Item.Group divided>
+            {this.state.guildsMember.map(x => (
+              <Item key={x._id} >
+                <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
+                <Item.Content>
+                  <Item.Header as='a'>{x.name}</Item.Header>
+                  <Item.Meta>
+                    <span className='type'>{x.type}</span>
+                    <Button color='green' floated='right' onClick={async ()=>{await this.handleViewButtonClick(x._id)}}>
+                      View
+                  <Icon name='right chevron' />
+                    </Button>
+                  </Item.Meta>
+                  <Item.Description>{x.description}</Item.Description>
+                </Item.Content>
+              </Item>
+            ))}
+          </Item.Group>
+        </Segment>
+      </Container>
     );
   }
 }

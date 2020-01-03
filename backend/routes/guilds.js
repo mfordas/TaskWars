@@ -3,6 +3,7 @@ const {
 } = require('../models/guild');
 const express = require('express');
 const router = express.Router();
+const { gameOver } = require('../db/utils/gameOver');
 
 router.get('/', async (req, res) => {
   const Guild = res.locals.models.guild;
@@ -106,7 +107,8 @@ router.put('/:id/members', async (req, res) => {
 
 router.put('/:id/current_fight', async (req, res) => {
   const Guild = res.locals.models.guild;
-  const Creature = res.locals.models.creature;
+  const Character = res.locals.models.character;
+  const Inventory = res.locals.models.inventory;
 
   const {
     error
@@ -116,8 +118,8 @@ router.put('/:id/current_fight', async (req, res) => {
   let guild = await Guild.findById(req.params.id);
   if (!guild) return res.status(404).send('The guild with given ID was not found');
 
-  const creature = await Creature.findById(req.body.current_fight);
-  if (!creature) return res.status(404).send('The creature with given ID was not found');
+  // const creature = await Creature.findById(req.body.current_fight);
+  // if (!creature) return res.status(404).send('The creature with given ID was not found');
 
   guild = await Guild.findByIdAndUpdate(req.params.id, {
     current_fight: req.body.current_fight
@@ -125,8 +127,27 @@ router.put('/:id/current_fight', async (req, res) => {
     new: true
   });
 
+  if(guild.current_fight.duration === -2147483647) {
+    downgradeMembersStats(guild, Character)
+  }
+  
   res.send(guild);
 });
+
+downgradeMembersStats = (guild, characterModel) => {
+  const hpPenalty = guild.current_fight.health/guild.members.length;
+  // console.log(hpPenalty);
+  guild.members.map(async (memberID) => {
+    const member = await characterModel.findById(memberID);
+    const memberHP = member.health;
+    if(memberHP - hpPenalty > 0) {
+      await characterModel.findByIdAndUpdate(memberID, { health: (memberHP - hpPenalty)});
+    } else {
+      gameOver(characterModel, member);
+    }
+  })
+}
+
 
 router.put('/:id/flag', async (req, res) => {
   const Guild = res.locals.models.guild;

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { validateCharacter } = require('../models/character');
+const { getStatsOnLevelUp } = require('../db/utils/getStatsOnLevelUp')
+const { gameOver } = require('../db/utils/gameOver');
 
 //Creating new character [working]
 router.post('/', async (req, res) => {
@@ -37,7 +39,7 @@ router.put('/:id/level', (req, res) => {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
       const stats = getStatsOnLevelUp(result, req.body.level);
-      console.log(stats);
+      // console.log(stats);
       Character.findByIdAndUpdate(
         req.params.id,
         {
@@ -60,50 +62,7 @@ router.put('/:id/level', (req, res) => {
   });
 });
 
-const getStatsOnLevelUp = (character, level) => {
-  let baseHP = 30;
-  for(let i=1; i<level; i++) {
-    baseHP += 10 + (i+1)*2;
-  }
-  // let actualHP = character.maxHealth;
-  // for(let i=1; i<level; i++) {
-  //   actualHP += 10 + (i+1)*2;
-  // }
 
-  let baseExp = 0;
-  for(let i=1; i<level+1; i++) {
-    baseExp += i*100 ;
-  }
-
-  //fix
-  let basePP = 1;
-  for(let i=1; i<level; i++) {
-    basePP += 2+(i+1) ;
-  }
-  let baseMP = basePP;
-  if(character.charClass === 'Warrior') {
-      // actualHP += (level-1)*5;
-      baseHP += (level)*5;
-      basePP += (level)*5;
-  }
-  if(character.charClass === 'Hunter') {
-    basePP += (level)*10;
-  }
-  if(character.charClass === 'Mage') {
-    baseMP += (level)*10;
-  }
-  if(character.charClass === 'Druid') {
-    // actualHP += (level-1)*5;
-    baseHP += (level)*5;
-    baseMP += (level)*5;
-  }
-
-  // let gainHP = actualHP - baseHP;
-  // console.log(gainHP);
-  let newHP = level > character.level ? baseHP : character.maxHealth
-
-  return [newHP, baseExp, basePP, baseMP]
-}
 
 router.put('/:id/maxHealth', (req, res) => {
   const Character = res.locals.models.character;
@@ -135,20 +94,25 @@ router.put('/:id/health', (req, res) => {
     if (!result) {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
-      Character.findByIdAndUpdate(
-        req.params.id,
-        {
-          health: req.body.health,
-        },
-        { new: true },
-      ).then(
-        r => {
-          res.send('Health updated!');
-        },
-        err => {
-          res.status(403).send('Bad request!');
-        },
-      );
+      if( req.body.health > 0 ) {
+        Character.findByIdAndUpdate(
+          req.params.id,
+          {
+            health: req.body.health,
+          },
+          { new: true },
+        ).then(
+          r => {
+            res.send('Health updated!');
+          },
+          err => {
+            res.status(403).send('Bad request!');
+          },
+        );
+      } else {
+        gameOver(Character, result);
+      }
+  
     }
   });
 });
@@ -167,7 +131,30 @@ router.put('/:id/exp_points', (req, res) => {
         },
         { new: true },
       ).then(
-        r => {
+        async r => {
+          // console.log(r);
+          if(r.exp_points >= r.expRequired){
+            let stats = [0, 0, 0, 0];
+            let nextLevel = r.level;
+            let reqExp = r.expRequired;
+            while(r.exp_points > reqExp) {
+              nextLevel++;
+              stats = getStatsOnLevelUp(result, nextLevel);
+              reqExp = stats[1];
+            }
+
+            await Character.findByIdAndUpdate(
+              req.params.id,
+              {
+                level: nextLevel,
+                health: stats[0],
+                maxHealth: stats[0],
+                expRequired: stats[1],
+                physical_power: stats[2],
+                magical_power: stats[3],
+              }
+            )
+          }
           res.send('Experience points updated!');
         },
         err => {
@@ -177,6 +164,7 @@ router.put('/:id/exp_points', (req, res) => {
     }
   });
 });
+
 
 //[working]
 router.put('/:id/physical_power', (req, res) => {

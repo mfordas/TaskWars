@@ -74,10 +74,13 @@ router.put('/:id/task', async (req, res) => {
   const Questbook = res.locals.models.questbook;
   const Task = res.locals.models.task;
   let task = new Task(req.body);
+  // console.log(req.body);
+  // console.log(task);
   const { error } = validateTask(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
+  // let task = new Task(req.body);
   questbookHandel.tasks.push(task);
 
   const questbook = await Questbook.findByIdAndUpdate(
@@ -115,7 +118,7 @@ router.post('/:id/task', async (req, res) => {
 
   
   // await task.save();
-  console.log(task);
+  // console.log(task);
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
   questbookHandel.tasks.push(task);
 

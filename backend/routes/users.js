@@ -136,7 +136,6 @@ router.get('/character/:character_id?', async (req, res) => {
   res.send(_.pick(result[0], ['_id', 'email', 'name']));
 });
 
-
 router.put('/me/password', auth, async (req, res) => {
   const User = res.locals.models.user;
   const {

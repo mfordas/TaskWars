@@ -26,7 +26,7 @@ const guildSchema = new mongoose.Schema({
     default: '',
   },
   current_fight: {
-    type: ObjectId,
+    type: Object,
     ref: 'Creature',
     default: null,
   },
@@ -51,7 +51,7 @@ function validateGuild(guild) {
     leader: Joi.objectId(),
     members: Joi.array().items(Joi.objectId()),
     type: Joi.valid('Physical', 'Mental', 'Utility'),
-    current_fight: Joi.objectId(),
+    current_fight: Joi.object(),
     description: Joi.string().max(1024),
     flag: Joi.string(),
   });

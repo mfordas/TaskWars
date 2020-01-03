@@ -17,6 +17,17 @@ router.get(
   },
 );
 
+router.get('/:name', async (req, res) => {
+    const Creature = res.locals.models.creature;
+
+    const nameArray = req.params.name ? req.params.name.split('_') : '';
+   
+    const creatures = await Creature.find().sort({ level: 1, name: 1 });
+    const filteredCreatures = filterByName(creatures, nameArray)
+    res.send(filteredCreatures);
+  },
+);
+
 router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
   const Creature = res.locals.models.creature;
 
@@ -33,15 +44,15 @@ router.get('/:id', /*[authorization,*/ [validateObjectId], async (req, res) => {
   res.send(creature);
 });
 
-router.put('/:id/task_to_dmg', /*[authorization,*/ [validateObjectId], async (req, res) => {
+router.put('/:id/task_to_dmg', /*[authorization, [validateObjectId],*/ async (req, res) => {
   const Creature = res.locals.models.creature;
-  const Task = res.locals.models.task;
+  // const Task = res.locals.models.task;
 
   const { error } = validateCreature(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const task = await Task.findById(req.body.task_to_dmg);
-  if (!task) return res.status(404).send('The task with given ID was not found');
+  // const task = await Task.findById(req.body.task_to_dmg);
+  // if (!task) return res.status(404).send('The task with given ID was not found');
 
   let creature = await Creature.findById(req.params.id);
   if (!creature) return res.status(404).send('The creature with given ID was not found');
@@ -78,5 +89,15 @@ router.put('/:id/duration', /*[authorization,*/ [validateObjectId], async (req, 
 
   res.send(creature);
 });
+
+filterByName = (creatures, name) => {
+  if (!name)
+    return creatures;
+  return creatures.filter(cre => {
+    return name.every(n => {
+      return cre.name.toLowerCase().includes(n);
+    })
+  }) 
+}
 
 module.exports = router;

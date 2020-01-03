@@ -17,6 +17,7 @@ const QuestbookContent = () => {
           <Route exact path="/questbook/uncompleted" render={(props) => <AllTasks {...props} type={'uncompleted'} />} />
           <Route exact path="/questbook/failed" render={(props) => <AllTasks {...props} type={'failed'} />}/>
           <Route exact path="/questbook/addtask" component={AddTask} />
+          <Route exact path="/tasks" component={Tasks} />
           <Route exact path="/questbook/addCustomTask" render={() => <Redirect to="/tasks" />} />
         </Switch>
   </Container>
