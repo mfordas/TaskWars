@@ -158,7 +158,7 @@ router.put('/me/password', auth, async (req, res) => {
   res.send(_.pick(user, ['_id', 'email']));
 });
 
-router.put('/:id/password', [auth, admin], async (req, res) => {
+router.put('/:id/password', [auth, /*admin*/], async (req, res) => {
   const User = res.locals.models.user;
   const {
     error

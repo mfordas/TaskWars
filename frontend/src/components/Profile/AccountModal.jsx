@@ -3,11 +3,16 @@ import { Input, Button } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import "./style-accountModal.css";
 import setHeaders from '../../utils/setHeaders';
+import TopPortal from '../Utils/TopPortal';
 import ErrorMessage from '../ErrorMessage';
 
 class AccountModal extends React.Component {
     constructor(props){
         super(props);
+
+        this.portalRefDiff = React.createRef();
+        this.portalRefWrong = React.createRef();
+        this.portalRefSucc = React.createRef();
 
         this.state = {
             oldPassword: '',
@@ -48,12 +53,19 @@ class AccountModal extends React.Component {
                 };
                 let params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
                 fetch(`/api/users/${this.state.id}/password`, params)
-                    .then(() => {
-
-                    })
-                    .catch((err) => {
+                    .then((res) => {
+                        if(res.status !== 200) {
+                            this.portalRefWrong.current.handleOpen();
+                        } else {
+                            this.portalRefSucc.current.handleOpen();
+                        }
                         
                     })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            } else {
+                this.portalRefDiff.current.handleOpen();
             }
         }
     }
@@ -80,6 +92,22 @@ class AccountModal extends React.Component {
                     <Button basic color='yellow' onClick={this.onPassButtonSubmit} value="">
                         Change password
                     </Button>
+
+                    <TopPortal
+                        ref={this.portalRefDiff}
+                        header={'Failed!'}
+                        description='Passwords are not the same'
+                    />
+                    <TopPortal
+                        ref={this.portalRefWrong}
+                        header={'Failed!'}
+                        description='Password is not correct'
+                    />
+                    <TopPortal
+                        ref={this.portalRefSucc}
+                        header={'Success!'}
+                        description='Password is changed'
+                    />
                 </div>
             </div>
         );
