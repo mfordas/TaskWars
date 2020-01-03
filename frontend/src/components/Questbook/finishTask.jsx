@@ -124,19 +124,24 @@ class FinishTask extends React.Component {
             };
             let paramsExp = {...setHeaders(), body: JSON.stringify(dataExp), method: "PUT"};
             console.log(dataExp);
-            fetch(`/api/characters/${memberID}/exp_points`, paramsExp);
+            await fetch(`/api/characters/${memberID}/exp_points`, paramsExp);
             const dataGold = {
               inventory: {gold: (memberGold + goldReward)}
             };
             let paramsGold = {...setHeaders(), body: JSON.stringify(dataGold), method: "PUT"};
             console.log(dataGold)
-            fetch(`/api/inventory/${member.inventory_id}/gold`, paramsGold);
+            await fetch(`/api/inventory/${member.inventory_id}/gold`, paramsGold);
 
             guild.current_fight.task_to_dmg.map(async (taskID) => {
               await this.putData(taskID, member.questbook_id);
             });
           });
-
+          const dataFinish = {
+            name: guild.name,
+            current_fight: {}           //current_fight after fight
+          }
+          let paramsFinish = {...setHeaders(), body: JSON.stringify(dataFinish), method: "PUT"};
+          await fetch(`/api/guilds/${guild._id}/current_fight`, paramsFinish);
         }
       }
     } else if (this.state.status === 'failed'){
@@ -152,7 +157,7 @@ class FinishTask extends React.Component {
           current_fight: fight
         }
         let params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
-        fetch(`/api/guilds/${guild._id}/current_fight`, params);
+        let resp = await fetch(`/api/guilds/${guild._id}/current_fight`, params);
 
         guild.members.map(async (memberID) => {
           const memberResponse = await fetch(`/api/characters/${memberID}`, setHeaders());
@@ -161,6 +166,12 @@ class FinishTask extends React.Component {
             await this.putData(taskID, member.questbook_id);
           });
         });
+        const dataFinish = {
+          name: guild.name,
+          current_fight: {}           //current_fight aafter fight
+        }
+        let paramsFinish = {...setHeaders(), body: JSON.stringify(dataFinish), method: "PUT"};
+        await fetch(`/api/guilds/${guild._id}/current_fight`, paramsFinish);
       }
     }
   }
