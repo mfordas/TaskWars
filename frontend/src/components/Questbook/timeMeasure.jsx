@@ -15,7 +15,8 @@ class MeasureTime extends React.Component {
     timeToEnd: '',
     days: '',
     hours: '',
-    minutes: ''
+    minutes: '',
+    pauseTime: ''
   }
 
   setTime = () => {
@@ -23,8 +24,10 @@ class MeasureTime extends React.Component {
     this.setState({now: currentDate, startDate: this.props.task.startFinishDate, taskDuration: this.props.task.duration});
   }
 
-  setTimeToEnd = (timeToEnd) => {
-    this.setState({timeToEnd});
+  
+
+  setPauseTime = (pauseTime) => {
+    this.setState({pauseTime});
   }
   
    showDaysHoursMinutesTillEnd(t){
@@ -48,9 +51,10 @@ class MeasureTime extends React.Component {
 measureTime = async () => {
     await this.setTime();
     const timeFromBegining = (Date.parse(this.state.now) - Date.parse(this.state.startDate));
-    const tillEnd = this.state.taskDuration*3600000 - timeFromBegining;
+    let tillEnd;
+    this.props.task.status === 'in_progress' ? tillEnd = this.state.taskDuration*3600000 - timeFromBegining
+    :tillEnd = this.state.taskDuration*3600000 + this.state.pauseTime - timeFromBegining;
     this.setState({timeToEnd: tillEnd});
-    // console.log(this.state.timeToEnd);
     this.showDaysHoursMinutesTillEnd(this.state.timeToEnd);
 }
   
@@ -77,6 +81,7 @@ measureTime = async () => {
   render() {
     
     return (
+      this.props.task.status === 'in_progress' ?
       <div>
         <Segment inverted textAlign='center' color='red' onChange={this.onChange}>
           {this.state.timeToEnd>= 0 ? 
@@ -84,10 +89,10 @@ measureTime = async () => {
           `Time's up!`}
           <Icon name='bell'/>
         </Segment>
-        <PauseTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged} setTimeToEnd={this.setTimeToEnd}/>
         <FinishTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged}/>
-      </div>
-         
+        {this.props.task.pausedAlready === true ? null :
+        <PauseTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged} setPauseTime={this.setPauseTime}/>}
+      </div> : <PauseTask time={this.state} task={this.props.task} taskStateChanged={this.props.taskStateChanged} setPauseTime={this.setPauseTime}/>
     );
   }
 }

@@ -165,4 +165,21 @@ router.put('/:id/task/:idTask/pause', async (req, res) => {
   res.send(questbook);
 });
 
+//unpause task
+router.put('/:id/task/:idTask/unpause', async (req, res) => {
+  const Questbook = res.locals.models.questbook;
+
+  const questbook = await Questbook.findByIdAndUpdate(
+  {  "_id": req.params.id },
+         {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].pausedAlready": true} },
+        { arrayFilters: [ { 
+          "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
+          } ], 
+         new: true })
+         
+
+  if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
+  res.send(questbook);
+});
+
 module.exports = router;
