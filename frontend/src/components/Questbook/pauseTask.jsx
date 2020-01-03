@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Button, Icon, Segment, Grid
+  Button, Icon, Segment
   } from 'semantic-ui-react'
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';

@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Button, Icon, Segment
+  Icon, Segment
   } from 'semantic-ui-react';
   import FinishTask from './finishTask';
   import PauseTask from './pauseTask';
