@@ -112,6 +112,29 @@ router.get('/:id', async (req, res) => {
   res.send(_.pick(user, ['_id', 'email']));
 });
 
+router.get('/character/:character_id?', async (req, res) => {
+  const User = res.locals.models.user;
+
+  const character_idParam = req.params.character_id;
+  const tagsArray = req.params.tags ? req.params.tags.split('_') : '';
+
+
+  const searchObj = () => {
+    if (character_idParam != 'All')
+      return {
+        character_id: character_idParam
+      };
+    else
+      return;
+  }
+
+  const user = await User.find(searchObj()).sort('name');
+  if (!user) res.status(404).send(`Guild with type ${req.params.character_id} not found`);
+
+  const result = filterByValue(user,tagsArray);
+
+  res.send(_.pick(result[0], ['_id', 'email', 'name']));
+});
 
 router.put('/me/password', auth, async (req, res) => {
   const User = res.locals.models.user;
@@ -199,6 +222,16 @@ async function getUsers(User, id) {
       err => console.log('Error', err),
     );
   }
+}
+
+function filterByValue(guild, tags) {
+  if (!tags)
+    return guild;
+  return guild.filter(o => {
+    return tags.every(t => {
+      return o.name.concat(o.description, o.type).toLowerCase().includes(t);
+    })
+  })
 }
 
 module.exports = router;

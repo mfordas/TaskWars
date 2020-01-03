@@ -14,8 +14,9 @@ class GuildJoin extends React.Component {
     name:'',
     leader: '',
     current_fight:{},
-    isLeader: false
-
+    isLeader: false,
+    membersId: [],
+    membersName: [],
   }
 
   static contextType = Store;
@@ -26,7 +27,6 @@ class GuildJoin extends React.Component {
       method: 'get',
       headers: setHeaders()
     }).then((response) => {
-      console.log(response);
       this.setState({name: response.data.name, leader: response.data.leader})
     }, (error) => {
       console.log(error);
@@ -36,8 +36,25 @@ class GuildJoin extends React.Component {
   fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
-    console.log(body.character_id);
     this.checkLeadership(body.character_id);
+    this.getData(this.state.guild_id);
+  }
+
+  getData = async (id) => {
+    let response = await fetch(`/api/guilds/${id}`, setHeaders());
+    let body = await response.json();
+    this.setState(
+      {
+        membersId: body.members
+      }
+    )
+
+    this.state.membersId.map(async (elem) => {
+      const res = await fetch(`/api/users/character/${elem}`, setHeaders())
+        .then(response => response.json());
+      this.state.membersName.push(res.name);
+    })
+    console.log(this.state.membersName)
   }
 
   checkLeadership = async (character_id) =>{
