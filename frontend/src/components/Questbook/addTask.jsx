@@ -132,7 +132,7 @@ class AddTask extends React.Component {
   }
   typeValidate = (e) => {
     if(this.state.type === '' && this.state.submitStatus) {
-    return <ErrorMessage message='Choose type'/>} 
+    return <Message negative content={<ErrorMessage message='Choose type'/>}/>} 
     else { return null }
 
   }
@@ -238,7 +238,7 @@ class AddTask extends React.Component {
             />
             <Form.Group inline >
               <label>Type</label>
-              <div>{this.typeValidate()}</div>
+              
               <Form.Field
                 control={Radio}
                 label='Physical'
@@ -265,6 +265,7 @@ class AddTask extends React.Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
+            {this.typeValidate()}
             <Form.Group widths='equal'>
               <Form.Field
                 error={this.daysValidate()}

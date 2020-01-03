@@ -112,13 +112,6 @@ class FinishTask extends React.Component {
     this.props.taskStateChanged(this.state.status);
   }
 
-  componentDidMount() {
-  }
-  
-  componentDidUpdate(prevProps) {
-    
-  }
-
   render() {
     
     return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
@@ -68,6 +68,7 @@ const App = () => {
           <PrivateRoute exact path="/tasks" component={Tasks} />
           <PrivateRoute exact path="/profile" component={Profile} />
           <PrivateRoute exact path="/questbook" component={Questbook} />
+          <PrivateRoute exact path="/questbook/addCustomTask" component={Tasks} />
           <PrivateRoute exact path="/shop" component={Shop} />
           <PrivateRoute exact path="/inventory" component={Inventory} />
           <PrivateRoute exact path="/guild" component={Guild} />
