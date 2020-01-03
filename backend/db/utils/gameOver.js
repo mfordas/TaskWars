@@ -7,7 +7,7 @@ const gameOver = async (characterModel, character) => {
 
         const level = character.level
         await characterModel.findByIdAndUpdate(character._id, { level: 0 })
-        const newLevel = level - levelPenalty;
+        let newLevel = level - levelPenalty;
         newLevel < 1 ? newLevel = 1 : {};
         const stats = getStatsOnLevelUp(character, newLevel);
         const exp =  getStatsOnLevelUp(character, newLevel-1)[1] + 1;
