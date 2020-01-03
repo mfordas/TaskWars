@@ -110,9 +110,9 @@ addTaskToMemebers = async (task_id, guild_id) => {
       task_to_dmg: [],
       picture: this.props.creature.picture
     }
-    const guild_id = this.context.guild_id;        //change
+    const guild_id = '5e0f7a57331d6216cca19c90';        //change
     const guild_name = "Guild_0";                       //change
-    const task_id = "5e0e3a128d57233de44d75c0";         //change
+    const task_id = "5e0f7a57331d6216cca19c5f";         //change
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
   
