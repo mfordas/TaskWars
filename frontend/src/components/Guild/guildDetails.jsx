@@ -7,8 +7,6 @@ import Store from '../../Store';
 import { Redirect, NavLink } from 'react-router-dom';
 
 class GuildJoin extends React.Component {
-
-
   state = {
     guild_id: '',
     name: '',
@@ -49,12 +47,13 @@ class GuildJoin extends React.Component {
       }
     )
 
-    this.state.membersId.map(async (elem) => {
-      const res = await fetch(`/api/users/character/${elem}`, setHeaders())
+    for (let i = 0; i < this.state.membersId.length; i++) {
+      const res = await fetch(`/api/users/character/${this.state.membersId[i]}`, setHeaders())
         .then(response => response.json());
-      this.state.membersName.push(res.name);
-    })
-    console.log(this.state.membersName)
+      this.setState({
+        membersName: [...this.state.membersName, res]
+      })
+    }
   }
 
   checkLeadership = async (character_id) => {
@@ -79,9 +78,27 @@ class GuildJoin extends React.Component {
         {this.state.isLeader === true ?
           <Item>
             <Header inverted>You are the leader</Header>
+            {this.state.membersName.map(x => (
+              <Item key={x._id} >
+                <Item.Content>
+                  <Item.Header>{x.name}</Item.Header>
+                </Item.Content>
+              </Item>
+            ))}
             <Button color='green' floated='right' as={NavLink} to='/creatures'>Fight!</Button>
           </Item>
-          : <Header inverted>You are not the leader</Header>}
+          : (
+            <Item>
+              <Header inverted>You are not the leader</Header>
+              {this.state.membersName.map(x => (
+                <Item key={x._id} >
+                  <Item.Content>
+                    <Item.Header>{x.name}</Item.Header>
+                  </Item.Content>
+                </Item>
+              ))}
+            </Item>
+          )}
       </Segment>
     )
   }
