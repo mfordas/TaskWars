@@ -3,7 +3,9 @@ const _ = require('lodash');
 const {
   validateUser
 } = require('../models/user');
-const {sednEmail} = require('./email');
+const {
+  sednEmail
+} = require('./email');
 const mongoose = require('mongoose');
 const auth = require('../middleware/authorization');
 const admin = require('../middleware/admin');
@@ -51,9 +53,12 @@ router.post('/email', async (req, res) => {
     return Joi.validate(req, schema);
   }
 
-  const { error, value } = validate(req.body);
+  const {
+    error,
+    value
+  } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  
+
   // // send email -----------------
   const url = `http://127.0.0.1:8080/api/users/confirmation/${req.body.token}`;
   sednEmail(req.body.email, url);
@@ -87,7 +92,7 @@ router.get('/count', async (req, res) => {
   const User = res.locals.models.user;
   const usersCount = await User.find()
     .then(response => response.length);
-    
+
   res.send(`${usersCount}`);
 });
 
@@ -116,8 +121,6 @@ router.get('/character/:character_id?', async (req, res) => {
   const User = res.locals.models.user;
 
   const character_idParam = req.params.character_id;
-  const tagsArray = req.params.tags ? req.params.tags.split('_') : '';
-
 
   const searchObj = () => {
     if (character_idParam != 'All')
@@ -131,9 +134,40 @@ router.get('/character/:character_id?', async (req, res) => {
   const user = await User.find(searchObj()).sort('name');
   if (!user) res.status(404).send(`Guild with type ${req.params.character_id} not found`);
 
-  const result = filterByValue(user,tagsArray);
+  res.send(_.pick(user[0], ['_id', 'email', 'name']));
+});
 
-  res.send(_.pick(result[0], ['_id', 'email', 'name']));
+router.get('/search/:charId&:tags?', async (req, res) => {
+  const User = res.locals.models.user;
+
+  const charIdParam = req.params.charId;
+  const tagsArray = req.params.tags ? req.params.tags.split('_') : '';
+
+  const searchObj = () => {
+    if (charIdParam != 'All')
+      return {
+        character_id: charIdParam
+      };
+    else
+      return;
+  }
+
+  const user = await User
+    .find(searchObj())
+    .sort('email');
+
+  const result = filterByValue(user, tagsArray)
+
+  res.send(
+    result.map((elem) => {
+      state = {
+        _id: elem._id,
+        name: elem.name,
+        email: elem.email,
+      }
+       return (state)
+      })
+  )
 });
 
 router.put('/me/password', auth, async (req, res) => {
@@ -189,11 +223,11 @@ router.put('/:id/character_id', (req, res) => {
       res.status(404).send(`User with this id: ${req.params.id} not found`);
     } else {
       User.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
           character_id: req.body.character_id,
+        }, {
+          new: true
         },
-        { new: true },
       ).then(
         r => {
           res.send('CharID updated!');
@@ -208,7 +242,9 @@ router.put('/:id/character_id', (req, res) => {
 
 async function getUsers(User, id) {
   if (id) {
-    return await User.find({ _id: id }).then(
+    return await User.find({
+      _id: id
+    }).then(
       result => {
         return result[0];
       },
@@ -224,12 +260,12 @@ async function getUsers(User, id) {
   }
 }
 
-function filterByValue(guild, tags) {
+function filterByValue(user, tags) {
   if (!tags)
-    return guild;
-  return guild.filter(o => {
+    return user;
+  return user.filter(o => {
     return tags.every(t => {
-      return o.name.concat(o.description, o.type).toLowerCase().includes(t);
+      return o.email.concat(o.description, o.type).toLowerCase().includes(t);
     })
   })
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Header, Icon, Item, Label, Segment, Image } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Icon, Input, Item, Label, Segment, Image, Container } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios'
 import Store from '../../Store';
@@ -11,10 +11,15 @@ class GuildJoin extends React.Component {
     guild_id: '',
     name: '',
     leader: '',
+    leaderName: '',
     current_fight: {},
     isLeader: false,
     membersId: [],
     membersName: [],
+    leaderName: '',
+    charId: 'All',
+    Tags: '',
+    results: [],
   }
 
   static contextType = Store;
@@ -54,6 +59,19 @@ class GuildJoin extends React.Component {
         membersName: [...this.state.membersName, res]
       })
     }
+
+    const res = await fetch(`/api/users/character/${this.state.leader}`, setHeaders())
+      .then(response => response.json());
+    this.setState({
+      leaderName: res
+    })
+  }
+
+  addMember = async () => {
+    const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders())
+      .then(response => response.json());
+
+    this.setState({ results: res });
   }
 
   checkLeadership = async (character_id) => {
@@ -69,15 +87,25 @@ class GuildJoin extends React.Component {
     await this.fetchUser();
   }
 
+  onSearchButtonClick = (event) => {
+    this.addMember();
+  }
+
+  onSearchChange = (event) => {
+    const str = event.target.value.toLowerCase();
+    this.setState({ tags: str.split(" ").join("_") });
+  }
+
   render() {
     return (
       <Segment inverted>
         <Image></Image>
+        <Item.Header as={'h1'}>{this.state.name} </Item.Header>
         <Header>Guild details</Header>
-        {this.state.name}
         {this.state.isLeader === true ?
           <Item>
-            <Header inverted>You are the leader</Header>
+            <Item.Header inverted>Guild leader :  {this.state.leaderName.name}</Item.Header>
+            <Header inverted as={'h3'}> List of members :</Header>
             {this.state.membersName.map(x => (
               <Item key={x._id} >
                 <Item.Content>
@@ -86,10 +114,51 @@ class GuildJoin extends React.Component {
               </Item>
             ))}
             <Button color='green' floated='right' as={NavLink} to='/creatures'>Fight!</Button>
+
+            <Header inverted as={'h3'}>Find new players</Header>
+            <Grid padded>
+              <Input
+                placeholder='Email...'
+                onChange={this.onSearchChange}
+              />
+              <Button
+                animated
+                color='standard'
+                onClick={this.onSearchButtonClick}>
+                <Button.Content visible>
+                  Search
+              </Button.Content>
+                <Button.Content hidden>
+                  <Icon name='search' />
+                </Button.Content>
+              </Button>
+
+              <Container>
+                {this.state.results.map(x => (
+                  <Item key={x._id} >
+                    <Item.Content>
+                      <Grid padded>
+                        <Button compact
+                          size='mini'
+                          color='green'
+                          onClick={this.onSearchButtonClick}>
+                          <Button.Content visible>
+                            <Icon name='plus' />
+                          </Button.Content>
+                        </Button>
+                        <Item.Header>{x.email}  |  {x.name}</Item.Header>
+                      </Grid>
+                    </Item.Content>
+                  </Item>
+                ))}
+              </Container>
+            </Grid>
           </Item>
           : (
             <Item>
-              <Header inverted>You are not the leader</Header>
+              <Item.Header inverted>You are not the leader</Item.Header>
+              <Item.Header inverted>Guild leader : {this.state.leaderName.name}</Item.Header>
+              <Header inverted as={'h3'}> List of members :</Header>
               {this.state.membersName.map(x => (
                 <Item key={x._id} >
                   <Item.Content>
@@ -98,7 +167,8 @@ class GuildJoin extends React.Component {
                 </Item>
               ))}
             </Item>
-          )}
+          )
+        }
       </Segment>
     )
   }
