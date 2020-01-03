@@ -9,6 +9,8 @@ class GuildPattern extends React.Component {
     super(props);
 
     this.portalRef = React.createRef();
+    this.portalRef2 = React.createRef();
+    this.portalRef3 = React.createRef();
     this.state = { open: false }
   }
 
@@ -23,6 +25,16 @@ class GuildPattern extends React.Component {
       "name": `${this.props.task.name}`,
       "members": [`${character._id}`],
     };
+
+    if (this.props.task.leader === character._id) {
+      this.portalRef2.current.handleOpen();
+      return
+    }
+
+    if (this.props.task.members.includes(character._id)){
+      this.portalRef3.current.handleOpen();
+      return
+    }
 
     const res = await axios.put(`/api/guilds/${this.props.task._id}/members`, memberToInsert);
 
@@ -44,6 +56,7 @@ class GuildPattern extends React.Component {
               <Icon name='plus' />
               Join to Guild
               </Button>
+
             <Item.Header as='h3'>{this.props.task.name}</Item.Header>
             <Item.Meta>
               <span className='type'>{this.props.task.type}</span>
@@ -56,6 +69,14 @@ class GuildPattern extends React.Component {
           ref={this.portalRef}
           header={'Success!'}
           description={`You join to guild ${this.props.task.name}`}
+        />
+        <TopPortal
+          ref={this.portalRef2}
+          header={`You are a leader of guild ${this.props.task.name}!`}
+        />
+        <TopPortal
+          ref={this.portalRef3}
+          header={`You are a member of guild ${this.props.task.name}!`}
         />
       </Segment >
     );
