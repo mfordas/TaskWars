@@ -31,7 +31,7 @@ class GuildPattern extends React.Component {
       return
     }
 
-    if (this.props.guild.members.includes(character._id)){
+    if (this.props.guild.members.includes(character._id)) {
       this.portalRef3.current.handleOpen();
       return
     }
@@ -46,24 +46,53 @@ class GuildPattern extends React.Component {
 
   render() {
     return (
-      <Segment textAlign='left'>
-        <Item.Group divided>
-          <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
-          <Item.Content>
-            <Button color='purple' floated='right'
-              onClick={this.handleButtonAddClick}
-              disabled={this.state.open}>
-              <Icon name='plus' />
-              Join to Guild
-              </Button>
+      <Container>
+        <Header as='h2'>Guilds, you are a leader of</Header>
+        <Segment textAlign='left' inverted>
+          <Item>
+            <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
+              style={{ display: 'inline-block' }}>
+            </Item.Image>
+            <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
+              {this.props.guild.name}
+            </Item.Header>
+            <Popup content='Type' trigger={
+              <Label color='orange'>
+                {this.props.guild.type}
+              </Label>
+            } />
 
-            <Item.Header as='h3'>{this.props.guild.name}</Item.Header>
-            <Item.Meta>
-              <span className='type'>{this.props.guild.type}</span>
-            </Item.Meta>
-            <Item.Description>{this.props.guild.description}</Item.Description>
-          </Item.Content>
-        </Item.Group>
+            <Item.Description>
+              <Segment.Group>
+                <Segment
+                  inverted
+                  textAlign='center'
+                  color='purple'
+                  style={{ padding: '2px 0px 0px 6px' }}>
+                  <Header as='h5'>
+                    Description
+                        </Header>
+                </Segment>
+                <Segment>
+                  {this.props.guild.description}<br />
+                </Segment>
+              </Segment.Group>
+            </Item.Description>
+
+            <Item.Extra>
+              <Button
+                fluid
+                icon
+                color='green'
+                labelPosition='right'
+                onClick={this.handleButtonAddClick}
+                disabled={this.state.open}>
+                <Icon name='plus' />
+                Join to Guild
+                </Button>
+            </Item.Extra>
+          </Item>
+        </Segment>
 
         <TopPortal
           ref={this.portalRef}
@@ -78,7 +107,7 @@ class GuildPattern extends React.Component {
           ref={this.portalRef3}
           header={`You are a member of guild ${this.props.guild.name}!`}
         />
-      </Segment >
+      </Container>
     );
   }
 }

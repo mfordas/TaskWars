@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Container, Header, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import { NavLink, Route, Redirect} from 'react-router-dom';
+import { Button, Container, Grid, Header, Icon, Item, Label, Popup, Segment } from 'semantic-ui-react';
+import { NavLink, Route, Redirect } from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
 
@@ -54,52 +54,112 @@ class YourGuilds extends React.Component {
   }
 
   render() {
-    if(this.state.guildChosen) return <Redirect to="/guildDetails" />;
+    if (this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
       <Container>
-        <Segment textAlign='left'>
-          <Header as='h2'>Guilds, you are a leader of</Header>
-          <Item.Group divided>
-            {this.state.guildsLeader.map(x => (
-              <Item key={x._id} >
-                <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
-                <Item.Content>
-                  <Item.Header as='a'>{x.name}</Item.Header>
-                  <Item.Meta>
-                    <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right' onClick={async ()=>{await this.handleViewButtonClick(x._id)}}>
-                      View
-                  <Icon name='right chevron' />
-                    </Button>
-                  </Item.Meta>
-                  <Item.Description>{x.description}</Item.Description>
-                </Item.Content>
-              </Item>
-            ))}
-          </Item.Group>
-        </Segment>
+        <Popup content='Type' trigger={
+          <Label color='red'>
+            <h2>Guilds, you are a leader of<br /></h2>
+          </Label>
+        } />
+        {this.state.guildsLeader.map(x => (
+          <Segment textAlign='left' inverted>
+            <Item key={x._id} >
+              <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
+                style={{ display: 'inline-block' }}>
+              </Item.Image>
+              <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
+                {x.name}
+              </Item.Header>
+              <Popup content='Type' trigger={
+                <Label color='orange'>
+                  {x.type}
+                </Label>
+              } />
 
-        <Segment textAlign='left'>
-          <Header as='h2'>Guilds in which you are a member</Header>
-          <Item.Group divided>
-            {this.state.guildsMember.map(x => (
-              <Item key={x._id} >
-                <Item.Image size='tiny' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png' />
-                <Item.Content>
-                  <Item.Header as='a'>{x.name}</Item.Header>
-                  <Item.Meta>
-                    <span className='type'>{x.type}</span>
-                    <Button color='green' floated='right' onClick={async ()=>{await this.handleViewButtonClick(x._id)}}>
-                      View
+              <Item.Description>
+                <Segment.Group>
+                  <Segment
+                    inverted
+                    textAlign='center'
+                    color='purple'
+                    style={{ padding: '2px 0px 0px 6px' }}>
+                    <Header as='h5'>
+                      Description
+                        </Header>
+                  </Segment>
+                  <Segment>
+                    {x.description}<br />
+                  </Segment>
+                </Segment.Group>
+              </Item.Description>
+
+              <Item.Extra>
+                <Button
+                  fluid
+                  icon
+                  color='green'
+                  labelPosition='right'
+                  onClick={async () => { await this.handleViewButtonClick(x._id) }}>
                   <Icon name='right chevron' />
+                  View
                     </Button>
-                  </Item.Meta>
-                  <Item.Description>{x.description}</Item.Description>
-                </Item.Content>
-              </Item>
-            ))}
-          </Item.Group>
-        </Segment>
+              </Item.Extra>
+            </Item>
+          </Segment>
+        ))}
+
+        <Popup content='Type' trigger={
+          <Label color='red'>
+            <h2>Guilds in which you are a member<br /></h2>
+          </Label>
+        } />
+        {this.state.guildsMember.map(x => (
+          <Segment textAlign='left' inverted>
+            <Item key={x._id} >
+              <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
+                style={{ display: 'inline-block' }}>
+              </Item.Image>
+              <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
+                {x.name}
+              </Item.Header>
+              <Popup content='Type' trigger={
+                <Label color='orange'>
+                  {x.type}
+                </Label>
+              } />
+
+              <Item.Description>
+                <Segment.Group>
+                  <Segment
+                    inverted
+                    textAlign='center'
+                    color='purple'
+                    style={{ padding: '2px 0px 0px 6px' }}>
+                    <Header as='h5'>
+                      Description
+                        </Header>
+                  </Segment>
+                  <Segment>
+                    {x.description}<br />
+                  </Segment>
+                </Segment.Group>
+              </Item.Description>
+
+              <Item.Extra>
+                <Button
+                  fluid
+                  icon
+                  color='green'
+                  labelPosition='right'
+                  onClick={async () => { await this.handleViewButtonClick(x._id) }}>
+                  <Icon name='right chevron' />
+                  View
+                    </Button>
+              </Item.Extra>
+            </Item>
+          </Segment>
+        ))}
       </Container>
     );
   }
