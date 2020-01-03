@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Grid, Item, Label, Button  } from 'semantic-ui-react';
+import { Segment, Grid, Item, Label, Button, Portal  } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import ItemButton from './ItemButton';
@@ -212,25 +212,27 @@ class InventoryView extends React.Component {
           <Segment inverted color='grey'>{this.state.itemDescription}</Segment> 
           : null}
         </Grid.Row>
-        <Segment> 
-        { this.props.ViewEquipped === true ? 
-                <ItemView
-                backpackItem={this.state.backpackItem} 
-                setDescription={this.setDescription} 
-                buttonActive={this.props.buttonActive}
-                eq={true} 
-              />
-          <Label>Equipped</Label>
-          <ItemView itemDescription={this.state.itemDescription} 
+
+        { this.props.ViewEquipped === false ?  
+          <Segment> 
+            <ItemView
+            backpackItem={this.state.backpackItem} 
+            setDescription={this.setDescription} 
+            buttonActive={this.props.buttonActive}
+            eq={true} />
+          </Segment> 
+          :
+          <Segment>           
+            <Label>Equipped</Label>
+            <ItemView itemDescription={this.state.itemDescription} 
             setDescription={this.setDescription} backpackItem={this.state.equipped} eq={false} />
-            : 
-          <ItemView
-          backpackItem={this.state.backpackItem} 
-          setDescription={this.setDescription} 
-          buttonActive={this.props.buttonActive}
-          eq={true} 
-        /> }
-        </Segment>
+            <ItemView
+            backpackItem={this.state.backpackItem} 
+            setDescription={this.setDescription} 
+            buttonActive={this.props.buttonActive}
+            eq={true} /> 
+          </Segment> 
+          }
       </Segment>
     );
   }

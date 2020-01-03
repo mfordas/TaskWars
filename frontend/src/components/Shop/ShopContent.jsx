@@ -91,7 +91,7 @@ class ShopContent extends React.Component {
 
   }
   getInventory = () => {
-    let inventory = <InventoryView showGold={false} buttonActive={false} />
+    let inventory = <InventoryView showGold={false} buttonActive={false} ViewEquipped={false} />
     // id_user={this.state.id_user}
     // id_inventory={this.state.id_inventory}
     // backpack={this.state.backpack}
