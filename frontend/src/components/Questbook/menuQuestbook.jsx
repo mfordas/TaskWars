@@ -58,12 +58,12 @@ class MenuQuestbook extends React.Component {
           <Icon name='add' />
           Add new task
         </Menu.Item>} />
-        <Popup content='Add your own task now!' trigger={
+        <Popup content='Add task now!' trigger={
         <Menu.Item
         as={Link} to='/questbook/addCustomTask'
         >
           <Icon name='add' />
-          Add task from our library
+          Add task from library
         </Menu.Item>} />
       </Menu>
  

@@ -139,7 +139,7 @@ finishPause = async () => {
         </div> : 
         <div>
           <Segment inverted textAlign='center' color='grey' onChange={this.onChange}>
-          Task paused for 24 hours. {this.state.pauseTime <86400000 ? `Time to end: ${this.state.pauseHours} hours ${this.state.pauseMinutes} minutes` : null}
+          Task paused for 24 hours. {this.state.pauseTime <86400000 ? `Time to pause end: ${this.state.pauseHours} hours ${this.state.pauseMinutes} minutes` : null}
         </Segment>
         </div>
     );
