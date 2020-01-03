@@ -97,8 +97,16 @@ class FinishTask extends React.Component {
       const guild = await this.checkGuild(character, this.props.task._id);
       if(guild !== undefined) {
         let hp = guild.current_fight.health;
-
-        hp = hp - 5000;     //change
+        
+        let dmg = 0;
+        if(guild.type ==='Physical') {
+          dmg = character.physical_power;
+        } else if(guild.type === 'Mental') {
+          dmg = character.magical_power;
+        } else if(guild.type === 'Utility') {
+          dmg = character.physical_power >= character.magical_power ? character.physical_power : character.magical_power;
+        }
+        hp = hp - dmg;
 
         guild.current_fight.health = hp;
         const data = {
@@ -108,7 +116,7 @@ class FinishTask extends React.Component {
         const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
         const response = await fetch(`/api/guilds/${guild._id}/current_fight`, params);
 
-        if(hp <= 0) {     
+        if(hp <= 0) {
           const expReward = guild.current_fight.exp/guild.members.length;
           const goldReward = guild.current_fight.gold/guild.members.length;
           console.log(guild);
