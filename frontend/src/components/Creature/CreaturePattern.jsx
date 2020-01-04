@@ -110,12 +110,12 @@ class CreaturePattern extends React.Component {
       exp: this.props.creature.exp,
       gold: this.props.creature.gold,
       duration: this.props.creature.duration,
-      task_to_dmg: [],
+      task_to_dmg: this.props.creature.task_to_dmg,
       picture: this.props.creature.picture,
     };
-    const guild_id = this.context.guild_id; //change
+    const guild_id = this.context.guild_id; 
     const guild_name = 'Guild_0'; //change
-    const task_id = '5e109895c023293410318ed2'; //change
+    const task_id = this.props.creature.task_to_dmg; 
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
 
