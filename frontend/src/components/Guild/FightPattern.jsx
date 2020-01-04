@@ -7,18 +7,17 @@ const _ = require('lodash');
 
 class FightPattern extends React.Component {
   state = {
-    guild_id: '5e09501790ddee12645725ec',
-    description: 'temp desc', //this.props.creature.task_to_dmg.description
+    description: 'Complete encounter quest to deal damage',
   };
   static contextType = Store;
 
   render() {
     return (
       <Segment.Group horizontal>
-        <Segment style={{ width: '35%' }}>
+        <Segment style={{ width: '35%' }} color="black" inverted>
           <Image src={this.props.creature.picture} />
         </Segment>
-        <Segment>
+        <Segment color="black" inverted>
           <Item>
             <Item.Header
               style={{ display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }}

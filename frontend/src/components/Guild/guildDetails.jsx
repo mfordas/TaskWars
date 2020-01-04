@@ -19,8 +19,8 @@ class GuildJoin extends React.Component {
       flag: '',
       leaderName: '',
       current_fight: {},
-      guildDesc:'',
-      guildType:'',
+      guildDesc: '',
+      guildType: '',
       isLeader: false,
       membersId: [],
       membersName: [],
@@ -127,7 +127,6 @@ class GuildJoin extends React.Component {
     await this.setState({ guild_id: this.context.guild_id });
     await this.getGuild();
     await this.fetchUser();
-    console.log(this.state.current_fight);
   };
 
   onSearchButtonClick = event => {
@@ -167,7 +166,7 @@ class GuildJoin extends React.Component {
               </Segment>
             ) : (
               <Segment inverted>
-                Choose creature and fight!
+                <Item.Header> Choose creature and fight!</Item.Header>
                 <Button color="brown" floated="right" as={NavLink} to="/creatures">
                   Fight!
                 </Button>
@@ -230,15 +229,13 @@ class GuildJoin extends React.Component {
           </div>
         ) : (
           <div>
-             {this.state.current_fight != null ? (
+            {this.state.current_fight != null ? (
               <Segment inverted>
                 <Item.Header as={'h3'}>We are fighting against:</Item.Header>
                 <FightPattern creature={this.state.current_fight} />
               </Segment>
             ) : (
-              <Segment inverted>
-                Your guild is taking a break.
-              </Segment>
+              <Segment inverted>Your guild is taking a break.</Segment>
             )}
             <Segment inverted>
               <Item>
