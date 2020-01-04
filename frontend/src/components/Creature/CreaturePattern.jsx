@@ -8,19 +8,20 @@ const _ = require('lodash');
 
 class CreaturePattern extends React.Component {
   state = {
-    guild_id: '5e09501790ddee12645725ec',
-    description: 'temp desc', //this.props.creature.task_to_dmg.description
+    creatureQuestId: 'temp desc', //this.props.creature.task_to_dmg.description
+    description:'', 
     open: false,
   };
   static contextType = Store;
   portalRef = React.createRef();
+
   addCreatureToFight = async (creature, guild_id, guild_name, task_id) => {
     // const creatureResponse = await fetch(`/api/creatures/${creature_id}`, setHeaders());
     // const creature = await creatureResponse.json();
     // console.log(creature)
 
     let task_to_dmg = await this.addTaskToMemebers(task_id, guild_id);
-    // console.log(task_to_dmg);
+    console.log(task_to_dmg);
     creature.task_to_dmg = task_to_dmg;
 
     // console.log(creature)
@@ -42,10 +43,10 @@ class CreaturePattern extends React.Component {
 
     const taskResponse = await fetch(`/api/tasks/${task_id}`, setHeaders());
     const task = await taskResponse.json();
-    // console.log(task);
+    //console.log(task);
 
     let data = _.omit(task, ['_id', '__v', '__proto']);
-    // console.log(data)
+    //console.log(data)
     let params = { ...setHeaders(), body: JSON.stringify(data), method: 'PUT' };
 
     const task_to_dmg = [];
@@ -53,12 +54,12 @@ class CreaturePattern extends React.Component {
       const memberResponse = await fetch(`/api/characters/${member_id}`, setHeaders());
       const member = await memberResponse.json();
 
-      // console.log(params)
+      //console.log(params)
       const memberTasksResponse = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
       const memberTasks = await memberTasksResponse.json();
-      // console.log(memberTasks);
+      //console.log(memberTasks);
       return memberTasks.tasks[memberTasks.tasks.length - 1]._id;
-      // task_to_dmg.push(memberTasks.tasks[memberTasks.tasks.length-1]._id);
+      //task_to_dmg.push(memberTasks.tasks[memberTasks.tasks.length-1]._id);
     });
 
     return Promise.all(requests)
@@ -96,8 +97,30 @@ class CreaturePattern extends React.Component {
   //     console.log(error);
   //   });*/
   // };
+  getQuestDescription = async () =>{
+    let response = await fetch(`/api/tasks/${this.state.creatureQuestId}`, setHeaders());
+    let body = await response.json();
+    this.setState({
+      description: body.name,
+    });
+  }
+
+
+   creatureQuest = async () =>{
+     const ajdi = "5e109897c023293410318e0" + this.props.number ;
+     this.setState({creatureQuestId: ajdi});
+   }
+
+   getGuildName = async id => {
+    let response = await fetch(`/api/guilds/${this.context.guild_id}`, setHeaders());
+    let body = await response.json();
+    this.setState({
+      guild_name: body.name,
+    });
+  }
 
   handleFightButtonClick = async event => {
+  
     // console.log(this.props.creature);
     const creatureData = {
       name: `${this.props.creature.name}`,
@@ -113,11 +136,16 @@ class CreaturePattern extends React.Component {
       task_to_dmg: [],
       picture: this.props.creature.picture,
     };
-    const guild_id = this.context.guild_id; //change
-    const guild_name = 'Guild_0'; //change
-    const task_id = '5e109895c023293410318ed2'; //change
+    const guild_id = this.context.guild_id; 
+    await this.getGuildName();
+    const guild_name = this.state.guild_name;
+    const task_id = this.state.creatureQuestId; 
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
+  componentDidMount =  async () => {
+    await this.creatureQuest();
+    await this.getQuestDescription();
+  }
 
   render() {
     return (
