@@ -24,7 +24,7 @@ class Stats extends React.Component {
 
     render() {
         return (
-            <Segment compact textAlign='center' color='purple' inverted>
+            <Segment compact textAlign='center' color='green' inverted>
                 <Segment>
                     <Item>
                         <Header as='h1'>JOIN</Header>

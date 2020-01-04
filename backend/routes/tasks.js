@@ -47,7 +47,7 @@ router.get('/:category&:type&:tags?', async (req, res) => {
     .find(searchObj())
     .sort('name');
 
-  const result = filterByValue(tasks, tagsArray)
+  const result = filterByValue(tasks, tagsArray);
 
   res.send(result);
 });
@@ -130,6 +130,23 @@ function filterByValue(tasks, tags) {
       return o.name.concat(o.description, o.type, o. category).toLowerCase().includes(t);
     })
   }) 
+}
+
+function filterByCategory(tasks) {
+  return (tasks.filter(task => {
+    if (task.category === 'Daily') {
+      return (new Date() - task.creationTime) >= 86400000;
+    }
+    else if (task.category === 'Weekly') {
+      return (new Date() - task.creationTime) >= 604800000;
+    }
+    else if (task.category === 'Monthly') {
+      return (new Date() - task.creationTime) >= 2629743830;
+    }
+    else {
+      return true;
+    }
+  }));
 }
 
 async function getTasks(Task, id) {
