@@ -56,12 +56,10 @@ class YourGuilds extends React.Component {
   render() {
     if (this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
-      <Container>
-        <Popup content='Type' trigger={
+      <Container>  
           <Label color='red'>
             <h2>Guilds, you are a leader of<br /></h2>
           </Label>
-        } />
         {this.state.guildsLeader.map(x => (
           <Segment textAlign='left' inverted>
             <Item key={x._id} >
@@ -107,11 +105,10 @@ class YourGuilds extends React.Component {
           </Segment>
         ))}
 
-        <Popup content='Type' trigger={
+     
           <Label color='red'>
             <h2>Guilds in which you are a member<br /></h2>
           </Label>
-        } />
         {this.state.guildsMember.map(x => (
           <Segment textAlign='left' inverted>
             <Item key={x._id} >

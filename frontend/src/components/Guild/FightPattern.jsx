@@ -5,114 +5,12 @@ import axios from 'axios';
 import Store from '../../Store';
 const _ = require('lodash');
 
-class CreaturePattern extends React.Component {
+class FightPattern extends React.Component {
   state = {
     guild_id: '5e09501790ddee12645725ec',
     description: 'temp desc', //this.props.creature.task_to_dmg.description
   };
   static contextType = Store;
-
-  addCreatureToFight = async (creature, guild_id, guild_name, task_id) => {
-    // const creatureResponse = await fetch(`/api/creatures/${creature_id}`, setHeaders());
-    // const creature = await creatureResponse.json();
-    // console.log(creature)
-
-    let task_to_dmg = await this.addTaskToMemebers(task_id, guild_id);
-    // console.log(task_to_dmg);
-    creature.task_to_dmg = task_to_dmg;
-
-    // console.log(creature)
-    const data = {
-      name: guild_name,
-      current_fight: creature,
-    };
-    const params = { ...setHeaders(), body: JSON.stringify(data), method: 'PUT' };
-    const response = await fetch(`/api/guilds/${guild_id}/current_fight`, params);
-    const body = await response.json();
-  };
-
-  addTaskToMemebers = async (task_id, guild_id) => {
-    const guildResponse = await fetch(`/api/guilds/${guild_id}`, setHeaders());
-    const guild = await guildResponse.json();
-
-    const taskResponse = await fetch(`/api/tasks/${task_id}`, setHeaders());
-    const task = await taskResponse.json();
-    // console.log(task);
-
-    let data = _.omit(task, ['_id', '__v', '__proto']);
-    // console.log(data)
-    let params = { ...setHeaders(), body: JSON.stringify(data), method: 'PUT' };
-
-    const task_to_dmg = [];
-    const requests = guild.members.map(async member_id => {
-      const memberResponse = await fetch(`/api/characters/${member_id}`, setHeaders());
-      const member = await memberResponse.json();
-
-      // console.log(params)
-      const memberTasksResponse = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
-      const memberTasks = await memberTasksResponse.json();
-      // console.log(memberTasks);
-      return memberTasks.tasks[memberTasks.tasks.length - 1]._id;
-      // task_to_dmg.push(memberTasks.tasks[memberTasks.tasks.length-1]._id);
-    });
-
-    return Promise.all(requests)
-      .then(id => {
-        task_to_dmg.push(...id);
-      })
-      .then(() => {
-        return task_to_dmg;
-      });
-  };
-
-  // addCreatureToFight = async () => {
-  //   /*const data = {
-  //     "name": `${this.props.creature.name}`,
-  //     //"level": `${this.props.creature.level}`,
-  //    // health: this.props.creature.health,
-  //     //physical_power: this.props.creature.physical_power,
-  //    // physical_resistance: this.props.creature.physcical_resistance,
-  //    // magical_power: this.props.creature.magical_power,
-  //     //magical_resistance: this.props.creature.magical_resistance,
-  //     //exp: this.props.creature.exp,
-  //    // gold: this.props.creature.gold,
-  //     //duration: this.props.creature.duration,
-  //     //task_to_dmg: [],
-  //     //picture: this.props.creature.picture
-  //   }
-  //   await axios({
-  //     url: `api/guilds/${this.state.guild_id}/current_fight`,
-  //     method: 'put',
-  //     data: data,
-  //     headers: setHeaders(),
-  //   }).then((response)=>{
-  //     console.log(response)
-  //   }, (error) => {
-  //     console.log(error);
-  //   });*/
-  // };
-
-  handleFightButtonClick = async event => {
-    // console.log(this.props.creature);
-    const creatureData = {
-      name: `${this.props.creature.name}`,
-      level: this.props.creature.level,
-      health: this.props.creature.health,
-      physical_power: this.props.creature.physical_power,
-      physical_resistance: this.props.creature.physcical_resistance,
-      magical_power: this.props.creature.magical_power,
-      magical_resistance: this.props.creature.magical_resistance,
-      exp: this.props.creature.exp,
-      gold: this.props.creature.gold,
-      duration: this.props.creature.duration,
-      task_to_dmg: [],
-      picture: this.props.creature.picture,
-    };
-    const guild_id = this.context.guild_id; //change
-    const guild_name = 'Guild_0'; //change
-    const task_id = '5e109895c023293410318ed2'; //change
-    await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
-  };
 
   render() {
     return (
@@ -208,12 +106,6 @@ class CreaturePattern extends React.Component {
                 </Step.Content>
               </Step>
             </Step.Group>
-            <Item.Extra>
-              <Button fluid icon color="red" labelPosition="right" onClick={this.handleFightButtonClick}>
-                <Icon name="gavel" />
-                Fight
-              </Button>
-            </Item.Extra>
           </Item>
         </Segment>
       </Segment.Group>
@@ -221,4 +113,4 @@ class CreaturePattern extends React.Component {
   }
 }
 
-export default CreaturePattern;
+export default FightPattern;
