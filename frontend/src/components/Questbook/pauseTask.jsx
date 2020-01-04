@@ -127,21 +127,27 @@ finishPause = async () => {
     clearInterval(this.Time);
   }
 
-  render() {
-    
-    return (
-      this.props.task.status === "in_progress" ? 
-      <div>
+  showPause = () => {
+    if(this.props.task.status === "in_progress" && this.props.task.category !== 'Encounters') {
+      return <div>
         <Button fluid icon color="yellow" style={{ marginTop: '15px' }} onClick={this.onButtonSubmit}>
           Pause task for 24 hours
           <Icon name="pause"/>
         </Button>
-        </div> : 
-        <div>
+        </div>}  else if (this.props.task.status === 'paused'){ 
+        return <div>
           <Segment inverted textAlign='center' color='grey' onChange={this.onChange}>
           Task paused for 24 hours. {this.state.pauseTime <86400000 ? `Time to pause end: ${this.state.pauseHours} hours ${this.state.pauseMinutes} minutes` : null}
         </Segment>
-        </div>
+        </div>}else if (this.props.task.category === 'Encounters') {return <Segment inverted textAlign='center' color='black'>
+          This is Guild task! You can't pause it!
+        </Segment>}
+  }
+
+  render() {
+    
+    return (
+      this.showPause()
     );
   }
 }
