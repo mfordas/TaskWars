@@ -23,7 +23,7 @@ class Quote extends React.Component {
     render() {
         
         return (
-            <Segment textAlign='center' color='purple' inverted>
+            <Segment textAlign='center' color='green' inverted>
                 <Grid columns={8} verticalAlign='middle'>
                     <Grid.Column width={14}>
                         <Segment inverted>
