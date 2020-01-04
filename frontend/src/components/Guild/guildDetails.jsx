@@ -293,26 +293,8 @@ class GuildJoin extends React.Component {
               </Grid>
             </Item>
           </Segment>
-          : (
-              <Segment inverted>Your guild is taking a break.</Segment>
-            )}
-            <Segment inverted>
-              <Item>
-                <Header inverted as={'h3'}>
-                  {' '}
-                  List of members :
-                </Header>
-                {this.state.charName.map(x => (
-                  <Item key={x._id}>
-                    <Item.Content>
-                      <Item.Header>{x.name}</Item.Header>
-                    </Item.Content>
-                  </Item>
-                ))}
-              </Item>
-            </Segment>
-          </div>
-        )}
+          : (null
+          )}
         <TopPortal ref={this.portalRef} header={'Success!'} description={`Adding a player to the guild`} />
       </Container>
     );
