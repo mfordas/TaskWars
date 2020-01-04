@@ -1,6 +1,5 @@
 import React from 'react';
-import setHeaders from '../../utils/setHeaders';
-import axios from 'axios';
+
 import { Segment, Button, Image, Table } from 'semantic-ui-react';
 
 class ItemDescription extends React.Component {
@@ -11,14 +10,14 @@ class ItemDescription extends React.Component {
       this.setState({ item: this.props.item });
   }
 
-  equipped = () => {
-    if (this.state.item.slot === 'Usable') {
-      console.log('Use item and remove from inventory');
-      this.useItem();
-    } else {
-      this.props.equippedThisItem(this.state.item);
-    }
-  }
+  // equipped = () => {
+  //   if (this.state.item.slot === 'Usable') {
+  //     console.log('Use item and remove from inventory');
+  //     this.useItem();
+  //   } else {
+  //     this.props.equippedThisItem(this.state.item);
+  //   }
+  // }
   // equipped = () => {
   //   if(this.props.eq === true) {
   //     if(this.state.item.slot === 'Usable') {
@@ -31,37 +30,7 @@ class ItemDescription extends React.Component {
   //   }
   // }
 
-  useItem = async () => {
-    const item = await fetch(`/api/item/${this.props.item._id}`)
-      .then(response => response.json());
-    if (!item) return;
 
-    const charID = await fetch(`/api/users/me`, setHeaders())
-      .then(response => response.json())
-      .then(user => user.character_id);
-
-    const character = await fetch(`/api/characters/${charID}`)
-      .then(response => response.json());
-    console.log(character);
-
-    await fetch(`/api/inventory/${character.inventory_id}/backpack/${this.props.item._id}`, {
-      method: 'PUT',
-      headers: { 'x-auth-token': `${localStorage.getItem('x-auth-token')}` }
-    });
-
-    if (item.effect.includes('magic_power')) {
-      await axios.put(`/api/characters/${charID}/magical_power`, { magical_power: `${character.magical_power + item.effect_value}` });
-    }
-
-    if (item.effect.includes('physical_power')) {
-      await axios.put(`/api/characters/${charID}/physical_power`, { physical_power: `${character.physical_power + item.effect_value}` });
-    }
-
-    if (item.effect.includes('health') || item.effect.includes('hp')) {
-      await axios.put(`/api/characters/${charID}/health`, { health: `${character.health + item.effect_value}` });
-    }
-
-  }
 
   render() {
     return (

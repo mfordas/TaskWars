@@ -11,11 +11,14 @@ class ItemView extends React.Component {
     this.setState({ open: false });
     if(this.props.eq === true) {
       if(this.state.item.slot === 'Usable') {
+        this.props.useItem(this.state.item,1);
       } else {
         this.props.equippedItem(this.state.item);
+        this.props.useItem(this.state.item,1);
       }
     } else { 
       this.props.unequippedItem(this.state.item);
+      this.props.useItem(this.state.item,-1);
       console.log('Unequipped item: getback to backpack');
     } 
   }

@@ -104,6 +104,7 @@ class InventoryView extends React.Component {
   }
 
   fetchRemoveFromEquipped = async (item) => {
+    
     console.log('Remove from equippedItems: endpoint');
     const resp = await axios({
       url: `/api/inventory/${this.state.id_inventory}/equippedItems/${item._id}`,
@@ -185,6 +186,27 @@ class InventoryView extends React.Component {
 
   }
 
+  useItem = async (item, sign) => {
+    const charID = this.state.id_user;
+
+    const character = await fetch(`/api/characters/${charID}`)
+      .then(response => response.json());
+    console.log(character);
+
+    if (item.effect.includes('magic_power')) {
+      await axios.put(`/api/characters/${charID}/magical_power`, { magical_power: `${character.magical_power + (sign *  item.effect_value)}` });
+    }
+
+    if (item.effect.includes('physical_power')) {
+      await axios.put(`/api/characters/${charID}/physical_power`, { physical_power: `${character.physical_power + (sign * item.effect_value)}` });
+    }
+
+    if (item.effect.includes('health') || item.effect.includes('hp')) {
+      await axios.put(`/api/characters/${charID}/health`, { health: `${character.health + (sign * item.effect_value)}` });
+    }
+
+  }
+
   render(){
     // let itemDescription = null;
     return (
@@ -202,7 +224,8 @@ class InventoryView extends React.Component {
             eq={true}
             description={this.state.itemDescription}
             equippedItem={this.equippedItem}
-            unequippedItem={this.unequippedItem} />
+            unequippedItem={this.unequippedItem} 
+            useItem={this.useItem} />
           </Segment> 
           :
           <Segment inverted color='purple'>
@@ -216,6 +239,7 @@ class InventoryView extends React.Component {
               description={this.state.itemDescription} 
               equippedItem={this.equippedItem}
               unequippedItem={this.unequippedItem}
+              useItem={this.useItem}
               />
             <Label color='grey' ribbon>Backpack</Label>
             <ItemView
@@ -226,6 +250,7 @@ class InventoryView extends React.Component {
               eq={true} 
               equippedItem={this.equippedItem}
               unequippedItem={this.unequippedItem}
+              useItem={this.useItem}
               /> 
           </Segment> 
           }
