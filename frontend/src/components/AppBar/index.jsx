@@ -50,7 +50,6 @@ const AppBar = () => {
             <Menu.Item color='yellow' as={NavLink} name="Shop" to="/shop" activeClassName="active" /><br></br>
             <Menu.Item color='pink' as={NavLink} name="Inventory" to="/inventory" activeClassName="active" /><br></br>
             <Menu.Item color='brown' as={NavLink} name="Guild" to="/guild" activeClassName="active" /><br></br>
-            <Menu.Item as={NavLink} name="Creatures" to="/creatures" activeClassName="active" /><br></br>
           </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item color='olive' as={NavLink} name= {me ? me.name: 'user' } to="/profile" activeClassName="active"/>

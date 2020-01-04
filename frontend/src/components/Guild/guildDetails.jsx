@@ -1,6 +1,19 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Form, Grid, Header, Icon, Input, Item, Label, Radio, Segment, Image, Container } from 'semantic-ui-react';
+import {
+  Button,
+  Form,
+  Grid,
+  Header,
+  Icon,
+  Input,
+  Item,
+  Label,
+  Radio,
+  Segment,
+  Image,
+  Container,
+} from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios';
 import Store from '../../Store';
@@ -35,7 +48,7 @@ class GuildJoin extends React.Component {
       open: false,
       userExist: true,
       type: 'Email',
-    }
+    };
   }
 
   static contextType = Store;
@@ -59,7 +72,7 @@ class GuildJoin extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.checkLeadership(body.character_id);
-    this.setState({ leaderId: body._id })
+    this.setState({ leaderId: body._id });
     this.getData(this.state.guild_id);
   };
 
@@ -96,32 +109,36 @@ class GuildJoin extends React.Component {
 
   findMember = async () => {
     if (this.state.type === 'Email') {
-      const resChar = await fetch(`/api/characters/search/${this.state.charId}&`, setHeaders())
-        .then(response => response.json());
+      const resChar = await fetch(`/api/characters/search/${this.state.charId}&`, setHeaders()).then(response =>
+        response.json(),
+      );
       this.setState({ charResult: resChar });
 
-      const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders())
-        .then(response => response.json());
+      const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders()).then(
+        response => response.json(),
+      );
       this.setState({ results: res });
     } else {
       this.setState({
         results: [],
-      })
-      const resChar = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders())
-        .then(response => response.json());
+      });
+      const resChar = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders()).then(
+        response => response.json(),
+      );
       this.setState({ charResult: resChar });
 
-      const res = await fetch(`/api/users/search/${this.state.charId}&`, setHeaders())
-        .then(response => response.json());
+      const res = await fetch(`/api/users/search/${this.state.charId}&`, setHeaders()).then(response =>
+        response.json(),
+      );
 
       res.forEach((elem, index) => {
         this.state.charResult.forEach((el, ind) => {
           if (elem.character_id === el._id && el.name)
             this.setState({
               results: [...this.state.results, elem],
-            })
-        })
-      })
+            });
+        });
+      });
 
       // this.setState({ results: res });
     }
@@ -133,7 +150,7 @@ class GuildJoin extends React.Component {
     //     charResult: [...this.state.charResult, resChar],
     //   })
     // }
-  }
+  };
 
   addMember = async id => {
     const memberToInsert = {
@@ -151,33 +168,31 @@ class GuildJoin extends React.Component {
     if (character_id === this.state.leader) {
       this.setState({ isLeader: true });
       this.context.changeStore('isLeader', true);
-    }
-    else {
+    } else {
       this.setState({ isLeader: false });
       this.context.changeStore('isLeader', false);
     }
   };
 
-  checkUser = (id) => {
+  checkUser = id => {
     let check = false;
     check = this.state.membersName.find(elem => {
-      return (elem._id === id)
-    })
+      return elem._id === id;
+    });
     if (id === this.state.leaderId || check) {
       return false;
     } else {
       return true;
     }
-  }
+  };
 
-  checkCharacterName = (id) => {
+  checkCharacterName = id => {
     let nameChar = '';
     nameChar = this.state.charResult.filter(elem => {
       return id.character_id === elem._id;
-    })
-    if (nameChar[0])
-      return (nameChar[0].name)
-  }
+    });
+    if (nameChar[0]) return nameChar[0].name;
+  };
 
   componentDidMount = async () => {
     await this.setState({ guild_id: this.context.guild_id });
@@ -216,110 +231,132 @@ class GuildJoin extends React.Component {
           </Item>
         </Segment>
 
-        {this.state.isLeader === true ?
-          <Segment inverted>
-            <Item>
-              <Header inverted as={'h3'}> List of members :</Header>
-              {this.state.charName.map(x => (
-                <Item key={x._id} >
-                  <Item.Content>
-                    <Item.Header>{x.name}</Item.Header>
-                  </Item.Content>
-                </Item>
-              ))}
-              <Button color='green' floated='right' as={NavLink} to='/creatures'>Fight!</Button>
-
-              <Header inverted as={'h3'}>Find new players</Header>
-              <Form inverted>
-                <Form.Group inline >
-                  <label>Search by : </label>
-                  <Form.Field
-                    control={Radio}
-                    defaultChecked
-                    label='Email'
-                    value='Email'
-                    name='type'
-                    checked={this.state.type === 'Email'}
-                    onChange={this.handleChange}
-                  />
-                  <Form.Field
-                    control={Radio}
-                    label='Character'
-                    value='Character'
-                    name='type'
-                    checked={this.state.type === 'Character'}
-                    onChange={this.handleChange}
-                  />
-                </Form.Group>
-              </Form>
-              <Grid padded>
-                <Input
-                  placeholder='Email...'
-                  onChange={this.onSearchChange}
-                />
-                <Button
-                  animated
-                  collor='grey'
-                  onClick={this.onSearchButtonClick}>
-                  <Button.Content visible>
-                    Search
-              </Button.Content>
-                  <Button.Content hidden>
-                    <Icon name='search' />
-                  </Button.Content>
-                </Button>
-
-                <Container>
-                  {this.state.results.map(x => (
-                    <Item key={x._id}>
-                      <Item.Content>
-                        <Grid padded>
-                          {this.checkUser(x._id) ? (
-                            <Button compact
-                              size='mini'
-                              color='green'
-                              onClick={async () => { await this.ButtonClick(x) }}>
-                              <Button.Content visible>
-                                <Icon name='plus' />
-                              </Button.Content>
-                            </Button>
-                          ) : <Button compact size='mini' color='yellow'><Icon name='minus' /></Button>}
-                          <Item.Header>{x.name}  |  {x.email}  |  {this.checkCharacterName(x)} </Item.Header>
-                        </Grid>
-                      </Item.Content>
-                    </Item>
-                  ))}
-                </Container>
-              </Grid>
-            </Item>
-          </Segment>
-          : (
-            <div>
-              {this.state.current_fight != null ? (
-                <Segment inverted>
-                  <Item.Header as={'h3'}>We are fighting against:</Item.Header>
-                  <FightPattern creature={this.state.current_fight} />
-                </Segment>
-              ) : (
-                  <Segment inverted>Your guild is taking a break.</Segment>
-                )}
+        {this.state.isLeader === true ? (
+          <div>
+            {this.state.current_fight != null ? (
               <Segment inverted>
-                <Item>
-                  <Header inverted as={'h3'}>
-                    {' '}
-                    List of members :
-                </Header>
-                  {this.state.charName.map(x => (
-                    <Item key={x._id}>
-                      <Item.Content>
-                        <Item.Header>{x.name}</Item.Header>
-                      </Item.Content>
-                    </Item>
-                  ))}
-                </Item>
+                <Item.Header as={'h3'}>We are fighting against:</Item.Header>
+                <FightPattern creature={this.state.current_fight} />
               </Segment>
-            </div>
-          )}
+            ) : (
+              <Segment inverted size="big">
+                <Grid padded>
+                <Header inverted> Choose creature and fight!</Header>
+                  <Button color="brown" floated="right" as={NavLink} to="/creatures">
+                  Fight!
+                  </Button>
+                </Grid>
+              </Segment>
+            )}
+            <Segment inverted>
+              <Item>
+                <Header inverted as={'h3'}>
+                  {' '}
+                  List of members :
+                </Header>
+                {this.state.charName.map(x => (
+                  <Item key={x._id}>
+                    <Item.Content>
+                      <Item.Header>{x.name}</Item.Header>
+                    </Item.Content>
+                  </Item>
+                ))}
+                <Header inverted as={'h3'}>
+                  Find new players
+                </Header>
+                <Form inverted>
+                  <Form.Group inline>
+                    <label>Search by : </label>
+                    <Form.Field
+                      control={Radio}
+                      defaultChecked
+                      label="Email"
+                      value="Email"
+                      name="type"
+                      checked={this.state.type === 'Email'}
+                      onChange={this.handleChange}
+                    />
+                    <Form.Field
+                      control={Radio}
+                      label="Character"
+                      value="Character"
+                      name="type"
+                      checked={this.state.type === 'Character'}
+                      onChange={this.handleChange}
+                    />
+                  </Form.Group>
+                </Form>
+                <Grid padded>
+                  <Input placeholder="Email..." onChange={this.onSearchChange} />
+                  <Button animated collor="grey" onClick={this.onSearchButtonClick}>
+                    <Button.Content visible>Search</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name="search" />
+                    </Button.Content>
+                  </Button>
+
+                  <Container>
+                    {this.state.results.map(x => (
+                      <Item key={x._id}>
+                        <Item.Content>
+                          <Grid padded>
+                            {this.checkUser(x._id) ? (
+                              <Button
+                                compact
+                                size="mini"
+                                color="green"
+                                onClick={async () => {
+                                  await this.ButtonClick(x);
+                                }}
+                              >
+                                <Button.Content visible>
+                                  <Icon name="plus" />
+                                </Button.Content>
+                              </Button>
+                            ) : (
+                              <Button compact size="mini" color="yellow">
+                                <Icon name="minus" />
+                              </Button>
+                            )}
+                            <Item.Header>
+                              {x.name} | {x.email} | {this.checkCharacterName(x)}{' '}
+                            </Item.Header>
+                          </Grid>
+                        </Item.Content>
+                      </Item>
+                    ))}
+                  </Container>
+                </Grid>
+              </Item>
+            </Segment>
+          </div>
+        ) : (
+          <div>
+            {this.state.current_fight != null ? (
+              <Segment inverted>
+                <Item.Header as={'h3'}>We are fighting against:</Item.Header>
+                <FightPattern creature={this.state.current_fight} />
+              </Segment>
+            ) : (
+              <Segment inverted>Your guild is taking a break.</Segment>
+            )}
+            <Segment inverted>
+              <Item>
+                <Header inverted as={'h3'}>
+                  {' '}
+                  List of members :
+                </Header>
+                {this.state.charName.map(x => (
+                  <Item key={x._id}>
+                    <Item.Content>
+                      <Item.Header>{x.name}</Item.Header>
+                    </Item.Content>
+                  </Item>
+                ))}
+              </Item>
+            </Segment>
+          </div>
+        )}
         <TopPortal ref={this.portalRef} header={'Success!'} description={`Adding a player to the guild`} />
       </Container>
     );

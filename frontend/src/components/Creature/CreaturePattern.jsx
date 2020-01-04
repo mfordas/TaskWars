@@ -9,7 +9,7 @@ const _ = require('lodash');
 class CreaturePattern extends React.Component {
   state = {
     creatureQuestId: 'temp desc', //this.props.creature.task_to_dmg.description
-    description:'', 
+    description: '',
     open: false,
   };
   static contextType = Store;
@@ -97,30 +97,28 @@ class CreaturePattern extends React.Component {
   //     console.log(error);
   //   });*/
   // };
-  getQuestDescription = async () =>{
+  getQuestDescription = async () => {
     let response = await fetch(`/api/tasks/${this.state.creatureQuestId}`, setHeaders());
     let body = await response.json();
     this.setState({
       description: body.name,
     });
-  }
+  };
 
+  creatureQuest = async () => {
+    const ajdi = '5e109897c023293410318e0' + this.props.number;
+    this.setState({ creatureQuestId: ajdi });
+  };
 
-   creatureQuest = async () =>{
-     const ajdi = "5e109897c023293410318e0" + this.props.number ;
-     this.setState({creatureQuestId: ajdi});
-   }
-
-   getGuildName = async id => {
+  getGuildName = async id => {
     let response = await fetch(`/api/guilds/${this.context.guild_id}`, setHeaders());
     let body = await response.json();
     this.setState({
       guild_name: body.name,
     });
-  }
+  };
 
   handleFightButtonClick = async event => {
-  
     // console.log(this.props.creature);
     const creatureData = {
       name: `${this.props.creature.name}`,
@@ -136,16 +134,16 @@ class CreaturePattern extends React.Component {
       task_to_dmg: [],
       picture: this.props.creature.picture,
     };
-    const guild_id = this.context.guild_id; 
+    const guild_id = this.context.guild_id;
     await this.getGuildName();
     const guild_name = this.state.guild_name;
-    const task_id = this.state.creatureQuestId; 
+    const task_id = this.state.creatureQuestId;
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
-  componentDidMount =  async () => {
+  componentDidMount = async () => {
     await this.creatureQuest();
     await this.getQuestDescription();
-  }
+  };
 
   render() {
     return (
