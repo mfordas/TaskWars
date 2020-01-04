@@ -10,7 +10,7 @@ class CreaturesTable extends React.Component {
   arrayToTable = arr => {
     let key = 0;
     return arr.map(elem => {
-      return <CreaturePattern creature={elem} key={key++} />;
+      return <CreaturePattern creature={elem} number={key} key={key++} />;
     });
   };
 
