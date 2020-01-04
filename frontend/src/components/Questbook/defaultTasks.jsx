@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Icon, Item, Label, Segment, Step, Popup, Header } from 'semantic-ui-react';
+import { Icon, Item, Label, Segment, Step, Popup, Header, Loader } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import StartTask from './startTask';
 import MeasureTime from './timeMeasure';
@@ -14,7 +14,8 @@ class AllTasks extends React.Component {
     super(props);
   this.state = {
     tasks: [],
-    taskStateChange: null
+    taskStateChange: null,
+    loading: true
   }
 }
 
@@ -34,7 +35,8 @@ class AllTasks extends React.Component {
       const body = await response.json();
       this.setState(
         {
-          tasks: body
+          tasks: body,
+          loading: false
         }
       )
       }
@@ -188,7 +190,11 @@ render() {
             />
 
         </Segment >
-      ))}</div>
+        
+      ))}
+      {this.state.loading && (
+        <Loader active size='huge' content='Loading...' inverted />
+)}</div>
     );
 }
 }
