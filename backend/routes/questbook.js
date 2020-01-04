@@ -23,7 +23,7 @@ router.get('/count', async (req, res) => {
   let counter = 0;
   questbooks.forEach(questbook => {
     questbook.tasks.forEach(task => {
-      if (task.status === 'completed')
+      if (task && task.status === 'completed')
         counter++;
     });
   });
