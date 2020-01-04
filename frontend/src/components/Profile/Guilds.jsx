@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Header } from 'semantic-ui-react'
+import { Table, Header, Segment } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 
 class Guilds extends React.Component {
@@ -14,7 +14,7 @@ class Guilds extends React.Component {
                    <Table.Row>
                     <Table.Cell>
                         <Header as='h4' image>
-                            <Header.Content>
+                            <Header.Content style={{color: "white"}}>
                              {name}
                             </Header.Content>
                         </Header>
@@ -27,18 +27,18 @@ class Guilds extends React.Component {
 
     render() {
         return (
-            <div className="guild">
+            <Segment inverted className="guild">
                   <Table style={{width: "100%"}} basic='very' celled collapsing>
                     <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Character Guilds</Table.HeaderCell>
+                        <Table.HeaderCell style={{color: "white"}}>Character Guilds</Table.HeaderCell>
                     </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         <div className="guildsList">{this.renderList()}</div>
                     </Table.Body>
                 </Table>
-            </div>
+            </Segment>
         );
     }
 }
