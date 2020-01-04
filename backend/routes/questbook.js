@@ -23,7 +23,7 @@ router.get('/count', async (req, res) => {
   let counter = 0;
   questbooks.forEach(questbook => {
     questbook.tasks.forEach(task => {
-      if (task.status === 'completed')
+      if (task && task.status === 'completed')
         counter++;
     });
   });
@@ -51,7 +51,7 @@ router.get('/:id/uncompleted', async (req, res) => {
   if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
 
   const tasks = _.filter(questbook.tasks, task => {
-    return task.status == 'in_progress';
+    return task.status == 'in_progress' || task.status == 'paused';
   });
 
   res.send(tasks);
@@ -78,6 +78,7 @@ router.put('/:id/task', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
+  task['_doc']['creationTime'] = new Date();
   questbookHandel.tasks.push(task);
 
   const questbook = await Questbook.findByIdAndUpdate(
@@ -131,13 +132,47 @@ router.post('/:id/task', async (req, res) => {
   res.send(questbook);
 });
 
-
+//start finish task
 router.put('/:id/task/:idTask', async (req, res) => {
   const Questbook = res.locals.models.questbook;
 
   const questbook = await Questbook.findByIdAndUpdate(
   {  "_id": req.params.id },
          {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].startFinishDate": new Date()} },
+        { arrayFilters: [ { 
+          "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
+          } ], 
+         new: true })
+         
+
+  if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
+  res.send(questbook);
+});
+
+//pause task
+router.put('/:id/task/:idTask/pause', async (req, res) => {
+  const Questbook = res.locals.models.questbook;
+
+  const questbook = await Questbook.findByIdAndUpdate(
+  {  "_id": req.params.id },
+         {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].pauseDate": new Date()} },
+        { arrayFilters: [ { 
+          "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
+          } ], 
+         new: true })
+         
+
+  if (!questbook) return res.status(404).send('The questbook with the given ID was not found.');
+  res.send(questbook);
+});
+
+//unpause task
+router.put('/:id/task/:idTask/unpause', async (req, res) => {
+  const Questbook = res.locals.models.questbook;
+
+  const questbook = await Questbook.findByIdAndUpdate(
+  {  "_id": req.params.id },
+         {"$set": {"tasks.$[task].status": req.body.status,"tasks.$[task].pausedAlready": true} },
         { arrayFilters: [ { 
           "task._id" : new mongoose.Types.ObjectId(req.params.idTask)
           } ], 

@@ -21,7 +21,7 @@ class UserBox extends React.Component {
         return user;
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         this.setState({ name: await this.getUser() });
     }
 
@@ -29,11 +29,11 @@ class UserBox extends React.Component {
     render() {
         if (!this.state.name) {
             return (
-                <Segment color='purple' inverted>
+                <Segment color='green' inverted>
                     <Segment textAlign='center' inverted placeholder>
                         <Grid columns={2} relaxed={'very'} stackable>
                             <Grid.Column>
-                                <Icon name='pencil' size='huge' color='blue' />
+                                <Icon name='pencil' size='huge' color='green' />
                                 <h2 style={{ marginTop: '10px' }}>Join us now by registering...</h2>
                                 <Button as={NavLink} to={'/register'} color='green'>
                                     Register!
@@ -41,7 +41,7 @@ class UserBox extends React.Component {
                             </Grid.Column>
 
                             <Grid.Column>
-                                <Icon name='address card' size='huge' color='blue' />
+                                <Icon name='address card' size='huge' color='green' />
                                 <h2 style={{ marginTop: '10px' }}>...let's get to work by logging in</h2>
                                 <Button as={NavLink} to={'/login'} color='green'>
                                     Login!
@@ -57,10 +57,10 @@ class UserBox extends React.Component {
             );
         }
         else return (
-            <Segment color='purple' inverted textAlign='center'>
+            <Segment color='green' inverted textAlign='center'>
                 <Segment inverted>
                     <Header as='h1'>Welcome back,</Header>
-                    <Icon name='user secret' size='huge' color='purple' />
+                    <Icon name='user secret' size='huge' color='green' />
                     <Header as='h1'>{this.state.name}!</Header>
                 </Segment>
 

@@ -164,7 +164,7 @@ render() {
                 {x.status === '' ?
               <StartTask task={x} taskStateChanged={this.onTaskStateChange}/>
               : null}
-                {x.status === 'in_progress' ?
+                {x.status === 'in_progress' || x.status === 'paused' ?
               <MeasureTime task={x} taskStateChanged={this.onTaskStateChange}/>
               : null}
                 {x.status === 'failed' ? 

@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Icon, Item, Label } from 'semantic-ui-react';
+import { Item, Label } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import StartTask from './startTask';
 
