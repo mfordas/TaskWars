@@ -70,8 +70,6 @@ class MenuTasksFilter extends React.Component {
     }
 
     fetchTasks = async () => {
-        this.setState({ loading: true });
-
         const user = await fetch('/api/users/me', setHeaders())
             .then(response => response.json());
         const character = await fetch(`/api/characters/${user.character_id}`)
@@ -158,9 +156,7 @@ class MenuTasksFilter extends React.Component {
 
                     <Grid.Column width={10}>
                         {this.state.loading && (
-                            <Dimmer active inverted>
-                                <Loader active size='huge' content='Loading...' />
-                            </Dimmer>
+                                <Loader active size='huge' content='Loading...' inverted />
                         )}
 
                         <TaskTable ref={this.taskTableRef} />
