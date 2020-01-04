@@ -15,6 +15,7 @@ class GuildJoin extends React.Component {
       guild_id: '',
       name: '',
       leader: '',
+      leaderId: '',
       flag: '',
       leaderName: '',
       current_fight: {},
@@ -28,6 +29,7 @@ class GuildJoin extends React.Component {
       results: [],
       charResult: [],
       open: false,
+      userExist: true,
     }
   }
 
@@ -49,6 +51,7 @@ class GuildJoin extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.checkLeadership(body.character_id);
+    this.setState({ leaderId: body._id })
     this.getData(this.state.guild_id);
   }
 
@@ -113,6 +116,18 @@ class GuildJoin extends React.Component {
     }
   }
 
+  checkUser = (id) => {
+    let check = false;
+    check = this.state.membersName.find(elem => {
+      return (elem._id === id)
+    })
+    if (id === this.state.leaderId || check) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   componentDidMount = async () => {
     await this.setState({ guild_id: this.context.guild_id });
     await this.getGuild();
@@ -135,69 +150,16 @@ class GuildJoin extends React.Component {
   render() {
     return (
       <Container>
-      <Segment inverted>
-        <Item>
-          <Image size='tiny' src={this.state.flag} style={{ display: 'inline-block' }}></Image>
-          <Item.Header style={{ display: 'inline-block' }} as={'h1'}>{this.state.name} </Item.Header>
-
-          <Item.Header as={'h3'}>Guild details</Item.Header>
-          <Item.Header style={{marginBottom:'10px'}}>Guild leader :  {this.state.leaderName.name}</Item.Header>
-        </Item>
-      </Segment>
-        {this.state.isLeader === true ?
         <Segment inverted>
           <Item>
-            <Header inverted as={'h3'}> List of members :</Header>
-            {this.state.charName.map(x => (
-              <Item key={x._id} >
-                <Item.Content>
-                  <Item.Header>{x.name}</Item.Header>
-                </Item.Content>
-              </Item>
-            ))}
-            <Button color='green' floated='right' as={NavLink} to='/creatures'>Fight!</Button>
+            <Image size='tiny' src={this.state.flag} style={{ display: 'inline-block' }}></Image>
+            <Item.Header style={{ display: 'inline-block' }} as={'h1'}>{this.state.name} </Item.Header>
 
-            <Header inverted as={'h3'}>Find new players</Header>
-            <Grid padded>
-              <Input
-                placeholder='Email...'
-                onChange={this.onSearchChange}
-              />
-              <Button
-                animated
-                standard
-                onClick={this.onSearchButtonClick}>
-                <Button.Content visible>
-                  Search
-              </Button.Content>
-                <Button.Content hidden>
-                  <Icon name='search' />
-                </Button.Content>
-              </Button>
-
-              <Container>
-                {this.state.results.map(x => (
-                  <Item key={x._id} >
-                    <Item.Content>
-                      <Grid padded>
-                        <Button compact
-                          size='mini'
-                          color='green'
-                          onClick={async () => { await this.ButtonClick(x) }}>
-                          <Button.Content visible>
-                            <Icon name='plus' />
-                          </Button.Content>
-                        </Button>
-                        <Item.Header>{x.email}  |  {x.name}  |  {x.charName}</Item.Header>
-                      </Grid>
-                    </Item.Content>
-                  </Item>
-                ))}
-              </Container>
-            </Grid>
+            <Item.Header as={'h3'}>Guild details</Item.Header>
+            <Item.Header style={{ marginBottom: '10px' }}>Guild leader :  {this.state.leaderName.name}</Item.Header>
           </Item>
-          </Segment>
-          : (
+        </Segment>
+        {this.state.isLeader === true ?
           <Segment inverted>
             <Item>
               <Header inverted as={'h3'}> List of members :</Header>
@@ -208,8 +170,63 @@ class GuildJoin extends React.Component {
                   </Item.Content>
                 </Item>
               ))}
+              <Button color='green' floated='right' as={NavLink} to='/creatures'>Fight!</Button>
+
+              <Header inverted as={'h3'}>Find new players</Header>
+              <Grid padded>
+                <Input
+                  placeholder='Email...'
+                  onChange={this.onSearchChange}
+                />
+                <Button
+                  animated
+                  collor='grey'
+                  onClick={this.onSearchButtonClick}>
+                  <Button.Content visible>
+                    Search
+              </Button.Content>
+                  <Button.Content hidden>
+                    <Icon name='search' />
+                  </Button.Content>
+                </Button>
+
+                <Container>
+                  {this.state.results.map(x => (
+                    <Item key={x._id}>
+                      <Item.Content>
+                        <Grid padded>
+                          {this.checkUser(x._id) ? (
+                            <Button compact
+                              size='mini'
+                              color='green'
+                              onClick={async () => { await this.ButtonClick(x) }}>
+                              <Button.Content visible>
+                                <Icon name='plus' />
+                              </Button.Content>
+                            </Button>
+                          ) : <Button compact size='mini' color='yellow'><Icon name='minus'/></Button>}
+                          <Item.Header>{x.email}  |  {x.name}  |  {x.charName}</Item.Header>
+                        </Grid>
+                      </Item.Content>
+                    </Item>
+                  ))}
+                </Container>
+              </Grid>
             </Item>
           </Segment>
+          : (
+            <Segment inverted>
+              <Item>
+                <Header inverted as={'h3'}> List of members :</Header>
+                {this.state.charName.map(x => (
+                  <Item key={x._id} >
+                    <Item.Content>
+                      <Item.Header>{x.name}</Item.Header>
+                    </Item.Content>
+                  </Item>
+                ))}
+              </Item>
+            </Segment>
           )
         }
 

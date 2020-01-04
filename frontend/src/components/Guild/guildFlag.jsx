@@ -48,7 +48,6 @@ class Flag extends React.Component {
 
   onModalClose = () => {
     this.setState({ avatar: this.img });
-    this.putAvatar(this.img);
     this.setState({
       img: this.props.avatar
     })
@@ -112,13 +111,6 @@ class Flag extends React.Component {
 
   // }
 
-  putAvatar = async (img) => {
-    const data = {
-      avatar: img
-    };
-    let params = { ...setHeaders(), body: JSON.stringify(data), method: "PUT" };
-    const response = await fetch(`/api/characters/${this.props.id}/flag`, params);
-  }
 
   render() {
     return (

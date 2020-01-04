@@ -25,7 +25,7 @@ class GuildCreate extends React.Component {
       leader: null,
       description: ' ',
       type: '',
-      flag: 'https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png',
+      flag: 'https://findicons.com/files/icons/2799/flat_icons/128/shield.png',
     }
   }
 
