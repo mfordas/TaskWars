@@ -5,8 +5,9 @@ class BuyItem extends React.Component {
   render() {
     return (
       <Button size="small"
-              toggle 
-              color='black'
+              color='purple'
+              // toggle 
+              // color='black'
               animated='fade' 
               floated='center' 
               active={this.props.active} 
@@ -16,7 +17,7 @@ class BuyItem extends React.Component {
               { this.props.value1 <= this.props.value2 ? 'Buy' : 'Not enough money' }
           </Button.Content>
           <Button.Content hidden>
-              { this.props.valu1 }
+              { this.props.value1 }
           </Button.Content>
       </Button>
     );

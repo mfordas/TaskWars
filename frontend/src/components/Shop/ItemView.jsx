@@ -30,11 +30,12 @@ class ItemView extends React.Component {
               Effect: { this.props.item.effect} <br/>
               Value: { this.props.item.effect_value} <br/>
               slot: { this.props.item.slot} <br/>
-              price: { this.props.item.price} <br/>
+              price: { this.props.item.price} <br/> <br/> <br/>
+
             </Item.Description>
             <Item.Extra>
-              <Label attached='bottom'>
-                <BuyItem  item={this.props.item} 
+              <Label horizontal attached='bottom' size='tiny' color='grey' >
+               <BuyItem  item={this.props.item} 
                           active={activeV}
                           disabled={disabledV}
                           value1={this.props.item.price} 
