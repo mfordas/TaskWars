@@ -9,16 +9,11 @@ class ItemView extends React.Component {
   setDescription = (des,eq) => {
     let description = <ItemDescription  key={des._id} 
                                         item={des} 
-                                        closeFun={this.setDescToNull} 
                                         equippedThisItem={this.props.equippedItem}
                                         unequippedThisItem={this.props.unequippedItem} 
                                         eq={eq}
                                         />;
     this.setState({ itemDescription: description, item: des });
-  }
-
-  setDescToNull = () => {
-    this.setState({ itemDescription: null });
   }
 
   handleClose = () => this.setState({ open: false })

@@ -105,7 +105,7 @@ class ShopContent extends React.Component {
     let activeV;
     let disabledV;
     return (
-      <Segment inverted>
+      <Segment inverted >
       <Grid doubling container centered columns='equal' padded>
         <Grid.Row textAlign='center' verticalAlign='top'>
           <Grid.Column stretched>

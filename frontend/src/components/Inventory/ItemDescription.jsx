@@ -26,10 +26,8 @@ class ItemDescription extends React.Component {
 
   render() {
     return (
-      <div>
-        <Label attached='top right' >
-            <Button size="tiny" icon='x' onClick={this.props.closeFun}></Button>
-        </Label> 
+      <Segment padded inverted color='black'>
+
         <h2>{this.state.item !== null ? this.state.item.name :' '}</h2>
         <p>{this.state.item !== null ? this.state.item.description :' '}</p>
         <Table definition>
@@ -52,22 +50,23 @@ class ItemDescription extends React.Component {
             </Table.Row>
           </Table.Body>
         </Table>
-        <Segment inverted>
+        <br></br><br></br>
+        <Label size='tiny' horizontal attached='bottom' size='tiny' color='grey'>
             {this.props.eq === true ?
-                          <Button size="small" onClick={this.equipped}>
+                          <Button size="small" onClick={this.equipped} color='purple'>
                           { this.props.item.slot != null && this.props.item.slot === 'Usable' 
                           ? 'Use' : 
                           'Equipped'}
                         </Button> :
-                        <Button size="small" onClick={this.equipped}>
+                        <Button size="small" onClick={this.equipped} color='purple'>
                         { this.props.item.slot != null && this.props.item.slot === 'Usable' 
                           ? 'None' : 
                           'Unequipped'}
                         </Button>
             }
 
-        </Segment> 
-      </div>
+        </Label> 
+      </Segment>
     );
   }
 }

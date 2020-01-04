@@ -190,11 +190,11 @@ class InventoryView extends React.Component {
     return (
       <Segment inverted>
         <Grid.Row textAlign='left' verticalAlign='top'> 
-        {this.props.showGold !== false ? <Segment>Gold: {this.state.gold}</Segment> : null}
+        {this.props.showGold !== false ? <Segment inverted color='purple'>Gold: {this.state.gold}</Segment> : null}
         </Grid.Row>
 
         { this.props.ViewEquipped === false ?  
-          <Segment> 
+          <Segment inverted color='purple'> 
             <ItemView
             backpackItem={this.state.backpackItem} 
             setDescription={this.setDescription} 
@@ -205,7 +205,7 @@ class InventoryView extends React.Component {
             unequippedThisItem={this.unequippedItem} />
           </Segment> 
           :
-          <Segment>           
+          <Segment inverted color='purple'>           
             <Label>Equipped</Label>
             <ItemView itemDescription={this.state.itemDescription} 
               setDescription={this.setDescription} backpackItem={this.state.equipped} 
