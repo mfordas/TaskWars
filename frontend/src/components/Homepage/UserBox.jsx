@@ -21,7 +21,7 @@ class UserBox extends React.Component {
         return user;
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         this.setState({ name: await this.getUser() });
     }
 

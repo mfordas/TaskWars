@@ -9,15 +9,16 @@ class TaskPattern extends React.Component {
         super(props);
 
         this.portalRef = React.createRef();
-        this.state = { open: false }
+        this.portalFailRef = React.createRef();
+        this.state = { open: false, fail: false }
     }
 
     parseTime = (hours) => {
         const days = Math.floor(hours / 24);
         const hr = hours - (days * 24);
-    
+
         return (`${days > 0 ? days + 'd' : ''} ${hr >= 0 ? hr + 'h' : ''}`)
-    }    
+    }
 
     handleButtonAddClick = async (e, { name }) => {
         this.setState({ open: true });
@@ -25,7 +26,7 @@ class TaskPattern extends React.Component {
             .then(response => response.json());
         const character = await fetch(`/api/characters/${user.character_id}`)
             .then(response => response.json());
-            
+
         const taskToInsert = {
             "name": `${this.props.task.name}`,
             "description": `${this.props.task.description}`,
@@ -38,12 +39,14 @@ class TaskPattern extends React.Component {
             "status": ""
         };
 
-        const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert);
+        const res = await axios.put(`/api/questbook/${character.questbook_id}/task`, taskToInsert)
+        .catch(err => {
+            this.portalFailRef.current.handleOpen();
+            this.setState({ open: false });
+        });
 
-        if (res.status == 200)
+        if (res && res.status == 200)
             this.portalRef.current.handleOpen();
-        await new Promise(res => setTimeout(res, 3500));
-        this.setState({ open: false });
     }
 
     pickImage() {
@@ -134,13 +137,13 @@ class TaskPattern extends React.Component {
                         <Button
                             fluid
                             icon
-                            color='blue'
+                            color={this.state.open === false ? 'blue' : 'green'}
                             labelPosition='right'
                             onClick={this.handleButtonAddClick}
                             disabled={this.state.open}>
-                            <Icon name='plus' />
-                            Add to questbook
-                    </Button>
+                            <Icon name={this.state.open === false ? 'plus' : 'check'} />
+                            {this.state.open === false ? 'Add to questbook' : 'Added to questbook'}
+                        </Button>
                     </Item.Extra>
 
                 </Item>
@@ -149,6 +152,12 @@ class TaskPattern extends React.Component {
                     ref={this.portalRef}
                     header={'Success!'}
                     description={`${this.props.task.name} has been added to your questbook`}
+                />
+
+                <TopPortal
+                    ref={this.portalFailRef}
+                    header={'Fail!'}
+                    description={`We were unable to add ${this.props.task.name} to your questbook`}
                 />
 
             </Segment >
