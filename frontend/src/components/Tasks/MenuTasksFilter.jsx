@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon, Container, Input, Button, Segment, Form, Grid } from 'semantic-ui-react';
+import { Menu, Icon, Container, Input, Button, Segment, Form, Grid, Loader, Dimmer } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import TaskTable from './TasksTable';
 
@@ -19,7 +19,6 @@ const tasksCategories = [
     { key: 3, text: 'Utility' }
 ];
 
-
 class MenuTasksFilter extends React.Component {
     constructor(props) {
         super(props);
@@ -29,7 +28,8 @@ class MenuTasksFilter extends React.Component {
             category: 'All',
             type: 'All',
             tags: '',
-            results: []
+            results: [],
+            loading: true
         };
     }
 
@@ -70,10 +70,31 @@ class MenuTasksFilter extends React.Component {
     }
 
     fetchTasks = async () => {
-        const tasks = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders())
-            .then( response => response.json());
+        this.setState({ loading: true });
 
-        this.setState({ results: tasks });
+        const user = await fetch('/api/users/me', setHeaders())
+            .then(response => response.json());
+        const character = await fetch(`/api/characters/${user.character_id}`)
+            .then(response => response.json());
+
+        const usersTasks = await fetch(`/api/questbook/${character.questbook_id}/tasks`, setHeaders())
+            .then(response => response.json());
+
+        const allTasks = await fetch(`/api/tasks/${this.state.category}&${this.state.type}&${this.state.tags}`, setHeaders())
+            .then(response => response.json());
+
+        const actDate = new Date();
+
+        const tasks = allTasks.filter(task => {
+            return (usersTasks.every(uTask => {
+                return (
+                    (uTask.name !== task.name && uTask.description !== task.description) ||
+                    (uTask.status !== 'in_progress' && uTask.status !== '' && uTask.status !== 'paused') &&
+                    (categoryFilter(uTask, actDate)))
+            }));
+        });
+
+        this.setState({ results: tasks, loading: false });
     }
 
     componentDidMount() {
@@ -96,7 +117,7 @@ class MenuTasksFilter extends React.Component {
                                     fluid
                                     placeholder='Tags...'
                                     icon='search'
-                                    onChange={this.onSearchChange} 
+                                    onChange={this.onSearchChange}
                                 />
 
                                 <Menu vertical inverted>
@@ -136,6 +157,12 @@ class MenuTasksFilter extends React.Component {
                     </Grid.Column>
 
                     <Grid.Column width={10}>
+                        {this.state.loading && (
+                            <Dimmer active inverted>
+                                <Loader active size='huge' content='Loading...' />
+                            </Dimmer>
+                        )}
+
                         <TaskTable ref={this.taskTableRef} />
                     </Grid.Column>
                 </Grid>
@@ -143,6 +170,18 @@ class MenuTasksFilter extends React.Component {
             </Container>
         );
     }
+}
+
+function categoryFilter(task, actDate) {
+    if (task.category === 'Daily') {
+        return actDate - new Date(task.creationTime) > 86400000;
+    } else if (task.category === 'Weekly') {
+        return actDate - new Date(task.creationTime) > 604800000;
+    } else if (task.category === 'Monthly') {
+        return actDate - new Date(task.creationTime) > 2592000000;
+    }
+
+    return true;
 }
 
 export default MenuTasksFilter;

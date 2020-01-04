@@ -23,7 +23,7 @@ router.get('/count', async (req, res) => {
   let counter = 0;
   questbooks.forEach(questbook => {
     questbook.tasks.forEach(task => {
-      if (task.status === 'completed')
+      if (task && task.status === 'completed')
         counter++;
     });
   });
@@ -78,6 +78,7 @@ router.put('/:id/task', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const questbookHandel = await Questbook.findById(req.params.id, 'tasks', { lean: true });
+  task['_doc']['creationTime'] = new Date();
   questbookHandel.tasks.push(task);
 
   const questbook = await Questbook.findByIdAndUpdate(
