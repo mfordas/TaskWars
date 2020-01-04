@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Button  } from 'semantic-ui-react';
+import { Item, Button, Portal, Segment } from 'semantic-ui-react';
 
 class ItemButton extends React.Component {
   state = { item: this.props.item }
@@ -10,13 +10,20 @@ class ItemButton extends React.Component {
 
   chooseItem = () => {
     this.props.setDescription(this.state.item, this.props.eq);
+    this.props.handleOpen();
   }
 
   render(){
     return (
-      <Button inverted circular color='grey' onClick={this.chooseItem} disabled={this.props.bnActive} >
-        <Item.Image src={ this.props.item.picture } size="mini" wrapped />
-      </Button>
+      <div>
+        <Button inverted 
+          circular 
+          color='grey' 
+          onClick={this.chooseItem} 
+          disabled={this.props.bnActive} >
+          <Item.Image src={ this.props.item.picture } size="mini" wrapped />
+        </Button>
+      </div>
     );
   }
 }

@@ -15,12 +15,13 @@ class ItemDescription extends React.Component {
         console.log('Use item and remove from inventory');
       } else {
         this.props.equippedThisItem(this.state.item);
+        console.log('Test1');
       }
     } else { 
       this.props.unequippedThisItem(this.state.item);
       console.log('Unequipped item: getback to backpack');
     }
-
+    console.log('Test2');
   }
 
   render() {

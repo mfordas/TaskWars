@@ -2,9 +2,8 @@ import React from 'react';
 import { Segment, Grid, Item, Label, Button, Portal  } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
-import ItemButton from './ItemButton';
-import ItemDescription from './ItemDescription';
 import ItemView from './ItemView';
+
 class InventoryView extends React.Component {
   state = { 
     id_user: null,
@@ -80,20 +79,6 @@ class InventoryView extends React.Component {
         console.log('Inventory as component');
       }
     console.log('mounted');
-  }
-
-  setDescription = (des,eq) => {
-    let description = <ItemDescription  key={des._id} 
-                                        item={des} 
-                                        closeFun={this.setDescToNull} 
-                                        equippedThisItem={this.equippedItem}
-                                        unequippedThisItem={this.unequippedItem} 
-                                        eq={eq}
-                                        />;
-    this.setState({ itemDescription: description });
-  }
-  setDescToNull = () => {
-    this.setState({ itemDescription: null });
   }
 
   equippedItem = (item) => {
@@ -207,11 +192,6 @@ class InventoryView extends React.Component {
         <Grid.Row textAlign='left' verticalAlign='top'> 
         {this.props.showGold !== false ? <Segment>Gold: {this.state.gold}</Segment> : null}
         </Grid.Row>
-        <Grid.Row textAlign='center' verticalAlign='top'>
-          { (this.state.itemDescription !== null) ? 
-          <Segment inverted color='grey'>{this.state.itemDescription}</Segment> 
-          : null}
-        </Grid.Row>
 
         { this.props.ViewEquipped === false ?  
           <Segment> 
@@ -219,18 +199,29 @@ class InventoryView extends React.Component {
             backpackItem={this.state.backpackItem} 
             setDescription={this.setDescription} 
             buttonActive={this.props.buttonActive}
-            eq={true} />
+            eq={true}
+            description={this.state.itemDescription}
+            equippedThisItem={this.equippedItem}
+            unequippedThisItem={this.unequippedItem} />
           </Segment> 
           :
           <Segment>           
             <Label>Equipped</Label>
             <ItemView itemDescription={this.state.itemDescription} 
-            setDescription={this.setDescription} backpackItem={this.state.equipped} eq={false} />
+              setDescription={this.setDescription} backpackItem={this.state.equipped} 
+              eq={false} description={this.state.itemDescription} 
+              equippedThisItem={this.equippedItem}
+              unequippedThisItem={this.unequippedItem}
+              />
             <ItemView
-            backpackItem={this.state.backpackItem} 
-            setDescription={this.setDescription} 
-            buttonActive={this.props.buttonActive}
-            eq={true} /> 
+              backpackItem={this.state.backpackItem} 
+              setDescription={this.setDescription} 
+              buttonActive={this.props.buttonActive}
+              description={this.state.itemDescription}
+              eq={true} 
+              equippedThisItem={this.equippedItem}
+              unequippedThisItem={this.unequippedItem}
+              /> 
           </Segment> 
           }
       </Segment>
