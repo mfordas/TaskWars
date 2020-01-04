@@ -8,7 +8,7 @@ const _ = require('lodash');
 
 class CreaturePattern extends React.Component {
   state = {
-    creatureQuestId: 'temp desc', //this.props.creature.task_to_dmg.description
+    creatureQuestId: '', 
     description: '',
     open: false,
   };
@@ -98,7 +98,7 @@ class CreaturePattern extends React.Component {
   //   });*/
   // };
   getQuestDescription = async () => {
-    let response = await fetch(`/api/tasks/${this.state.creatureQuestId}`, setHeaders());
+    let response = await fetch(`/api/tasks/${this.props.creature.creature_task}`, setHeaders());
     let body = await response.json();
     this.setState({
       description: body.name,
@@ -106,8 +106,7 @@ class CreaturePattern extends React.Component {
   };
 
   creatureQuest = async () => {
-    const ajdi = '5e109897c023293410318e0' + this.props.number;
-    this.setState({ creatureQuestId: ajdi });
+    this.setState({ creatureQuestId: this.props.creature.creature_task });
   };
 
   getGuildName = async id => {
@@ -119,9 +118,8 @@ class CreaturePattern extends React.Component {
   };
 
   handleFightButtonClick = async event => {
-    // console.log(this.props.creature);
     const creatureData = {
-      name: `${this.props.creature.name}`,
+      name: this.props.creature.name,
       level: this.props.creature.level,
       health: this.props.creature.health,
       physical_power: this.props.creature.physical_power,
@@ -131,15 +129,18 @@ class CreaturePattern extends React.Component {
       exp: this.props.creature.exp,
       gold: this.props.creature.gold,
       duration: this.props.creature.duration,
+      creature_task: this.props.creature.creature_task,
       task_to_dmg: [],
       picture: this.props.creature.picture,
     };
     const guild_id = this.context.guild_id;
     await this.getGuildName();
     const guild_name = this.state.guild_name;
+    await this.creatureQuest();
     const task_id = this.state.creatureQuestId;
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
+
   componentDidMount = async () => {
     await this.creatureQuest();
     await this.getQuestDescription();

@@ -12,6 +12,7 @@ const defaultCreatures = [
     exp: 500,
     gold: 500,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e00",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/2180/premium/2180715.png'
   },
@@ -26,6 +27,7 @@ const defaultCreatures = [
     exp: 500,
     gold: 500,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e01",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/1164/1164927.png'
   },
@@ -40,6 +42,7 @@ const defaultCreatures = [
     exp: 800,
     gold: 800,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e02",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/1205/1205564.png'
   },
@@ -54,6 +57,7 @@ const defaultCreatures = [
     exp: 800,
     gold: 800,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e03",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/863/863611.png'
   },
@@ -68,6 +72,7 @@ const defaultCreatures = [
     exp: 1000,
     gold: 1000,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e04",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/323/323953.png'
   },
@@ -82,6 +87,7 @@ const defaultCreatures = [
     exp: 1200,
     gold: 1200,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e05",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/427/427540.png'
   },
@@ -96,6 +102,7 @@ const defaultCreatures = [
     exp: 1200,
     gold: 1200,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e06",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/809/809052.png'
   },
@@ -110,6 +117,7 @@ const defaultCreatures = [
     exp: 1500,
     gold: 1500,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e07",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/1016/1016748.png'
   },
@@ -124,6 +132,7 @@ const defaultCreatures = [
     exp: 1800,
     gold: 1800,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e08",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/427/427518.png'
   },
@@ -138,6 +147,7 @@ const defaultCreatures = [
     exp: 2000,
     gold: 2000,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e09",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/2010/2010383.png'
   },
@@ -152,6 +162,7 @@ const defaultCreatures = [
     exp: 2000,
     gold: 2000,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e10",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/2366/2366450.png'
   },
@@ -166,6 +177,7 @@ const defaultCreatures = [
     exp: 2000,
     gold: 2000,
     duration: defaultDuration,
+    creature_task: "5e109897c023293410318e11",
     task_to_dmg: [],
     picture: 'https://image.flaticon.com/icons/png/512/2136/premium/2136600.png'
   },

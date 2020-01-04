@@ -133,6 +133,7 @@ const createCreatures = async (prefix, count, models, taskCatalog) => {
         exp: 50+x,
         gold: 50+x,
         duration: x+6,
+        creature_task: "5e109897c023293410318e00",
         task_to_dmg: taskCatalog[x],
         picture: ''
       };

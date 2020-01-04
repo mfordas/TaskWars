@@ -319,8 +319,29 @@ const defaultCreatures = [
        gold: 50,
        penalty: 10,
        status: ""
+   }, {
+       _id: "5e109897c023293410318e10",
+       name: "Wunderbaum [Boss]",
+       description: "Decorate christmas tree.",
+       type: "Utility",
+       category: "Encounters",
+       duration: defaultDuration,
+       exp: 50,
+       gold: 50,
+       penalty: 10,
+       status: ""
+   }, {
+       _id: "5e109897c023293410318e11",
+       name: "Jack-o'-lantern [Boss]",
+       description: "Prepare for Halloween.",
+       type: "Utility",
+       category: "Encounters",
+       duration: defaultDuration,
+       exp: 50,
+       gold: 50,
+       penalty: 10,
+       status: ""
    },
-   
 ]
 
 defaultCreatures.forEach(element => {
