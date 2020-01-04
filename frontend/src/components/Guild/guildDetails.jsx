@@ -7,7 +7,6 @@ import Store from '../../Store';
 import { Redirect, NavLink } from 'react-router-dom';
 import TopPortal from '../Utils/TopPortal';
 
-
 class GuildJoin extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +15,7 @@ class GuildJoin extends React.Component {
       guild_id: '',
       name: '',
       leader: '',
+      flag: '',
       leaderName: '',
       current_fight: {},
       isLeader: false,
@@ -39,7 +39,7 @@ class GuildJoin extends React.Component {
       method: 'get',
       headers: setHeaders()
     }).then((response) => {
-      this.setState({ name: response.data.name, leader: response.data.leader })
+      this.setState({ name: response.data.name, leader: response.data.leader, flag: response.data.flag })
     }, (error) => {
       console.log(error);
     });
@@ -102,7 +102,7 @@ class GuildJoin extends React.Component {
     const res = await axios.put(`/api/guilds/${this.state.guild_id}/members`, memberToInsert);
     if (res.status == 200)
       this.portalRef.current.handleOpen();
-      this.findMember();
+    this.findMember();
     await new Promise(res => setTimeout(res, 3500));
     this.setState({ open: false });
   }
@@ -114,7 +114,7 @@ class GuildJoin extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.setState({ guild_id: this.context.guild_id }); 
+    await this.setState({ guild_id: this.context.guild_id });
     await this.getGuild();
     await this.fetchUser();
   }
@@ -134,13 +134,19 @@ class GuildJoin extends React.Component {
 
   render() {
     return (
+      <Container>
       <Segment inverted>
-        <Image></Image>
-        <Item.Header as={'h1'}>{this.state.name} </Item.Header>
-        <Header>Guild details</Header>
+        <Item>
+          <Image size='tiny' src={this.state.flag} style={{ display: 'inline-block' }}></Image>
+          <Item.Header style={{ display: 'inline-block' }} as={'h1'}>{this.state.name} </Item.Header>
+
+          <Item.Header as={'h3'}>Guild details</Item.Header>
+          <Item.Header style={{marginBottom:'10px'}}>Guild leader :  {this.state.leaderName.name}</Item.Header>
+        </Item>
+      </Segment>
         {this.state.isLeader === true ?
+        <Segment inverted>
           <Item>
-            <Item.Header inverted>Guild leader :  {this.state.leaderName.name}</Item.Header>
             <Header inverted as={'h3'}> List of members :</Header>
             {this.state.charName.map(x => (
               <Item key={x._id} >
@@ -190,10 +196,10 @@ class GuildJoin extends React.Component {
               </Container>
             </Grid>
           </Item>
+          </Segment>
           : (
+          <Segment inverted>
             <Item>
-              <Item.Header inverted>You are not the leader</Item.Header>
-              <Item.Header inverted>Guild leader : {this.state.leaderName.name}</Item.Header>
               <Header inverted as={'h3'}> List of members :</Header>
               {this.state.charName.map(x => (
                 <Item key={x._id} >
@@ -203,6 +209,7 @@ class GuildJoin extends React.Component {
                 </Item>
               ))}
             </Item>
+          </Segment>
           )
         }
 
@@ -211,7 +218,7 @@ class GuildJoin extends React.Component {
           header={'Success!'}
           description={`Adding a player to the guild`}
         />
-      </Segment>
+      </Container>
     )
   }
 }
