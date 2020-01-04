@@ -91,7 +91,7 @@ return `${d} days ${h} hours`
 render() {
     return (
       <div>
-      {this.state.tasks.map(x => (
+      {this.state.tasks.reverse().map(x => (
         <Segment key={x._id} inverted>
             <Item>
                 <Item.Image style={{ display: 'inline-block' }}>
