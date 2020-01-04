@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Form, Grid, Header, Icon, Input, Item, Label, Segment, Image, Container } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Icon, Input, Item, Label, Radio, Segment, Image, Container } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import axios from 'axios'
 import Store from '../../Store';
@@ -30,6 +30,7 @@ class GuildJoin extends React.Component {
       charResult: [],
       open: false,
       userExist: true,
+      type: 'Email',
     }
   }
 
@@ -84,17 +85,24 @@ class GuildJoin extends React.Component {
   }
 
   findMember = async () => {
-    const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders())
-      .then(response => response.json());
-    this.setState({ results: res });
-
-    for (let i = 0; i < this.state.results.length; i++) {
-      const resChar = await fetch(`/api/characters/${res[i].character_id}`, setHeaders())
+    if (this.state.type === 'Email') {
+      const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders())
         .then(response => response.json());
-      this.setState({
-        charResult: [...this.state.charResult, resChar],
-      })
+      this.setState({ results: res });
+    } else {
+      const res = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders())
+        .then(response => response.json());
+      this.setState({ results: res });
+
+      // for (let i = 0; i < this.state.results.length; i++) {
+      //   const resChar = await fetch(`/api/characters/${res[i].character_id}`, setHeaders())
+      //     .then(response => response.json());
+      //   this.setState({
+      //     charResult: [...this.state.charResult, resChar],
+      //   })
+      // }
     }
+
   }
 
   addMember = async (id) => {
@@ -147,6 +155,8 @@ class GuildJoin extends React.Component {
     this.setState({ tags: str.split(" ").join("_") });
   }
 
+  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+
   render() {
     return (
       <Container>
@@ -173,6 +183,28 @@ class GuildJoin extends React.Component {
               <Button color='green' floated='right' as={NavLink} to='/creatures'>Fight!</Button>
 
               <Header inverted as={'h3'}>Find new players</Header>
+              <Form inverted>
+                <Form.Group inline >
+                  <label>Search by : </label>
+                  <Form.Field
+                    control={Radio}
+                    defaultChecked
+                    label='Email'
+                    value='Email'
+                    name='type'
+                    checked={this.state.type === 'Email'}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Field
+                    control={Radio}
+                    label='Character'
+                    value='Character'
+                    name='type'
+                    checked={this.state.type === 'Character'}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+              </Form>
               <Grid padded>
                 <Input
                   placeholder='Email...'
@@ -204,8 +236,8 @@ class GuildJoin extends React.Component {
                                 <Icon name='plus' />
                               </Button.Content>
                             </Button>
-                          ) : <Button compact size='mini' color='yellow'><Icon name='minus'/></Button>}
-                          <Item.Header>{x.email}  |  {x.name}  |  {x.charName}</Item.Header>
+                          ) : <Button compact size='mini' color='yellow'><Icon name='minus' /></Button>}
+                          <Item.Header>{x.name}  |  {x.email} </Item.Header>
                         </Grid>
                       </Item.Content>
                     </Item>

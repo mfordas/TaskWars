@@ -1,14 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { validateCharacter } = require('../models/character');
-const { getStatsOnLevelUp } = require('../db/utils/getStatsOnLevelUp')
-const { gameOver } = require('../db/utils/gameOver');
+const {
+  validateCharacter
+} = require('../models/character');
+const {
+  getStatsOnLevelUp
+} = require('../db/utils/getStatsOnLevelUp')
+const {
+  gameOver
+} = require('../db/utils/gameOver');
 
 //Creating new character [working]
 router.post('/', async (req, res) => {
   const Character = res.locals.models.character;
 
-  const { error } = validateCharacter(req.body);
+  const {
+    error
+  } = validateCharacter(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let character = new Character(req.body);
@@ -31,6 +39,30 @@ router.get('/:id', async (req, res) => {
   res.send(character);
 });
 
+router.get('/search/:charId&:tags?', async (req, res) => {
+  const Character = res.locals.models.character;
+
+  const charIdParam = req.params.charId;
+  const tagsArray = req.params.tags ? req.params.tags.split('_') : '';
+
+  const searchObj = () => {
+    if (charIdParam != 'All')
+      return {
+        _id: charIdParam
+      };
+    else
+      return;
+  }
+
+  const character = await Character
+    .find(searchObj())
+    .sort('email');
+
+  const result = filterByValue(character, tagsArray);
+
+  res.send(result);
+});
+
 //Level update [working]
 router.put('/:id/level', (req, res) => {
   const Character = res.locals.models.character;
@@ -41,15 +73,15 @@ router.put('/:id/level', (req, res) => {
       const stats = getStatsOnLevelUp(result, req.body.level);
       // console.log(stats);
       Character.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
           maxHealth: stats[0],
           expRequired: stats[1],
           physical_power: stats[2],
           magical_power: stats[3],
           level: req.body.level,
+        }, {
+          new: true
         },
-        { new: true },
       ).then(
         r => {
           res.send('Level updated!');
@@ -71,11 +103,11 @@ router.put('/:id/maxHealth', (req, res) => {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
       Character.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
           maxHealth: req.body.maxHealth,
+        }, {
+          new: true
         },
-        { new: true },
       ).then(
         r => {
           res.send('MaxHealth updated!');
@@ -94,13 +126,13 @@ router.put('/:id/health', (req, res) => {
     if (!result) {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
-      if( req.body.health > 0 ) {
+      if (req.body.health > 0) {
         Character.findByIdAndUpdate(
-          req.params.id,
-          {
+          req.params.id, {
             health: req.body.health,
+          }, {
+            new: true
           },
-          { new: true },
         ).then(
           r => {
             res.send('Health updated!');
@@ -112,7 +144,7 @@ router.put('/:id/health', (req, res) => {
       } else {
         gameOver(Character, result);
       }
-  
+
     }
   });
 });
@@ -125,41 +157,40 @@ router.put('/:id/exp_points', (req, res) => {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
       Character.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
           exp_points: req.body.exp_points,
+        }, {
+          new: true
         },
-        { new: true },
       ).then(
         async r => {
-          // console.log(r);
-          if(r.exp_points >= r.expRequired){
-            let stats = [0, 0, 0, 0];
-            let nextLevel = r.level;
-            let reqExp = r.expRequired;
-            while(r.exp_points > reqExp) {
-              nextLevel++;
-              stats = getStatsOnLevelUp(result, nextLevel);
-              reqExp = stats[1];
-            }
-
-            await Character.findByIdAndUpdate(
-              req.params.id,
-              {
-                level: nextLevel,
-                health: stats[0],
-                maxHealth: stats[0],
-                expRequired: stats[1],
-                physical_power: stats[2],
-                magical_power: stats[3],
+            // console.log(r);
+            if (r.exp_points >= r.expRequired) {
+              let stats = [0, 0, 0, 0];
+              let nextLevel = r.level;
+              let reqExp = r.expRequired;
+              while (r.exp_points > reqExp) {
+                nextLevel++;
+                stats = getStatsOnLevelUp(result, nextLevel);
+                reqExp = stats[1];
               }
-            )
-          }
-          res.send('Experience points updated!');
-        },
-        err => {
-          res.status(403).send('Bad request!');
-        },
+
+              await Character.findByIdAndUpdate(
+                req.params.id, {
+                  level: nextLevel,
+                  health: stats[0],
+                  maxHealth: stats[0],
+                  expRequired: stats[1],
+                  physical_power: stats[2],
+                  magical_power: stats[3],
+                }
+              )
+            }
+            res.send('Experience points updated!');
+          },
+          err => {
+            res.status(403).send('Bad request!');
+          },
       );
     }
   });
@@ -174,11 +205,11 @@ router.put('/:id/physical_power', (req, res) => {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
       Character.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
           physical_power: req.body.physical_power,
+        }, {
+          new: true
         },
-        { new: true },
       ).then(
         r => {
           res.send('Physical power updated!');
@@ -199,11 +230,11 @@ router.put('/:id/magical_power', (req, res) => {
       res.status(404).send(`Character with this id: ${req.params.id} not found`);
     } else {
       Character.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
           magical_power: req.body.magical_power,
+        }, {
+          new: true
         },
-        { new: true },
       ).then(
         r => {
           res.send('Magical power updated!');
@@ -225,7 +256,9 @@ router.put('/:id/avatar', (req, res) => {
       // console.log(result);
       Character.findByIdAndUpdate(req.params.id, {
         avatar: req.body.avatar
-      }, { new: true }).then(
+      }, {
+        new: true
+      }).then(
         r => {
           res.send(`Avatar updated for: ${r.name}:\n${r}`);
         },
@@ -241,7 +274,9 @@ router.put('/:id/avatar', (req, res) => {
 
 async function getCharacters(Character, id) {
   if (id) {
-    return await Character.find({ _id: id }).then(
+    return await Character.find({
+      _id: id
+    }).then(
       result => {
         return result[0];
       },
@@ -255,6 +290,16 @@ async function getCharacters(Character, id) {
       err => console.log('Error', err),
     );
   }
+}
+
+function filterByValue(user, tags) {
+  if (!tags)
+    return user;
+  return user.filter(o => {
+    return tags.every(t => {
+      return o.name.concat(o.description, o.type).toLowerCase().includes(t);
+    })
+  })
 }
 
 module.exports = router;
