@@ -111,6 +111,7 @@ class AddTask extends React.Component {
 
   }
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
+  
 
   nameValidate = (e) => {
     if(this.state.name === '' && this.state.submitStatus) {
@@ -139,40 +140,30 @@ class AddTask extends React.Component {
   penaltyValidate = (e) => {
     if(this.state.penalty === '' && this.state.submitStatus) {
     return {content:<ErrorMessage message='Type penalty'/>}} 
-    else if(this.state.submitStatus && typeof(this.state.penalty) === number) {
-      return {content:<ErrorMessage message='Penalty shoud be a number'/>}} 
       else { return null }
 
   }
   goldValidate = (e) => {
     if(this.state.gold === '' && this.state.submitStatus) {
     return {content:<ErrorMessage message='Type gold'/>}} 
-    else if(this.state.submitStatus && typeof(this.state.gold)===number) {
-      return {content:<ErrorMessage message='Gold shoud be a number'/>}} 
       else { return null }
 
   }
   expValidate = (e) => {
     if(this.state.exp === '' && this.state.submitStatus) {
     return {content:<ErrorMessage message='Type exp'/>}} 
-    else if(this.state.submitStatus && typeof(this.state.exp) === number) {
-      return {content:<ErrorMessage message='Exp shoud be a number'/>}} 
       else { return null }
 
   }
   hoursValidate = (e) => {
     if(this.state.hours === '' && this.state.submitStatus) {
     return {content:<ErrorMessage message='Type hours'/>}} 
-    else if(this.state.submitStatus && typeof(this.state.hours) === number) {
-      return {content:<ErrorMessage message='Hours shoud be a number'/>}} 
       else { return null }
 
   }
   daysValidate = (e) => {
     if(this.state.days === '' && this.state.submitStatus) {
     return {content:<ErrorMessage message='Type days'/>}} 
-    else if(this.state.submitStatus && typeof(this.state.days) === number) {
-      return {content:<ErrorMessage message='Days shoud be a number'/>}} 
       else { return null }
 
   }
@@ -270,6 +261,7 @@ class AddTask extends React.Component {
               <Form.Field
                 error={this.daysValidate()}
                 control={Input}
+                type={<input type='number'/>}
                 label='Duration: days'
                 placeholder='Days'
                 value={days}
@@ -279,6 +271,7 @@ class AddTask extends React.Component {
               <Form.Field
                 error={this.hoursValidate()}
                 control={Input}
+                type={<input type='number'/>}
                 label='hours'
                 placeholder='Hours'
                 value={hours}
@@ -288,6 +281,7 @@ class AddTask extends React.Component {
               <Form.Field
               error={this.penaltyValidate()}
                 control={Input}
+                type={<input type='number'/>}
                 label='Penalty'
                 placeholder='Penalty'
                 value={penalty}
@@ -299,6 +293,7 @@ class AddTask extends React.Component {
               <Form.Field
               error={this.goldValidate()}
                 control={Input}
+                type={<input type='number'/>}
                 label='Gold'
                 placeholder='Gold'
                 value={gold}
@@ -308,6 +303,7 @@ class AddTask extends React.Component {
               <Form.Field
               error={this.expValidate()}
                 control={Input}
+                type={<input type='number'/>}
                 label='Exp'
                 placeholder='Exp'
                 value={exp}

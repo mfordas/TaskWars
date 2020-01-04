@@ -56,10 +56,12 @@ const App = () => {
     })();
   }, [changeStore, isLogged]);
 
+  
+
   return (
     <BrowserRouter>
-      <Container>
-        <AppBar />
+      <Container >
+        <AppBar  />
         <Switch>
           <Route exact path="/" component={Home} />
           <PublicRoute path="/login" component={Login} />
@@ -81,9 +83,11 @@ const App = () => {
   );
 };
 
+
 ReactDOM.render(
   <StoreProvider>
     <App />
   </StoreProvider>,
   document.querySelector('#root'),
+  
 );
