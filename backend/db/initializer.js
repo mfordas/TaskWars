@@ -258,7 +258,7 @@ const addCharactersToGuilds = async (characters, guilds, models) => {
     for(let z=(j*i); z<j*i+3; z++) {
       let guild = await models["guild"].findById(guilds[z]);
       if (!guild) return null;
-      await models["guild"].findByIdAndUpdate(guilds[z], { members: [character] }, { new: true });
+      await models["guild"].findByIdAndUpdate(guilds[z], { members: [character], leader: character }, { new: true });
       g.push(guilds[z]);
     }
     await models["character"].findByIdAndUpdate(characters[i], { guilds: g }, { new: true });
