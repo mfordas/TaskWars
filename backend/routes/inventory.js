@@ -1,5 +1,6 @@
 const { validateInventory } = require('../models/inventory');
 const { validateItemID } = require('../models/item');
+const auth = require('../middleware/authorization');
 const express = require('express');
 const router = express.Router();
 
@@ -125,7 +126,7 @@ router.put('/:id/equippedItems', async (req, res) => {
 });
 
 // remove one item from equippedItems by ID
-router.put('/:id/equippedItems/:itemID', async (req, res) => {
+router.put('/:id/equippedItems/:itemID', auth, async (req, res) => {
   const Inventory = res.locals.models.inventory;
 
   const inventoryHandel = await Inventory.findById(req.params.id, 'equippedItems', { lean: true }).catch(err => {
@@ -154,7 +155,7 @@ router.put('/:id/equippedItems/:itemID', async (req, res) => {
 });
 
 // remove one item from backpack by ID
-router.put('/:id/backpack/:itemID', async (req, res) => {
+router.put('/:id/backpack/:itemID', auth, async (req, res) => {
   const Inventory = res.locals.models.inventory;
 
   const inventoryHandel = await Inventory.findById(req.params.id, 'backpack', { lean: true }).catch(err => {
