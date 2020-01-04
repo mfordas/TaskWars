@@ -114,7 +114,7 @@ class GuildJoin extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.setState({ guild_id: this.context.guild_id });
+    await this.setState({ guild_id: this.context.guild_id }); 
     await this.getGuild();
     await this.fetchUser();
   }
@@ -159,7 +159,7 @@ class GuildJoin extends React.Component {
               />
               <Button
                 animated
-                color='standard'
+                standard
                 onClick={this.onSearchButtonClick}>
                 <Button.Content visible>
                   Search

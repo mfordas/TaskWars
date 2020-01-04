@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Container, Grid, Header, Icon, Item, Label, Popup, Segment } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Image, Item, Label, Popup, Segment } from 'semantic-ui-react';
 import { NavLink, Route, Redirect } from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
@@ -65,9 +65,7 @@ class YourGuilds extends React.Component {
         {this.state.guildsLeader.map(x => (
           <Segment textAlign='left' inverted>
             <Item key={x._id} >
-              <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
-                style={{ display: 'inline-block' }}>
-              </Item.Image>
+              <Image size='mini' src={x.flag} style={{ display: 'inline-block' }}></Image>
               <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
                 {x.name}
               </Item.Header>
@@ -117,9 +115,7 @@ class YourGuilds extends React.Component {
         {this.state.guildsMember.map(x => (
           <Segment textAlign='left' inverted>
             <Item key={x._id} >
-              <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
-                style={{ display: 'inline-block' }}>
-              </Item.Image>
+              <Image size='mini' src={x.flag} style={{ display: 'inline-block' }}></Image>
               <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
                 {x.name}
               </Item.Header>

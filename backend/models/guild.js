@@ -38,7 +38,7 @@ const guildSchema = new mongoose.Schema({
   },
   flag: {
     type: String,
-    default: '',
+    default: 'https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png',
   },
 });
 

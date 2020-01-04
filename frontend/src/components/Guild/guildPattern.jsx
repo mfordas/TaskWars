@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Grid, Container, Segment, Icon, Button, Label, Popup, Step, Header } from 'semantic-ui-react';
+import { Item, Grid, Container, Segment, Icon, Image, Button, Label, Popup, Step, Header } from 'semantic-ui-react';
 import TopPortal from '../Utils/TopPortal';
 import setHeaders from '../../utils/setHeaders';
 const axios = require('axios');
@@ -49,9 +49,7 @@ class GuildPattern extends React.Component {
       <Container>
         <Segment textAlign='left' inverted>
           <Item>
-            <Item.Image size='mini' src='https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png'
-              style={{ display: 'inline-block' }}>
-            </Item.Image>
+            <Image size='mini' src={this.props.guild.flag} style={{ display: 'inline-block' }}></Image>
             <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
               {this.props.guild.name}
             </Item.Header>
