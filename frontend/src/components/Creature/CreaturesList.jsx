@@ -49,7 +49,7 @@ class CreatureList extends React.Component {
 
   render() {
     if (!this.context.hasCharacter) return <Redirect to="/" />;
-
+    if (!this.context.isLeader) return <Redirect to="/" />;
     return (
       <div>
         <Segment inverted>

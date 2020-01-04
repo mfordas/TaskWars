@@ -8,6 +8,7 @@ export class StoreProvider extends React.Component {
     me: null,
     hasCharacter: null,
     guild_id: null,
+    isLeader: null,
   };
 
   changeStore = (name, value) => {

@@ -120,6 +120,11 @@ class GuildJoin extends React.Component {
   checkLeadership = async character_id => {
     if (character_id === this.state.leader) {
       this.setState({ isLeader: true });
+      this.context.changeStore('isLeader', true);
+    }
+    else {
+      this.setState({ isLeader: false });
+      this.context.changeStore('isLeader', false);
     }
   };
 
