@@ -6,6 +6,7 @@ import axios from 'axios'
 import Store from '../../Store';
 import { Redirect, NavLink } from 'react-router-dom';
 import TopPortal from '../Utils/TopPortal';
+import { concat } from 'joi';
 
 class GuildJoin extends React.Component {
   constructor(props) {
@@ -86,23 +87,43 @@ class GuildJoin extends React.Component {
 
   findMember = async () => {
     if (this.state.type === 'Email') {
+      const resChar = await fetch(`/api/characters/search/${this.state.charId}&`, setHeaders())
+        .then(response => response.json());
+      this.setState({ charResult: resChar });
+
       const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders())
         .then(response => response.json());
       this.setState({ results: res });
     } else {
-      const res = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders())
+      this.setState({
+        results: [],
+      })
+      const resChar = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders())
         .then(response => response.json());
-      this.setState({ results: res });
+      this.setState({ charResult: resChar });
 
-      // for (let i = 0; i < this.state.results.length; i++) {
-      //   const resChar = await fetch(`/api/characters/${res[i].character_id}`, setHeaders())
-      //     .then(response => response.json());
-      //   this.setState({
-      //     charResult: [...this.state.charResult, resChar],
-      //   })
-      // }
+      const res = await fetch(`/api/users/search/${this.state.charId}&`, setHeaders())
+        .then(response => response.json());
+
+      res.forEach((elem, index) => {
+        this.state.charResult.forEach((el, ind) => {
+          if (elem.character_id === el._id && el.name)
+            this.setState({
+              results: [...this.state.results, elem],
+            })
+        })
+      })
+
+      // this.setState({ results: res });
     }
 
+    // for (let i = 0; i < this.state.results.length; i++) {
+    //   const resChar = await fetch(`/api/characters/${res[i].character_id}`, setHeaders())
+    //     .then(response => response.json());
+    //   this.setState({
+    //     charResult: [...this.state.charResult, resChar],
+    //   })
+    // }
   }
 
   addMember = async (id) => {
@@ -134,6 +155,15 @@ class GuildJoin extends React.Component {
     } else {
       return true;
     }
+  }
+
+  checkCharacterName = (id) => {
+    let nameChar = '';
+    nameChar = this.state.charResult.filter(elem => {
+      return id.character_id === elem._id;
+    })
+    if (nameChar[0])
+      return (nameChar[0].name)
   }
 
   componentDidMount = async () => {
@@ -237,7 +267,7 @@ class GuildJoin extends React.Component {
                               </Button.Content>
                             </Button>
                           ) : <Button compact size='mini' color='yellow'><Icon name='minus' /></Button>}
-                          <Item.Header>{x.name}  |  {x.email} </Item.Header>
+                          <Item.Header>{x.name}  |  {x.email}  |  {this.checkCharacterName(x)} </Item.Header>
                         </Grid>
                       </Item.Content>
                     </Item>
