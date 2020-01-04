@@ -5,21 +5,30 @@ import setHeaders from '../../utils/setHeaders';
 import axios from 'axios'
 import Store from '../../Store';
 import { Redirect, NavLink } from 'react-router-dom';
+import TopPortal from '../Utils/TopPortal';
+
 
 class GuildJoin extends React.Component {
-  state = {
-    guild_id: '',
-    name: '',
-    leader: '',
-    leaderName: '',
-    current_fight: {},
-    isLeader: false,
-    membersId: [],
-    membersName: [],
-    leaderName: '',
-    charId: 'All',
-    Tags: '',
-    results: [],
+  constructor(props) {
+    super(props);
+    this.portalRef = React.createRef();
+    this.state = {
+      guild_id: '',
+      name: '',
+      leader: '',
+      leaderName: '',
+      current_fight: {},
+      isLeader: false,
+      membersId: [],
+      membersName: [],
+      leaderName: '',
+      charId: 'All',
+      charName: [],
+      Tags: '',
+      results: [],
+      charResult: [],
+      open: false,
+    }
   }
 
   static contextType = Store;
@@ -55,23 +64,47 @@ class GuildJoin extends React.Component {
     for (let i = 0; i < this.state.membersId.length; i++) {
       const res = await fetch(`/api/users/character/${this.state.membersId[i]}`, setHeaders())
         .then(response => response.json());
+      const charRes = await fetch(`/api/characters/${this.state.membersId[i]}`, setHeaders())
+        .then(response => response.json())
+
       this.setState({
-        membersName: [...this.state.membersName, res]
+        membersName: [...this.state.membersName, res],
+        charName: [...this.state.charName, charRes],
       })
     }
 
-    const res = await fetch(`/api/users/character/${this.state.leader}`, setHeaders())
+    const res = await fetch(`/api/characters/${this.state.leader}`, setHeaders())
       .then(response => response.json());
     this.setState({
       leaderName: res
     })
   }
 
-  addMember = async () => {
+  findMember = async () => {
     const res = await fetch(`/api/users/search/${this.state.charId}&${this.state.tags}`, setHeaders())
       .then(response => response.json());
-
     this.setState({ results: res });
+
+    for (let i = 0; i < this.state.results.length; i++) {
+      const resChar = await fetch(`/api/characters/${res[i].character_id}`, setHeaders())
+        .then(response => response.json());
+      this.setState({
+        charResult: [...this.state.charResult, resChar],
+      })
+    }
+  }
+
+  addMember = async (id) => {
+    const memberToInsert = {
+      "name": `${this.state.name}`,
+      "members": [`${id.character_id}`],
+    };
+    const res = await axios.put(`/api/guilds/${this.state.guild_id}/members`, memberToInsert);
+    if (res.status == 200)
+      this.portalRef.current.handleOpen();
+      this.findMember();
+    await new Promise(res => setTimeout(res, 3500));
+    this.setState({ open: false });
   }
 
   checkLeadership = async (character_id) => {
@@ -80,7 +113,6 @@ class GuildJoin extends React.Component {
     }
   }
 
-
   componentDidMount = async () => {
     await this.setState({ guild_id: this.context.guild_id });
     await this.getGuild();
@@ -88,7 +120,11 @@ class GuildJoin extends React.Component {
   }
 
   onSearchButtonClick = (event) => {
-    this.addMember();
+    this.findMember();
+  }
+
+  ButtonClick = async (id) => {
+    await this.addMember(id);
   }
 
   onSearchChange = (event) => {
@@ -106,7 +142,7 @@ class GuildJoin extends React.Component {
           <Item>
             <Item.Header inverted>Guild leader :  {this.state.leaderName.name}</Item.Header>
             <Header inverted as={'h3'}> List of members :</Header>
-            {this.state.membersName.map(x => (
+            {this.state.charName.map(x => (
               <Item key={x._id} >
                 <Item.Content>
                   <Item.Header>{x.name}</Item.Header>
@@ -141,12 +177,12 @@ class GuildJoin extends React.Component {
                         <Button compact
                           size='mini'
                           color='green'
-                          onClick={this.onSearchButtonClick}>
+                          onClick={async () => { await this.ButtonClick(x) }}>
                           <Button.Content visible>
                             <Icon name='plus' />
                           </Button.Content>
                         </Button>
-                        <Item.Header>{x.email}  |  {x.name}</Item.Header>
+                        <Item.Header>{x.email}  |  {x.name}  |  {x.charName}</Item.Header>
                       </Grid>
                     </Item.Content>
                   </Item>
@@ -159,7 +195,7 @@ class GuildJoin extends React.Component {
               <Item.Header inverted>You are not the leader</Item.Header>
               <Item.Header inverted>Guild leader : {this.state.leaderName.name}</Item.Header>
               <Header inverted as={'h3'}> List of members :</Header>
-              {this.state.membersName.map(x => (
+              {this.state.charName.map(x => (
                 <Item key={x._id} >
                   <Item.Content>
                     <Item.Header>{x.name}</Item.Header>
@@ -169,6 +205,12 @@ class GuildJoin extends React.Component {
             </Item>
           )
         }
+
+        <TopPortal
+          ref={this.portalRef}
+          header={'Success!'}
+          description={`Adding a player to the guild`}
+        />
       </Segment>
     )
   }

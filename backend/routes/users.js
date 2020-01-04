@@ -164,6 +164,7 @@ router.get('/search/:charId&:tags?', async (req, res) => {
         _id: elem._id,
         name: elem.name,
         email: elem.email,
+        character_id: elem.character_id,
       }
        return (state)
       })
