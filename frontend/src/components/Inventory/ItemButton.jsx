@@ -9,7 +9,7 @@ class ItemButton extends React.Component {
   }
 
   chooseItem = () => {
-    this.props.setDescription(this.state.item, this.props.eq);
+    this.props.setDescription(this.state.item);
     this.props.handleOpen();
   }
 

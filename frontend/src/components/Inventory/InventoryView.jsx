@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Grid, Item, Label, Button, Portal  } from 'semantic-ui-react';
+import { Segment, Grid, Item, Label, } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import ItemView from './ItemView';
@@ -192,7 +192,7 @@ class InventoryView extends React.Component {
         <Grid.Row textAlign='left' verticalAlign='top'> 
         {this.props.showGold !== false ? <Segment inverted color='purple'>Gold: {this.state.gold}</Segment> : null}
         </Grid.Row>
-
+         
         { this.props.ViewEquipped === false ?  
           <Segment inverted color='purple'> 
             <ItemView
@@ -201,26 +201,31 @@ class InventoryView extends React.Component {
             buttonActive={this.props.buttonActive}
             eq={true}
             description={this.state.itemDescription}
-            equippedThisItem={this.equippedItem}
-            unequippedThisItem={this.unequippedItem} />
+            equippedItem={this.equippedItem}
+            unequippedItem={this.unequippedItem} />
           </Segment> 
           :
-          <Segment inverted color='purple'>           
-            <Label>Equipped</Label>
-            <ItemView itemDescription={this.state.itemDescription} 
-              setDescription={this.setDescription} backpackItem={this.state.equipped} 
-              eq={false} description={this.state.itemDescription} 
-              equippedThisItem={this.equippedItem}
-              unequippedThisItem={this.unequippedItem}
+          <Segment inverted color='purple'>
+                     
+            <Label color='grey' ribbon>Equipped</Label>
+            <ItemView 
+              itemDescription={this.state.itemDescription} 
+              setDescription={this.setDescription} 
+              backpackItem={this.state.equipped} 
+              eq={false} 
+              description={this.state.itemDescription} 
+              equippedItem={this.equippedItem}
+              unequippedItem={this.unequippedItem}
               />
+            <Label color='grey' ribbon>Backpack</Label>
             <ItemView
               backpackItem={this.state.backpackItem} 
               setDescription={this.setDescription} 
               buttonActive={this.props.buttonActive}
               description={this.state.itemDescription}
               eq={true} 
-              equippedThisItem={this.equippedItem}
-              unequippedThisItem={this.unequippedItem}
+              equippedItem={this.equippedItem}
+              unequippedItem={this.unequippedItem}
               /> 
           </Segment> 
           }

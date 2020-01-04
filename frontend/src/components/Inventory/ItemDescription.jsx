@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Label, Table } from 'semantic-ui-react';
+import { Segment, Button, Image, Table } from 'semantic-ui-react';
 
 class ItemDescription extends React.Component {
   state = { item: null }
@@ -9,26 +9,32 @@ class ItemDescription extends React.Component {
     this.setState({ item: this.props.item });
   }
 
-  equipped = () => {
-    if(this.props.eq === true) {
-      if(this.state.item.slot === 'Usable') {
-        console.log('Use item and remove from inventory');
-      } else {
-        this.props.equippedThisItem(this.state.item);
-        console.log('Test1');
-      }
-    } else { 
-      this.props.unequippedThisItem(this.state.item);
-      console.log('Unequipped item: getback to backpack');
-    }
-    console.log('Test2');
-  }
+  // equipped = () => {
+  //   if(this.props.eq === true) {
+  //     if(this.state.item.slot === 'Usable') {
+  //     } else {
+  //       this.props.equippedThisItem(this.state.item);
+  //     }
+  //   } else { 
+  //     this.props.unequippedThisItem(this.state.item);
+  //     console.log('Unequipped item: getback to backpack');
+  //   }
+  // }
+
 
   render() {
     return (
       <Segment padded inverted color='black'>
 
-        <h2>{this.state.item !== null ? this.state.item.name :' '}</h2>
+        <h2>
+          {this.state.item !== null ? 
+            <div> 
+              <Image src={this.state.item.picture} avatar />
+              {this.state.item.name}
+            </div>:
+            ' '
+          }
+        </h2>
         <p>{this.state.item !== null ? this.state.item.description :' '}</p>
         <Table definition>
           <Table.Body>
@@ -51,21 +57,20 @@ class ItemDescription extends React.Component {
           </Table.Body>
         </Table>
         <br></br><br></br>
-        <Label size='tiny' horizontal attached='bottom' size='tiny' color='grey'>
+        {/* <Label size='tiny' horizontal attached='bottom' size='tiny' color='grey'>
             {this.props.eq === true ?
-                          <Button size="small" onClick={this.equipped} color='purple'>
+                          <Button size="small" onClick={this.check} color='purple'>
                           { this.props.item.slot != null && this.props.item.slot === 'Usable' 
                           ? 'Use' : 
                           'Equipped'}
                         </Button> :
-                        <Button size="small" onClick={this.equipped} color='purple'>
+                        <Button size="small" onClick={this.check} color='purple'>
                         { this.props.item.slot != null && this.props.item.slot === 'Usable' 
                           ? 'None' : 
                           'Unequipped'}
                         </Button>
             }
-
-        </Label> 
+        </Label> */}
       </Segment>
     );
   }

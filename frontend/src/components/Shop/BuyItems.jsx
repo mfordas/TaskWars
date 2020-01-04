@@ -6,10 +6,7 @@ class BuyItem extends React.Component {
     return (
       <Button size="small"
               color='purple'
-              // toggle 
-              // color='black'
               animated='fade' 
-              floated='center' 
               active={this.props.active} 
               disabled={this.props.disabled} 
               onClick={this.props.BuyItemFun}>
