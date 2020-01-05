@@ -7,7 +7,8 @@
     "format": "prettier --ignore-path .gitignore --write \"./**/*.{js,json,scss,html}\"",
     "mon": "nodemon -r dotenv/config ./backend/app.js",
     "dev": "concurrently -n react,express -k \"cd frontend && npm run start\" \"npm run mon\"",
-    "start": "node -r dotenv/config ./backend/app.js"
+    "start": "concurrently -n react,express -k \"cd frontend && npm run start\" \"npm run mon\"",
+   
   },
   "engines": {
     "node": "^10.16.3"
