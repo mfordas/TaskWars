@@ -4,15 +4,18 @@ import { Button, Container, Grid, Header, Icon, Image, Item, Label, Popup, Segme
 import { NavLink, Route, Redirect } from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
+import { empty } from 'joi';
 
 class YourGuilds extends React.Component {
   state = {
+    leaderId: '',
     leaderAvatar: '',
     guildChosen: false,
     name: '',
     guildsLeader: [],
     guildsMember: [],
     loading: true,
+    isMember: false,
   };
 
   static contextType = Store;
@@ -21,6 +24,7 @@ class YourGuilds extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.getData(body.character_id);
+    this.setState({ leaderId: body.character_id });
 
     const responseAvatar = await (await fetch(`/api/characters/${body.character_id}`, setHeaders())).json();
     this.setState({ leaderAvatar: responseAvatar.avatar })
@@ -35,13 +39,23 @@ class YourGuilds extends React.Component {
       loading: false,
     });
 
+    this.setState({ guildsMember: [] });
     const response2 = await fetch(`/api/guilds/members/${id}`, setHeaders());
     const body2 = await response2.json();
     body2.sort((a, b) => { return (a.name > b.name) })
-    this.setState({
-      guildsMember: body2,
-    });
+
+    body2.map(elem => {
+      if (!(elem.leader === this.state.leaderId)) {
+        this.setState({
+          guildsMember: [...this.state.guildsMember, elem],
+        });
+      }
+    })
+
+    if (!this.state.guildsMember[0] && !this.state.guildsLeader[0])
+      this.setState({ isMember: true })
   };
+
 
   componentDidMount() {
     this.fetchUser();
@@ -60,6 +74,8 @@ class YourGuilds extends React.Component {
     if (this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
       <Container>
+        {(this.state.isMember) ?
+          <Header>You don't belong to any guild</Header> : null}
         {this.state.guildsLeader.map(x => (
           <Segment textAlign="left" inverted>
             <Item key={x._id}>
