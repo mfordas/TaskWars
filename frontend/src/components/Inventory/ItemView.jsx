@@ -47,7 +47,7 @@ class ItemView extends React.Component {
       <Segment inverted>
       <Grid doubling container centered columns='equal' padded>
         {this.props.backpackItem.map( (item, id = 0) => (
-          <Item key={id}>
+          <Item key={item._id}>
             <Grid.Column mobile={4} tablet={2} computer={1} stretched>
                 <ItemButton item={item} 
                             setDescription={this.setDescription} 
