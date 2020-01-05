@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Item, Header, Divider, Grid, Container } from 'semantic-ui-react';
+import { Segment, Item, Header, Divider, Container } from 'semantic-ui-react';
 
 class Stats extends React.Component {
     constructor(props) {

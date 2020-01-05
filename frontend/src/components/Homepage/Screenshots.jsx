@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Image, Dimmer, DimmerDimmable, Dimmable, Grid, Header } from 'semantic-ui-react';
+import { Segment, Grid, Header } from 'semantic-ui-react';
 import ViewImage from './ViewImage';
 
 class Screenshots extends React.Component {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Image, Dimmer, DimmerDimmable, Dimmable, Header, Container, Modal } from 'semantic-ui-react';
+import { Button, Image, Dimmer, Header, Modal } from 'semantic-ui-react';
 
 class ViewImage extends React.Component {
     constructor(props) {
