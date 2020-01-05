@@ -1,16 +1,28 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
-import Quote from '../../components/Homepage/Quote';
-import Stats from '../../components/Homepage/Stats';
+import { Container, Grid } from 'semantic-ui-react';
+import Quote from './Quote';
+import Stats from './Stats';
+import Screenshots from './Screenshots';
 
 class HomepageContent extends React.Component {
 
     render() {
-        
+
         return (
             <Container>
                 <Quote />
-                <Stats />
+                <Grid columns='16'>
+                    <Grid.Row stretched>
+                        <Grid.Column width='4' floated='left'>
+                            <Stats />
+                        </Grid.Column>
+                        <Grid.Column width='12' floated='right' >
+                            <Screenshots />
+                        </Grid.Column>
+                    </Grid.Row>
+
+                </Grid>
+
             </Container>
         );
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Item, Header, Divider } from 'semantic-ui-react';
+import { Segment, Item, Header, Divider, Grid, Container } from 'semantic-ui-react';
 
 class Stats extends React.Component {
     constructor(props) {
@@ -24,19 +24,21 @@ class Stats extends React.Component {
 
     render() {
         return (
-            <Segment compact textAlign='center' color='green' inverted>
-                <Segment>
-                    <Item>
-                        <Header as='h1'>JOIN</Header>
-                        <Header as='h4'>coumunity which has</Header>
-                        <Header as='h1'>{this.state.userCount} users</Header>
-                    </Item>
-                    <Divider />
-                    <Item>
-                        <Header as='h1'>TOGETHER</Header>
-                        <Header as='h4'>we were able to complete</Header>
-                        <Header as='h1'>{this.state.tasksCompleted} tasks</Header>
-                    </Item>
+            <Segment textAlign='center' color='green' inverted>
+                <Segment inverted style={{ height: '100%' }}>
+                    <Container style={{marginTop: '13%'}}>
+                        <Item>
+                            <Header as='h1' inverted >JOIN</Header>
+                            <Header as='h3' inverted >coumunity which has</Header>
+                            <Header as='h1' inverted >{this.state.userCount} users</Header>
+                        </Item>
+                        <Divider />
+                        <Item>
+                            <Header as='h1' inverted >TOGETHER</Header>
+                            <Header as='h3' inverted >we were able to complete</Header>
+                            <Header as='h1' inverted >{this.state.tasksCompleted} tasks</Header>
+                        </Item>
+                    </Container>
                 </Segment>
 
             </Segment>
