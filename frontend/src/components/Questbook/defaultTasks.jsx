@@ -158,7 +158,7 @@ render() {
                         <Icon name='warning circle' color='red'/>
                         <Step.Content>
                             <Step.Title>Penalty</Step.Title>
-                            <Step.Description>{x.penalty}</Step.Description>
+                            <Step.Description>{x.penalty} hp</Step.Description>
                         </Step.Content>
                     </Step>
                 </Step.Group>

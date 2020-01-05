@@ -94,10 +94,12 @@ class FinishTask extends React.Component {
     if(this.state.status === 'completed'){
     // if(this.state.status === 'failed'){
       this.taskCompleted(character.inventory_id, body.character_id, character);
+      if(this.props.task.category === 'Encounters'){
       const guild = await this.checkGuild(character, this.props.task._id);
-      if(guild !== undefined) {
+      console.log(guild);
+      if(guild !== undefined ) {
         let hp = guild.current_fight.health;
-        
+        console.log(hp);
         let dmg = 0;
         if(guild.type ==='Physical') {
           dmg = character.physical_power;
@@ -107,7 +109,7 @@ class FinishTask extends React.Component {
           dmg = character.physical_power >= character.magical_power ? character.physical_power : character.magical_power;
         }
         hp = hp - dmg;
-
+        console.log(hp);
         guild.current_fight.health = hp;
         const data = {
           name: guild.name,
@@ -115,7 +117,7 @@ class FinishTask extends React.Component {
         }
         const params = {...setHeaders(), body: JSON.stringify(data), method: "PUT"};
         const response = await fetch(`/api/guilds/${guild._id}/current_fight`, params);
-
+        console.log(response);
         if(hp <= 0) {
           const expReward = guild.current_fight.exp/guild.members.length;
           const goldReward = guild.current_fight.gold/guild.members.length;
@@ -152,11 +154,16 @@ class FinishTask extends React.Component {
           await fetch(`/api/guilds/${guild._id}/current_fight`, paramsFinish);
         }
       }
-    } else if (this.state.status === 'failed'){
+    }
+  }
+     else if (this.state.status === 'failed'){
     // } else if (this.state.status === 'completed'){
-      const guild = await this.checkGuild(character, this.props.task._id);
+      
       this.taskFailed(body.character_id, character);
+      if(this.props.task.category === 'Encounters'){
+        const guild = await this.checkGuild(character, this.props.task._id);
       if(guild !== undefined) {
+        
         let fight = guild.current_fight;
         console.log(fight);
         fight.duration = -2147483647;
@@ -183,12 +190,14 @@ class FinishTask extends React.Component {
       }
     }
   }
+  }
 
   checkGuild = async (character, task_id) => {
     return new Promise((res,rej) => {
       character.guilds.map(async (guild_id) => {
         const guildResponse = await fetch(`/api/guilds/${guild_id}`, setHeaders());
         const guild = await guildResponse.json();
+        console.log(guild);
         guild.current_fight.task_to_dmg.map((id) => {
           if(id === task_id) {
             res(guild);
@@ -200,8 +209,11 @@ class FinishTask extends React.Component {
   
   onButtonSubmit = async e => {
     e.preventDefault();
+    console.log(this.state.status);
     await this.setStatus();
+    console.log(this.state.status);
     await this.finishTask();
+    console.log('message');
     this.props.taskStateChanged(this.state.status);
   }
 
