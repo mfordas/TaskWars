@@ -4,8 +4,7 @@ import CharacterCreation from './characterCreation';
 
 const CharacterCreationContent = () => {
   return (
-    <Container text>
-      <Header>Create your character!</Header>
+    <Container>
       <CharacterCreation />
     </Container>
   );

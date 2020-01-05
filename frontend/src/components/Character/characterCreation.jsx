@@ -221,9 +221,9 @@ class CharacterCreation extends React.Component {
     return (
       <div>
         {this.state.charCreated === true ? <SuccessMessage message="Character created" /> : null}
-        <Segment>
-          <Form onSubmit={this.handleButtonClick}>
-            <Header>Character name</Header>
+        <Segment inverted>
+          <Form onSubmit={this.handleButtonClick} inverted>
+            <Header inverted>Character name</Header>
             <Form.Group inline>
               <Form.Input
                 error={this.nameValidate()}
@@ -235,7 +235,7 @@ class CharacterCreation extends React.Component {
               />
             </Form.Group>
 
-            <Header>Class</Header>
+            <Header inverted>Character class</Header>
             <Form.Group inline>
               <Form.Field>
                 <Radio
@@ -275,14 +275,14 @@ class CharacterCreation extends React.Component {
                 />
               </Form.Field>
             </Form.Group>
-            <Button type="submit">Create</Button>
+            <Button type="submit" color="brown" >Create</Button>
           </Form>
         </Segment>
         <Segment.Group horizontal>
-          <Segment style={{ width: '45%', height: '60vh' }} floated="left">
+          <Segment style={{ width: '45%', height: '60vh' }} floated="left" color="black" inverted>
             <Image style={{ width: '100%', height: '100%' }} src={avatar} />
           </Segment>
-          <Segment style={{ width: '55%' }} floated="right">
+          <Segment style={{ width: '55%' }} floated="right" color="black" inverted>
             <Header as="h1">
               {charClass} {name}
             </Header>
