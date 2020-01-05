@@ -111,7 +111,7 @@ class GuildJoin extends React.Component {
 
   findMember = async () => {
     if (this.state.type === 'Email') {
-      this.setState({ results: [], });
+      this.setState({ results: [] });
       const resChar = await fetch(`/api/characters/search/${this.state.charId}&`, setHeaders()).then(response =>
         response.json(),
       );
@@ -130,8 +130,7 @@ class GuildJoin extends React.Component {
         });
       });
     } else {
-
-      this.setState({ results: [], });
+      this.setState({ results: [] });
       const resChar = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders()).then(
         response => response.json(),
       );
@@ -166,8 +165,7 @@ class GuildJoin extends React.Component {
 
   deleteMember = async id => {
     const res = await axios.delete(`/api/guilds/${this.state.guild_id}/${id._id}`);
-    if (res.status == 200)
-      this.portalRefDelete.current.handleOpen();
+    if (res.status == 200) this.portalRefDelete.current.handleOpen();
     await new Promise(res => setTimeout(res, 3500));
     this.setState({ open: false });
   };
@@ -251,15 +249,15 @@ class GuildJoin extends React.Component {
                 <FightPattern creature={this.state.current_fight} />
               </Segment>
             ) : (
-                <Segment inverted size="big">
-                  <Grid padded>
-                    <Header inverted> Choose creature and fight!</Header>
-                    <Button color="brown" floated="right" as={NavLink} to="/creatures">
-                      Fight!
+              <Segment inverted size="big">
+                <Grid padded>
+                  <Header inverted> Choose creature and fight!</Header>
+                  <Button color="brown" floated="right" as={NavLink} to="/creatures">
+                    Fight!
                   </Button>
-                  </Grid>
-                </Segment>
-              )}
+                </Grid>
+              </Segment>
+            )}
             <Segment inverted>
               <Item>
                 <Header inverted as={'h3'}>
@@ -339,10 +337,10 @@ class GuildJoin extends React.Component {
                                 </Button.Content>
                               </Button>
                             ) : (
-                                <Button compact size="mini" color="yellow">
-                                  <Icon name="minus" />
-                                </Button>
-                              )}
+                              <Button compact size="mini" color="yellow">
+                                <Icon name="minus" />
+                              </Button>
+                            )}
                             <Item.Header>
                               {x.name} | {x.email} | {this.checkCharacterName(x)}{' '}
                             </Item.Header>
@@ -356,32 +354,32 @@ class GuildJoin extends React.Component {
             </Segment>
           </div>
         ) : (
-            <div>
-              {this.state.current_fight != null ? (
-                <Segment inverted>
-                  <Item.Header as={'h3'}>We are fighting against:</Item.Header>
-                  <FightPattern creature={this.state.current_fight} />
-                </Segment>
-              ) : (
-                  <Segment inverted>Your guild is taking a break.</Segment>
-                )}
+          <div>
+            {this.state.current_fight != null ? (
               <Segment inverted>
-                <Item>
-                  <Header inverted as={'h3'}>
-                    {' '}
-                    List of members :
-                </Header>
-                  {this.state.charName.map(x => (
-                    <Item key={x._id}>
-                      <Item.Content>
-                        <Item.Header>{x.name}</Item.Header>
-                      </Item.Content>
-                    </Item>
-                  ))}
-                </Item>
+                <Item.Header as={'h3'}>We are fighting against:</Item.Header>
+                <FightPattern creature={this.state.current_fight} />
               </Segment>
-            </div>
-          )}
+            ) : (
+              <Segment inverted>Your guild is taking a break.</Segment>
+            )}
+            <Segment inverted>
+              <Item>
+                <Header inverted as={'h3'}>
+                  {' '}
+                  List of members :
+                </Header>
+                {this.state.charName.map(x => (
+                  <Item key={x._id}>
+                    <Item.Content>
+                      <Item.Header>{x.name}</Item.Header>
+                    </Item.Content>
+                  </Item>
+                ))}
+              </Item>
+            </Segment>
+          </div>
+        )}
         <TopPortal ref={this.portalRefAdd} header={'Success!'} description={`Adding a player to the guild`} />
         <TopPortal ref={this.portalRefDelete} header={''} description={`Delete a player from the guild`} />
       </Container>

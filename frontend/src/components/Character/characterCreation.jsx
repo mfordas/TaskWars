@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Button, Form, Radio, Header, Segment, Image } from 'semantic-ui-react';
+import { Button, Form, Radio, Header, Segment, Image, Grid } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
@@ -275,7 +275,11 @@ class CharacterCreation extends React.Component {
                 />
               </Form.Field>
             </Form.Group>
-            <Button type="submit" color="brown" >Create</Button>
+            <Grid textAlign="center" padded>
+              <Button type="submit" color="brown">
+                Create
+              </Button>
+            </Grid>
           </Form>
         </Segment>
         <Segment.Group horizontal>

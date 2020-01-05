@@ -1,7 +1,5 @@
 import React from 'react';
-import { Item, Segment, Icon, Button, Step, Header, Image } from 'semantic-ui-react';
-import setHeaders from '../../utils/setHeaders';
-import axios from 'axios';
+import { Item, Segment, Icon, Step, Header, Image } from 'semantic-ui-react';
 import Store from '../../Store';
 const _ = require('lodash');
 
@@ -11,18 +9,20 @@ class FightPattern extends React.Component {
   };
   static contextType = Store;
 
-  convertToDaysAndHours(t){
-    let time = t *3600000;
+  convertToDaysAndHours(t) {
+    let time = t * 3600000;
     const cd = 24 * 60 * 60 * 1000,
-        ch = 60 * 60 * 1000,
-        d = Math.floor(time / cd),
-        h = Math.floor( (time - d * cd) / ch),
-        pad = function(n){ return n < 10 ? '0' + n : n; };
-  if( h === 24 ){
-    d++;
-    h = 0;
-  }
-  return `${d} days ${h} hours`
+      ch = 60 * 60 * 1000,
+      d = Math.floor(time / cd),
+      h = Math.floor((time - d * cd) / ch),
+      pad = function(n) {
+        return n < 10 ? '0' + n : n;
+      };
+    if (h === 24) {
+      d++;
+      h = 0;
+    }
+    return `${d} days ${h} hours`;
   }
 
   render() {
@@ -50,9 +50,7 @@ class FightPattern extends React.Component {
                 <Segment inverted textAlign="center" color="purple" style={{ padding: '2px 0px 0px 6px' }}>
                   <Header as="h5">How to fight</Header>
                 </Segment>
-                <Segment>
-                  {this.state.description}
-                </Segment>
+                <Segment>{this.state.description}</Segment>
               </Segment.Group>
             </Item.Description>
 

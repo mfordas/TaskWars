@@ -1,30 +1,26 @@
 import React from 'react';
 import { Item, Segment, Icon, Button, Step, Header, Image } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
-import axios from 'axios';
 import Store from '../../Store';
 import TopPortal from '../Utils/TopPortal';
 const _ = require('lodash');
 
 class CreaturePattern extends React.Component {
   state = {
-    creatureQuestId: '', 
+    creatureQuestId: '',
     description: '',
     open: false,
+    fightChoosen: false,
   };
   static contextType = Store;
   portalRef = React.createRef();
 
   addCreatureToFight = async (creature, guild_id, guild_name, task_id) => {
-    // const creatureResponse = await fetch(`/api/creatures/${creature_id}`, setHeaders());
-    // const creature = await creatureResponse.json();
-    // console.log(creature)
-
     let task_to_dmg = await this.addTaskToMemebers(task_id, guild_id);
     console.log(task_to_dmg);
     creature.task_to_dmg = task_to_dmg;
 
-    // console.log(creature)
     const data = {
       name: guild_name,
       current_fight: creature,
@@ -34,7 +30,7 @@ class CreaturePattern extends React.Component {
     const body = await response.json();
     if (response.status == 200) this.portalRef.current.handleOpen();
     await new Promise(res => setTimeout(res, 3500));
-    this.setState({ open: false });
+    this.setState({ open: false, fightChosen: true });
   };
 
   addTaskToMemebers = async (task_id, guild_id) => {
@@ -43,10 +39,9 @@ class CreaturePattern extends React.Component {
 
     const taskResponse = await fetch(`/api/tasks/${task_id}`, setHeaders());
     const task = await taskResponse.json();
-    //console.log(task);
 
     let data = _.omit(task, ['_id', '__v', '__proto']);
-    //console.log(data)
+
     let params = { ...setHeaders(), body: JSON.stringify(data), method: 'PUT' };
 
     const task_to_dmg = [];
@@ -54,10 +49,9 @@ class CreaturePattern extends React.Component {
       const memberResponse = await fetch(`/api/characters/${member_id}`, setHeaders());
       const member = await memberResponse.json();
 
-      //console.log(params)
       const memberTasksResponse = await fetch(`/api/questbook/${member.questbook_id}/task`, params);
       const memberTasks = await memberTasksResponse.json();
-      //console.log(memberTasks);
+
       return memberTasks.tasks[memberTasks.tasks.length - 1]._id;
       //task_to_dmg.push(memberTasks.tasks[memberTasks.tasks.length-1]._id);
     });
@@ -71,32 +65,6 @@ class CreaturePattern extends React.Component {
       });
   };
 
-  // addCreatureToFight = async () => {
-  //   /*const data = {
-  //     "name": `${this.props.creature.name}`,
-  //     //"level": `${this.props.creature.level}`,
-  //    // health: this.props.creature.health,
-  //     //physical_power: this.props.creature.physical_power,
-  //    // physical_resistance: this.props.creature.physcical_resistance,
-  //    // magical_power: this.props.creature.magical_power,
-  //     //magical_resistance: this.props.creature.magical_resistance,
-  //     //exp: this.props.creature.exp,
-  //    // gold: this.props.creature.gold,
-  //     //duration: this.props.creature.duration,
-  //     //task_to_dmg: [],
-  //     //picture: this.props.creature.picture
-  //   }
-  //   await axios({
-  //     url: `api/guilds/${this.state.guild_id}/current_fight`,
-  //     method: 'put',
-  //     data: data,
-  //     headers: setHeaders(),
-  //   }).then((response)=>{
-  //     console.log(response)
-  //   }, (error) => {
-  //     console.log(error);
-  //   });*/
-  // };
   getQuestDescription = async () => {
     let response = await fetch(`/api/tasks/${this.props.creature.creature_task}`, setHeaders());
     let body = await response.json();
@@ -141,12 +109,29 @@ class CreaturePattern extends React.Component {
     await this.addCreatureToFight(creatureData, guild_id, guild_name, task_id);
   };
 
+  convertToDaysAndHours(t) {
+    let time = t * 3600000;
+    const cd = 24 * 60 * 60 * 1000,
+      ch = 60 * 60 * 1000,
+      d = Math.floor(time / cd),
+      h = Math.floor((time - d * cd) / ch),
+      pad = function(n) {
+        return n < 10 ? '0' + n : n;
+      };
+    if (h === 24) {
+      d++;
+      h = 0;
+    }
+    return `${d} days ${h} hours`;
+  }
+
   componentDidMount = async () => {
     await this.creatureQuest();
     await this.getQuestDescription();
   };
 
   render() {
+    if (this.state.fightChosen === true) return <Redirect to="/guild" />;
     return (
       <div>
         <Segment.Group horizontal>
@@ -199,7 +184,7 @@ class CreaturePattern extends React.Component {
                   <Icon name="clock" color="teal" />
                   <Step.Content>
                     <Step.Title>Duration</Step.Title>
-                    <Step.Description>{this.props.creature.duration}</Step.Description>
+                    <Step.Description>{this.convertToDaysAndHours(this.props.creature.duration)}</Step.Description>
                   </Step.Content>
                 </Step>
                 <Step style={{ padding: '2px' }}>

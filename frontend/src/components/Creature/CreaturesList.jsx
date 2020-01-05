@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Header, Segment, Input, Button } from 'semantic-ui-react';
+import { Header, Segment, Input, Button, Loader } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
@@ -10,6 +10,7 @@ class CreatureList extends React.Component {
   state = {
     name: '',
     results: [],
+    loading: true,
   };
 
   creaturesTableRef = React.createRef();
@@ -22,7 +23,7 @@ class CreatureList extends React.Component {
       headers: setHeaders(),
     }).then(
       response => {
-        this.setState({ results: response.data });
+        this.setState({ results: response.data, loading: false });
       },
       error => {
         console.log(error);
@@ -55,12 +56,13 @@ class CreatureList extends React.Component {
         <Segment inverted>
           <Header>Creature Type</Header>
           <Input fluid placeholder="Name" icon="search" onChange={this.onSearchChange} />
-          <Button color="blue" onClick={this.onSearchButtonClick}>
+          <Button color="brown" onClick={this.onSearchButtonClick}>
             Search
           </Button>
         </Segment>
 
         <CreaturesTable ref={this.creaturesTableRef} />
+        {this.state.loading && <Loader active size="huge" content="Loading..." inverted />}
       </div>
     );
   }

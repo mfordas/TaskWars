@@ -1,18 +1,18 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Container, Grid, Header, Icon, Image, Item, Label, Popup, Segment } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Image, Item, Label, Popup, Segment, Loader } from 'semantic-ui-react';
 import { NavLink, Route, Redirect } from 'react-router-dom';
 import setHeaders from '../../utils/setHeaders';
 import Store from '../../Store';
 
 class YourGuilds extends React.Component {
-
   state = {
     guildChosen: false,
     name: '',
     guildsLeader: [],
     guildsMember: [],
-  }
+    loading: true,
+  };
 
   static contextType = Store;
 
@@ -20,70 +20,72 @@ class YourGuilds extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.getData(body.character_id);
-  }
+  };
 
-  getData = async (id) => {
+  getData = async id => {
     const response = await fetch(`/api/guilds/leader/${id}`, setHeaders());
     const body = await response.json();
-    this.setState(
-      {
-        guildsLeader: body
-      }
-    )
+    this.setState({
+      guildsLeader: body,
+      loading: false,
+    });
 
     const response2 = await fetch(`/api/guilds/members/${id}`, setHeaders());
     const body2 = await response2.json();
-    this.setState(
-      {
-        guildsMember: body2
-      }
-    )
-  }
+    this.setState({
+      guildsMember: body2,
+    });
+  };
 
   componentDidMount() {
-    this.fetchUser()
+    this.fetchUser();
   }
 
-  updateStore = async (id) => {
+  updateStore = async id => {
     this.context.changeStore('guild_id', id);
     this.state.guildChosen = true;
-  }
+  };
 
-  handleViewButtonClick = async (id) => {
+  handleViewButtonClick = async id => {
     await this.updateStore(id);
-  }
+  };
 
   render() {
     if (this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
       <Container>
-        <Label color='red'>
-          <h2>Guilds, you are a leader of<br /></h2>
+        <Label color="brown">
+          <h2>
+            Guilds, you are a leader of
+            <br />
+          </h2>
         </Label>
         {this.state.guildsLeader.map(x => (
-          <Segment textAlign='left' inverted>
-            <Item key={x._id} >
-              <Image size='mini' src={x.flag} style={{ display: 'inline-block' }}></Image>
-              <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
+          <Segment textAlign="left" inverted>
+            <Item key={x._id}>
+              <Image size="mini" src={x.flag} style={{ display: 'inline-block' }}></Image>
+              <Item.Header
+                style={{
+                  color: 'white',
+                  display: 'inline-block',
+                  margin: '0 8px 10px 8px',
+                  position: 'relative',
+                  top: '5px',
+                }}
+                as={'h1'}
+              >
                 {x.name}
               </Item.Header>
-              <Label color='orange'>
-                {x.type}
-              </Label>
+              <Label color="orange">{x.type}</Label>
 
               <Item.Description>
                 <Segment.Group>
-                  <Segment
-                    inverted
-                    textAlign='center'
-                    color='purple'
-                    style={{ padding: '2px 0px 0px 6px' }}>
-                    <Header as='h5'>
-                      Description
-                        </Header>
+                  <Segment inverted textAlign="center" color="purple" style={{ padding: '2px 0px 0px 6px' }}>
+                    <Header as="h5">Description</Header>
                   </Segment>
                   <Segment>
-                    {x.description}<br />
+                    {x.description}
+                    <br />
                   </Segment>
                 </Segment.Group>
               </Item.Description>
@@ -92,44 +94,52 @@ class YourGuilds extends React.Component {
                 <Button
                   fluid
                   icon
-                  color='green'
-                  labelPosition='right'
-                  onClick={async () => { await this.handleViewButtonClick(x._id) }}>
-                  <Icon name='right chevron' />
+                  color="green"
+                  labelPosition="right"
+                  onClick={async () => {
+                    await this.handleViewButtonClick(x._id);
+                  }}
+                >
+                  <Icon name="right chevron" />
                   View
-                    </Button>
+                </Button>
               </Item.Extra>
             </Item>
           </Segment>
         ))}
 
-        <Label color='red'>
-          <h2>Guilds in which you are a member<br /></h2>
+        <Label color="brown">
+          <h2>
+            Guilds in which you are a member
+            <br />
+          </h2>
         </Label>
         {this.state.guildsMember.map(x => (
-          <Segment textAlign='left' inverted>
-            <Item key={x._id} >
-              <Image size='mini' src={x.flag} style={{ display: 'inline-block' }}></Image>
-              <Item.Header style={{ color: 'white', display: 'inline-block', margin: '0 8px 10px 8px', position: 'relative', top: '5px' }} as={'h1'}>
+          <Segment textAlign="left" inverted>
+            <Item key={x._id}>
+              <Image size="mini" src={x.flag} style={{ display: 'inline-block' }}></Image>
+              <Item.Header
+                style={{
+                  color: 'white',
+                  display: 'inline-block',
+                  margin: '0 8px 10px 8px',
+                  position: 'relative',
+                  top: '5px',
+                }}
+                as={'h1'}
+              >
                 {x.name}
               </Item.Header>
-                <Label color='orange'>
-                  {x.type}
-                </Label>
+              <Label color="orange">{x.type}</Label>
 
               <Item.Description>
                 <Segment.Group>
-                  <Segment
-                    inverted
-                    textAlign='center'
-                    color='purple'
-                    style={{ padding: '2px 0px 0px 6px' }}>
-                    <Header as='h5'>
-                      Description
-                        </Header>
+                  <Segment inverted textAlign="center" color="purple" style={{ padding: '2px 0px 0px 6px' }}>
+                    <Header as="h5">Description</Header>
                   </Segment>
                   <Segment>
-                    {x.description}<br />
+                    {x.description}
+                    <br />
                   </Segment>
                 </Segment.Group>
               </Item.Description>
@@ -138,19 +148,23 @@ class YourGuilds extends React.Component {
                 <Button
                   fluid
                   icon
-                  color='green'
-                  labelPosition='right'
-                  onClick={async () => { await this.handleViewButtonClick(x._id) }}>
-                  <Icon name='right chevron' />
+                  color="green"
+                  labelPosition="right"
+                  onClick={async () => {
+                    await this.handleViewButtonClick(x._id);
+                  }}
+                >
+                  <Icon name="right chevron" />
                   View
-                    </Button>
+                </Button>
               </Item.Extra>
             </Item>
           </Segment>
         ))}
+        {this.state.loading && <Loader active size="huge" content="Loading..." inverted />}
       </Container>
     );
   }
 }
 
-export default YourGuilds;    
+export default YourGuilds;
