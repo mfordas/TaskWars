@@ -42,7 +42,7 @@ class GuildPattern extends React.Component {
 
     if (res.status == 200)
       this.state.guildChosen = true;
-      this.portalRef.current.handleOpen();
+    this.portalRef.current.handleOpen();
     await new Promise(res => setTimeout(res, 3500));
     this.setState({ open: false });
   }
