@@ -51,6 +51,7 @@ class GuildCreate extends React.Component {
           type: this.state.type,
           description: this.state.description,
           flag: this.state.flag,
+          members: [this.state.leader],
         },
         headers: setHeaders(),
       });
