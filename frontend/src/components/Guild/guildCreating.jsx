@@ -184,7 +184,7 @@ class GuildCreate extends React.Component {
           </Form>
 
           <Grid textAlign='center' padded>
-            <Button color='purple' type='submit'>Submit</Button>
+            <Button color='brown' type='submit'>Submit</Button>
           </Grid>
         </Form>
       </Segment>

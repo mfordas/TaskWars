@@ -7,6 +7,7 @@ import Store from '../../Store';
 
 class YourGuilds extends React.Component {
   state = {
+    leaderAvatar: '',
     guildChosen: false,
     name: '',
     guildsLeader: [],
@@ -20,11 +21,15 @@ class YourGuilds extends React.Component {
     const response = await fetch('/api/users/me', setHeaders());
     const body = await response.json();
     this.getData(body.character_id);
-  };
+
+    const responseAvatar = await (await fetch(`/api/characters/${body.character_id}`, setHeaders())).json();
+    this.setState({ leaderAvatar: responseAvatar.avatar })
+  }
 
   getData = async id => {
     const response = await fetch(`/api/guilds/leader/${id}`, setHeaders());
     const body = await response.json();
+    body.sort((a, b) => { return (a.name > b.name) })
     this.setState({
       guildsLeader: body,
       loading: false,
@@ -32,6 +37,7 @@ class YourGuilds extends React.Component {
 
     const response2 = await fetch(`/api/guilds/members/${id}`, setHeaders());
     const body2 = await response2.json();
+    body2.sort((a, b) => { return (a.name > b.name) })
     this.setState({
       guildsMember: body2,
     });
@@ -54,12 +60,6 @@ class YourGuilds extends React.Component {
     if (this.state.guildChosen) return <Redirect to="/guildDetails" />;
     return (
       <Container>
-        <Label color="brown">
-          <h2>
-            Guilds, you are a leader of
-            <br />
-          </h2>
-        </Label>
         {this.state.guildsLeader.map(x => (
           <Segment textAlign="left" inverted>
             <Item key={x._id}>
@@ -76,12 +76,23 @@ class YourGuilds extends React.Component {
               >
                 {x.name}
               </Item.Header>
-              <Label color="orange">{x.type}</Label>
-
+              <Label color='orange'>
+                {x.type}
+              </Label>
+              <Label color='red' attached='top right' as='a' image>
+                <img src={this.state.leaderAvatar} />
+                Leader
+              </Label>
               <Item.Description>
                 <Segment.Group>
-                  <Segment inverted textAlign="center" color="purple" style={{ padding: '2px 0px 0px 6px' }}>
-                    <Header as="h5">Description</Header>
+                  <Segment
+                    inverted
+                    textAlign='center'
+                    color='brown'
+                    style={{ padding: '2px 0px 0px 6px' }}>
+                    <Header as='h5'>
+                      Description
+                        </Header>
                   </Segment>
                   <Segment>
                     {x.description}
@@ -94,13 +105,10 @@ class YourGuilds extends React.Component {
                 <Button
                   fluid
                   icon
-                  color="green"
-                  labelPosition="right"
-                  onClick={async () => {
-                    await this.handleViewButtonClick(x._id);
-                  }}
-                >
-                  <Icon name="right chevron" />
+                  color='brown'
+                  labelPosition='right'
+                  onClick={async () => { await this.handleViewButtonClick(x._id) }}>
+                  <Icon name='right chevron' />
                   View
                 </Button>
               </Item.Extra>
@@ -108,12 +116,9 @@ class YourGuilds extends React.Component {
           </Segment>
         ))}
 
-        <Label color="brown">
-          <h2>
-            Guilds in which you are a member
-            <br />
-          </h2>
-        </Label>
+        <Header as={'h1'}>
+          {' '}
+        </Header>
         {this.state.guildsMember.map(x => (
           <Segment textAlign="left" inverted>
             <Item key={x._id}>
@@ -130,12 +135,23 @@ class YourGuilds extends React.Component {
               >
                 {x.name}
               </Item.Header>
-              <Label color="orange">{x.type}</Label>
+              <Label color='orange'>
+                {x.type}
+              </Label>
+              <Label color='grey' attached='top right' >
+                Member
+              </Label>
 
               <Item.Description>
                 <Segment.Group>
-                  <Segment inverted textAlign="center" color="purple" style={{ padding: '2px 0px 0px 6px' }}>
-                    <Header as="h5">Description</Header>
+                  <Segment
+                    inverted
+                    textAlign='center'
+                    color='brown'
+                    style={{ padding: '2px 0px 0px 6px' }}>
+                    <Header as='h5'>
+                      Description
+                        </Header>
                   </Segment>
                   <Segment>
                     {x.description}
@@ -148,13 +164,10 @@ class YourGuilds extends React.Component {
                 <Button
                   fluid
                   icon
-                  color="green"
-                  labelPosition="right"
-                  onClick={async () => {
-                    await this.handleViewButtonClick(x._id);
-                  }}
-                >
-                  <Icon name="right chevron" />
+                  color='brown'
+                  labelPosition='right'
+                  onClick={async () => { await this.handleViewButtonClick(x._id) }}>
+                  <Icon name='right chevron' />
                   View
                 </Button>
               </Item.Extra>
