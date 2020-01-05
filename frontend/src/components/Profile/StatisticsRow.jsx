@@ -11,14 +11,14 @@ class StatisticsRow extends React.Component {
         return (
             <Table.Row>
             <Table.Cell>
-            <Header as='h4' image>
+            <Header style={{color: "white"}} as='h4' image>
                 <Image src={this.props.image} rounded size='mini' />
                 <Header.Content>
                 {this.props.name}
                 </Header.Content>
             </Header>
             </Table.Cell>
-            <Table.Cell id='statisticValue'>
+            <Table.Cell style={{color: "white"}} id='statisticValue'>
                 <h4>{this.props.value}</h4>
             </Table.Cell>
             </Table.Row>

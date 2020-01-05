@@ -65,7 +65,7 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
   const characterData = arrayWithCount(count)(x => {
     return {
       name: prefix + x,
-      level: 10 + x,
+      level: 1 + x,
       maxHealth: 100*(x+1),
       health: 50*(x+1),
       expRequired: 120*(x+1),
@@ -85,17 +85,34 @@ const createCharacters = async (prefix, count, models, questbookCatalog, guildCa
 };
 
 const createGuilds = async (prefix, count,  models, creatureCatalog) => {
-  const guildData = arrayWithCount(count)(x => {
+  const guildData = arrayWithCount(count)( x => {
     return {
       name: prefix + x,
       //leader and members field's cannot be initilized befor character
       leader: null,
       members: [],
       type: "Utility",
+      current_fight: {},
       description: "",
-      current_fight: creatureCatalog[x] === undefined ? null : creatureCatalog[x],
+      //current_fight: creatureCatalog[x] === undefined ? null : creatureCatalog[x],
     };
   });
+
+  let arr = [];
+  for(let i = 0; i<count; i++) {
+    const creature = await models['creature'].findById(creatureCatalog[i]);
+    // console.log(creatureCatalog[i])
+    // console.log(creature)
+    arr.push(creature);
+  }
+  
+  let x = 0;
+  guildData.forEach(element => {
+    // creatureCatalog[x] === undefined ? null : 
+    element.current_fight = arr[x];
+    // console.log(x)
+    x+=1;
+  }); 
   return await createModelBatch(models.guild, guildData);
 };
 
@@ -116,6 +133,7 @@ const createCreatures = async (prefix, count, models, taskCatalog) => {
         exp: 50+x,
         gold: 50+x,
         duration: x+6,
+        creature_task: "5e109897c023293410318e00",
         task_to_dmg: taskCatalog[x],
         picture: ''
       };
@@ -241,7 +259,7 @@ const addCharactersToGuilds = async (characters, guilds, models) => {
     for(let z=(j*i); z<j*i+3; z++) {
       let guild = await models["guild"].findById(guilds[z]);
       if (!guild) return null;
-      await models["guild"].findByIdAndUpdate(guilds[z], { members: [character] }, { new: true });
+      await models["guild"].findByIdAndUpdate(guilds[z], { members: [character], leader: character }, { new: true });
       g.push(guilds[z]);
     }
     await models["character"].findByIdAndUpdate(characters[i], { guilds: g }, { new: true });
