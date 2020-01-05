@@ -127,7 +127,7 @@ class Flag extends React.Component {
             <GuildFlagModal img={this.state.avatar} handleClose={this.handleClose} />
           </Modal>
           <div className='avatarDiv'>
-            <Image id='avatar' src={this.state.avatar} size='small' rounded />
+            <Image id='avatar' src={this.state.avatar} size='tiny' rounded />
           </div>
         </div>
       </Segment>

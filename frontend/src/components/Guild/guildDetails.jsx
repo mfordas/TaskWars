@@ -254,7 +254,7 @@ class GuildJoin extends React.Component {
             </Item.Header>
             <Item.Header as={'h3'}>Guild details</Item.Header>
             <Item.Header style={{ marginBottom: '10px' }}>Guild leader: {' '}
-            <Label as='a' image>
+              <Label as='a' color='black' image>
                 <img src={this.state.leaderName.avatar} />
                 {this.state.leaderName.name}
               </Label>
@@ -272,15 +272,15 @@ class GuildJoin extends React.Component {
                 <FightPattern creature={this.state.current_fight} />
               </Segment>
             ) : (
-              <Segment inverted size="big">
-                <Grid padded>
-                  <Header inverted> Choose creature and fight!</Header>
-                  <Button color="brown" floated="right" as={NavLink} to="/creatures">
-                    Fight!
+                <Segment inverted size="big">
+                  <Grid padded>
+                    <Header inverted> Choose creature and fight!</Header>
+                    <Button color="brown" floated="right" as={NavLink} to="/creatures">
+                      Fight!
                   </Button>
-                </Grid>
-              </Segment>
-            )}
+                  </Grid>
+                </Segment>
+              )}
             <Segment inverted>
               <Item>
                 <Header inverted as={'h3'}>
@@ -292,6 +292,7 @@ class GuildJoin extends React.Component {
                     <Item.Content>
                       <Grid padded>
                         <Button
+                          inverted
                           animated
                           compact
                           color={this.state.color}
@@ -307,7 +308,7 @@ class GuildJoin extends React.Component {
                             <Icon name="trash alternate outline" />
                           </Button.Content>
                         </Button>
-                        <Label as='a' image>
+                        <Label as='a' image color='black'>
                           <img src={x.avatar} />
                           {x.name}
                         </Label>
@@ -355,6 +356,7 @@ class GuildJoin extends React.Component {
                           <Grid padded>
                             {this.checkUser(x._id) ? (
                               <Button
+                                inverted
                                 animated
                                 compact
                                 size="mini"
@@ -374,7 +376,7 @@ class GuildJoin extends React.Component {
                                   <Icon name="minus" />
                                 </Button>
                               )}
-                            <Label as='a' image>
+                            <Label as='a' image color='black'>
                               <img src={this.getCharacterAvatar(x)} />
                               {this.checkCharacterName(x)}{' '}
                               <Label.Detail>{x.name} | {x.email}</Label.Detail>
@@ -389,32 +391,32 @@ class GuildJoin extends React.Component {
             </Segment>
           </div>
         ) : (
-          <div>
-            {this.state.current_fight != null ? (
+            <div>
+              {this.state.current_fight != null ? (
+                <Segment inverted>
+                  <Item.Header as={'h3'}>We are fighting against:</Item.Header>
+                  <FightPattern creature={this.state.current_fight} />
+                </Segment>
+              ) : (
+                  <Segment inverted>Your guild is taking a break.</Segment>
+                )}
               <Segment inverted>
-                <Item.Header as={'h3'}>We are fighting against:</Item.Header>
-                <FightPattern creature={this.state.current_fight} />
-              </Segment>
-            ) : (
-              <Segment inverted>Your guild is taking a break.</Segment>
-            )}
-            <Segment inverted>
-              <Item>
-                <Header inverted as={'h3'}>
-                  {' '}
-                  List of members :
+                <Item>
+                  <Header inverted as={'h3'}>
+                    {' '}
+                    List of members :
                 </Header>
-                {this.state.charName.map(x => (
-                  <Item key={x._id}>
-                    <Item.Content>
-                      <Item.Header>{x.name}</Item.Header>
-                    </Item.Content>
-                  </Item>
-                ))}
-              </Item>
-            </Segment>
-          </div>
-        )}
+                  {this.state.charName.map(x => (
+                    <Item key={x._id}>
+                      <Item.Content>
+                        <Item.Header>{x.name}</Item.Header>
+                      </Item.Content>
+                    </Item>
+                  ))}
+                </Item>
+              </Segment>
+            </div>
+          )}
         <TopPortal ref={this.portalRefAdd} header={'Success!'} description={`Adding a player to the guild`} />
         <TopPortal ref={this.portalRefDelete} header={''} description={`Delete a player from the guild`} />
       </Container>
