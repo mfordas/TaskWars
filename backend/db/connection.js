@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const getByMode = (prod, dev) => (process.env.TEST_ENV || process.env.NODE_ENV ? dev : prod);
+const getByMode = (prod, dev) => (process.env.TEST_ENV || process.env.NODE_ENV === 'development' ? dev : prod);
 
 const config = {
   host: getByMode(process.env.DB_HOST, process.env.DB_HOST_DEV),
