@@ -68,7 +68,7 @@ router.put('/:id/backpack', async (req, res) => {
     return res.status(404).send(`Bad request. The given ID: ${req.params.id} was not valid.`);
 
   inventoryHandel.backpack.push(req.body.item._id);
-  console.log('Inventoryandel backpack: ', inventoryHandel.backpack);
+
   const inventory = await Inventory.findByIdAndUpdate(
     req.params.id,
     {
@@ -126,7 +126,7 @@ router.put('/:id/equippedItems', async (req, res) => {
 });
 
 // remove one item from equippedItems by ID
-router.put('/:id/equippedItems/:itemID', auth, async (req, res) => {
+router.put('/:id/equippedItems/:itemID', async (req, res) => {
   const Inventory = res.locals.models.inventory;
 
   const inventoryHandel = await Inventory.findById(req.params.id, 'equippedItems', { lean: true }).catch(err => {
@@ -140,7 +140,7 @@ router.put('/:id/equippedItems/:itemID', auth, async (req, res) => {
 
   if (equipped.includes(req.params.itemID))
     equipped.splice(equipped.indexOf(`${req.params.itemID}`), 1);
-  else return res.status(404).send('The iitem with the given ID was not found.');
+  else return res.status(404).send('The item with the given ID was not found.');
 
   const inventory = await Inventory.findByIdAndUpdate(
     req.params.id,
@@ -154,8 +154,9 @@ router.put('/:id/equippedItems/:itemID', auth, async (req, res) => {
   res.send(inventory);
 });
 
+
 // remove one item from backpack by ID
-router.put('/:id/backpack/:itemID', auth, async (req, res) => {
+router.put('/:id/backpack/:itemID', async (req, res) => {
   const Inventory = res.locals.models.inventory;
 
   const inventoryHandel = await Inventory.findById(req.params.id, 'backpack', { lean: true }).catch(err => {

@@ -5,7 +5,7 @@ class BuyItem extends React.Component {
   render() {
     return (
       <Button size="small"
-              color='purple'
+              color='yellow'
               animated='fade' 
               active={this.props.active} 
               disabled={this.props.disabled} 

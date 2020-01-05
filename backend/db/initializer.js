@@ -134,7 +134,6 @@ const createInventories = async (count, models, itemCatalog) => {
       ],
       gold: (x+1) * 500,
       equippedItems: [
-        itemCatalog[(x+1)*1] === undefined ? null : itemCatalog[(x+1)*1],
       ],
     };
   });

@@ -11,6 +11,7 @@ class ItemView extends React.Component {
     this.setState({ open: false });
     if(this.props.eq === true) {
       if(this.state.item.slot === 'Usable') {
+        this.props.useUsableItem(this.state.item);
         this.props.useItem(this.state.item,1);
       } else {
         this.props.equippedItem(this.state.item);
@@ -54,20 +55,12 @@ class ItemView extends React.Component {
                             eq={this.props.eq} 
                             handleOpen={this.handleOpen}
                             />
-                {/* <Portal onClose={this.handleClose} open={this.state.open}>
-                  <Segment style= {{ left: '40%', position: 'fixed', top: '20%', zIndex: 1000, }}>
-                  {this.state.itemDescription}
-                    
-                  </Segment>
-                  </Portal> */}
                               
                   <Confirm
                     content={this.state.itemDescription}
                     open={this.state.open}
                     cancelButton='Close'
-                    confirmButton={this.props.eq === true ? 
-                      item.slot != null && item.slot === 'Usable' ? 'Use' : 'Equipped':
-                      item.slot != null && item.slot === 'Usable' ? 'None' : 'Unequipped'}
+                    confirmButton={this.props.eq === true ? (item.slot == 'Usable' ? 'Use' : 'Equipped'):(item.slot == 'Usable' ? 'None' : 'Unequipped')}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleConfirm}
                   />

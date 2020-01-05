@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Icon, Grid  } from 'semantic-ui-react';
+import { Segment, Dimmer, Loader, Grid  } from 'semantic-ui-react';
 import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import PublicRoute from '../PublicRoute';
@@ -7,45 +7,47 @@ import ItemView from './ItemView';
 import InventoryView from '../Inventory/InventoryView';
 
 class ShopContent extends React.Component {
-  state = { items: [], id_user: 0, id_inventory: 0 , gold: 0, item: null, backpack: [], inventory: null }
+  state = { 
+    items: [], 
+    id_user: 0, 
+    id_inventory: 0 , 
+    gold: 0, 
+    item: null, 
+    backpack: [], 
+    inventory: null 
+  }
 
   fetchItems = async () => {
     const response = await fetch('/api/item', setHeaders());
-    console.log(response);
     const body = await response.json();
-    console.log(body);
     this.setState({ items: body });
   }
 
   fetchUser = async () => {
     const response = await fetch('/api/users/me', setHeaders());
-    console.log(response);
     const body = await response.json();
-    console.log(body);
+
     this.setState({ id_user: body.character_id });
-    this.fetchInventory(this.state.id_user);
+    await this.fetchInventory(this.state.id_user);
   }
 
   fetchInventory = async (character_id) => {
     const response = await fetch('/api/characters/'+character_id, setHeaders());
-    console.log(response);
     const body = await response.json();
-    console.log(body);
+
     this.setState({ id_inventory: body.inventory_id });
-    this.fetchUserGold(this.state.id_inventory);
+    await this.fetchUserGold(this.state.id_inventory);
   }
 
   fetchUserGold = async (inventory_id) => {
     const response = await fetch('/api/inventory/'+inventory_id, setHeaders());
-    console.log(response);
     const body = await response.json();
-    console.log(body);
     this.setState({ gold: body.gold, backpack: body.backpack });
     this.getInventory();
   }
 
   fetchBuyItem = async (item) => {
-    const resp = await axios({
+    await axios({
       url: `/api/inventory/${this.state.id_inventory}/backpack`,
       method: 'put',
       data: {
@@ -54,13 +56,15 @@ class ShopContent extends React.Component {
         }
       },
       headers: setHeaders(),
-    }).then(res => {
-        console.log('Put item:',res);
-        let afterPay = this.state.gold - item.price;
-        this.setState({ gold: afterPay });
-        this.fetchPayGold(afterPay);
+    }).then(() => {
+
       })
     .catch(error => console.error(error));
+    let afterPay = this.state.gold - item.price;
+    this.setState({ gold: afterPay });
+    await this.fetchPayGold(afterPay);
+    await this.fetchUserGold(this.state.id_inventory);
+    this.getInventory();
   }
 
   fetchPayGold = async (gold) => {
@@ -73,37 +77,41 @@ class ShopContent extends React.Component {
         }
       },
       headers: setHeaders(),
-    }).then(res => {
-        console.log('Pay for item:',res);
-      })
+    })
     .catch(error => console.error(error));
   }
-
 
   componentDidMount() {
     this.fetchItems();
     this.fetchUser();
-
-    console.log('mounted');
   }
-  componentDidUpdate() {
 
-
-  }
   getInventory = () => {
-    let inventory = <InventoryView showGold={false} buttonActive={false} ViewEquipped={false} />
-    // id_user={this.state.id_user}
-    // id_inventory={this.state.id_inventory}
-    // backpack={this.state.backpack}
-    // gold={this.state.gold}
-    // items={this.state.items}
-    // showGold={false}/>
+    let inventory = <InventoryView 
+      showGold={false} 
+      buttonActive={false} 
+      ViewEquipped={false} 
+      // id_user={this.state.id_user}
+      // id_inventory={this.state.id_inventory}
+      // backpack={this.state.backpack}
+      // gold={this.state.gold}
+      // items={this.state.items} 
+    />
     this.setState({ inventory: inventory});
   }
 
   render() {
     let activeV;
     let disabledV;
+    if(!this.state.inventory && !this.state.gold ){
+      return (
+        <Dimmer active>
+          <Loader content='Loading' />
+        </Dimmer>
+
+      );
+    }
+    
     return (
       <Segment inverted >
       <Grid doubling container centered columns='equal' padded>

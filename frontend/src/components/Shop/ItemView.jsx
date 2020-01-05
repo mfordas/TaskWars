@@ -7,8 +7,6 @@ class ItemView extends React.Component {
 
   componentDidMount(){
     this.setState({ item: this.props.item });
-    console.log('Monted item');
-    console.log(this.state.item);
   }
 
   BuyItemFun = () => {
