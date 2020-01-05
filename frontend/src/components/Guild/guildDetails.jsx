@@ -409,7 +409,10 @@ class GuildJoin extends React.Component {
                   {this.state.charName.map(x => (
                     <Item key={x._id}>
                       <Item.Content>
-                        <Item.Header>{x.name}</Item.Header>
+                        <Label as='a' image color='black'>
+                          <img src={x.avatar} />
+                          {x.name}
+                        </Label>
                       </Item.Content>
                     </Item>
                   ))}
