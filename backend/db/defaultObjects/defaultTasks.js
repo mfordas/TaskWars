@@ -1,10 +1,10 @@
-defaultDuration = 100;
+defaultDuration = 48;
 duration=[];
-duration['Daily'] = 100;
-duration['Weekly'] = 300;
-duration['Monthly'] = 1200;
-duration['Events'] = 1000;
-duration['Encounters'] = 1000;
+duration['Daily'] = 24;
+duration['Weekly'] = 168;
+duration['Monthly'] = 720;
+duration['Events'] = 336;
+duration['Encounters'] = 48;
 
 const defaultCreatures = [
 //----------------------------Physical-----------------------------------

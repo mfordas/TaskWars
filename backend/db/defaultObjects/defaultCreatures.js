@@ -1,4 +1,4 @@
-defaultDuration = 1000;
+defaultDuration = 48;
 
 const defaultCreatures = [
   {
