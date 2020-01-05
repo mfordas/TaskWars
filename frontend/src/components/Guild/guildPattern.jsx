@@ -1,6 +1,8 @@
 import React from 'react';
 import { Item, Grid, Container, Segment, Icon, Image, Button, Label, Popup, Step, Header } from 'semantic-ui-react';
 import TopPortal from '../Utils/TopPortal';
+import { NavLink, Route, Redirect } from 'react-router-dom';
+
 import setHeaders from '../../utils/setHeaders';
 const axios = require('axios');
 
@@ -11,7 +13,7 @@ class GuildPattern extends React.Component {
     this.portalRef = React.createRef();
     this.portalRef2 = React.createRef();
     this.portalRef3 = React.createRef();
-    this.state = { open: false }
+    this.state = { open: false, guildChosen: false }
   }
 
   handleButtonAddClick = async (e, { name }) => {
@@ -39,12 +41,30 @@ class GuildPattern extends React.Component {
     const res = await axios.put(`/api/guilds/${this.props.guild._id}/members`, memberToInsert);
 
     if (res.status == 200)
+      this.state.guildChosen = true;
       this.portalRef.current.handleOpen();
     await new Promise(res => setTimeout(res, 3500));
     this.setState({ open: false });
   }
 
+  checkLeader = () => {
+    if (this.props.userId === this.props.guild.leader)
+      return false;
+    return true;
+  }
+
+  checkMember = () => {
+    let check = true;
+    this.props.guild.members.map(elem => {
+      if (elem === this.props.userId) {
+        check = false;
+      }
+    })
+    return check;
+  }
+
   render() {
+    if (this.state.guildChosen) return <Redirect to="/guildJoin" />;
     return (
       <Container>
         <Segment textAlign='left' inverted>
@@ -64,7 +84,7 @@ class GuildPattern extends React.Component {
                 <Segment
                   inverted
                   textAlign='center'
-                  color='purple'
+                  color='brown'
                   style={{ padding: '2px 0px 0px 6px' }}>
                   <Header as='h5'>
                     Description
@@ -77,16 +97,18 @@ class GuildPattern extends React.Component {
             </Item.Description>
 
             <Item.Extra>
-              <Button
-                fluid
-                icon
-                color='green'
-                labelPosition='right'
-                onClick={this.handleButtonAddClick}
-                disabled={this.state.open}>
-                <Icon name='plus' />
-                Join to Guild
+              {(this.checkMember() && this.checkLeader()) ?
+                <Button
+                  fluid
+                  icon
+                  color='brown'
+                  labelPosition='right'
+                  onClick={this.handleButtonAddClick}
+                  disabled={this.state.open}>
+                  <Icon name='plus' />
+                  Join to Guild
                 </Button>
+                : null}
             </Item.Extra>
           </Item>
         </Segment>

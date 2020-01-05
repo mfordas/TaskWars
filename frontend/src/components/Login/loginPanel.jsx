@@ -67,9 +67,9 @@ class LoginPanel extends React.Component {
 
     return (
       <Grid centered>
-        <Segment compact textAlign='left'>
-          <Form error onSubmit={this.onButtonSubmit}>
-            <Header textAlign='center'>Login</Header>
+        <Segment compact textAlign='left' inverted>
+          <Form error onSubmit={this.onButtonSubmit} inverted>
+            <Header inverted textAlign='center'>Login</Header>
             <Form.Input
               label='Email'
               placeholder='Email'

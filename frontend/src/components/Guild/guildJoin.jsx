@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon, Container, Input, Button, Segment, Form, Grid } from 'semantic-ui-react';
+import { Menu, Icon, Container, Input, Button, Segment, Loader, Form, Grid } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import GuildTable from './guildTable';
 
@@ -19,7 +19,8 @@ class MenuGuildFilter extends React.Component {
     this.state = {
       type: 'All',
       tags: '',
-      results: []
+      results: [],
+      loading: true,
     };
   }
 
@@ -47,10 +48,14 @@ class MenuGuildFilter extends React.Component {
   }
 
   fetchGuild = async () => {
-    const guild = await fetch(`/api/guilds/search/${this.state.type}&${this.state.tags}`, setHeaders())
+    const user = await fetch('/api/users/me', setHeaders())
       .then(response => response.json());
 
-    this.setState({ results: guild });
+    const guild = await fetch(`/api/guilds/search/${this.state.type}&${this.state.tags}`, setHeaders())
+      .then(response => response.json());
+    guild.sort((a, b) => { return (a.name > b.name) })
+    this.setState({ results: guild, userId: user.character_id, loading: false });
+
   }
 
   componentDidMount() {
@@ -60,6 +65,10 @@ class MenuGuildFilter extends React.Component {
 
   componentDidUpdate() {
     this.guildTableRef.current.setState({ results: this.state.results });
+  }
+
+  handleClose = async (param) => {
+
   }
 
   render() {
@@ -89,7 +98,7 @@ class MenuGuildFilter extends React.Component {
               <Button
                 fluid
                 animated
-                color='green'
+                color='brown'
                 size='huge'
                 onClick={this.onSearchButtonClick}>
                 <Button.Content visible>
@@ -105,7 +114,10 @@ class MenuGuildFilter extends React.Component {
         </Grid.Column>
 
         <Grid.Column floated='right' mobile={16} computer={10}>
-          <GuildTable ref={this.guildTableRef} />
+          {this.state.loading && (
+            <Loader active size='huge' content='Loading...' inverted />
+          )}
+          <GuildTable ref={this.guildTableRef} userId={this.state.userId} handleClose={this.handleClose} />
         </Grid.Column>
 
       </Grid>

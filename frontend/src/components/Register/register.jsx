@@ -112,9 +112,9 @@ class Login extends React.Component {
     return (
       <BrowserRouter>
         <Grid centered>
-          <Segment compact textAlign='left'>
-            <Form success error onSubmit={this.onButtonSubmit}>
-              <Header textAlign='center'>Register</Header>
+          <Segment compact textAlign='left' inverted>
+            <Form success error onSubmit={this.onButtonSubmit} inverted>
+              <Header inverted textAlign='center'>Register</Header>
               <Form.Input
                 error={this.nameValidate()}
                 label='Name'
