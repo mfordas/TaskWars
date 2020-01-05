@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon, Container, Input, Button, Segment, Form, Grid, Loader, Dimmer } from 'semantic-ui-react';
+import { Menu, Icon, Container, Input, Button, Segment, Form, Grid, Loader } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import TaskTable from './TasksTable';
 
