@@ -50,6 +50,7 @@ class GuildJoin extends React.Component {
       open: false,
       userExist: true,
       type: 'Email',
+      color: 'brown',
     };
   }
 
@@ -79,6 +80,7 @@ class GuildJoin extends React.Component {
   };
 
   getData = async id => {
+    this.setState({ charName: [], membersName: [] });
     let response = await fetch(`/api/guilds/${id}`, setHeaders());
     let body = await response.json();
     this.setState({
@@ -111,7 +113,7 @@ class GuildJoin extends React.Component {
 
   findMember = async () => {
     if (this.state.type === 'Email') {
-      this.setState({ results: [], });
+      this.setState({ results: [], charResult: [] });
       const resChar = await fetch(`/api/characters/search/${this.state.charId}&`, setHeaders()).then(response =>
         response.json(),
       );
@@ -131,7 +133,7 @@ class GuildJoin extends React.Component {
       });
     } else {
 
-      this.setState({ results: [], });
+      this.setState({ results: [], charResult: [] });
       const resChar = await fetch(`/api/characters/search/${this.state.charId}&${this.state.tags}`, setHeaders()).then(
         response => response.json(),
       );
@@ -158,7 +160,9 @@ class GuildJoin extends React.Component {
       members: [`${id.character_id}`],
     };
     const res = await axios.put(`/api/guilds/${this.state.guild_id}/members`, memberToInsert);
-    if (res.status == 200) this.portalRefAdd.current.handleOpen();
+    if (res.status == 200)
+      this.portalRefAdd.current.handleOpen();
+    this.fetchUser();
     this.findMember();
     await new Promise(res => setTimeout(res, 3500));
     this.setState({ open: false });
@@ -168,6 +172,8 @@ class GuildJoin extends React.Component {
     const res = await axios.delete(`/api/guilds/${this.state.guild_id}/${id._id}`);
     if (res.status == 200)
       this.portalRefDelete.current.handleOpen();
+    this.fetchUser();
+    this.findMember();
     await new Promise(res => setTimeout(res, 3500));
     this.setState({ open: false });
   };
@@ -202,6 +208,14 @@ class GuildJoin extends React.Component {
     if (nameChar[0]) return nameChar[0].name;
   };
 
+  getCharacterAvatar = id => {
+    let nameChar = '';
+    nameChar = this.state.charResult.filter(elem => {
+      return id.character_id === elem._id;
+    });
+    if (nameChar[0]) return nameChar[0].avatar;
+  };
+
   componentDidMount = async () => {
     await this.setState({ guild_id: this.context.guild_id });
     await this.getGuild();
@@ -227,6 +241,8 @@ class GuildJoin extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
+  colorChange = (e, { value }) => this.setState({ color: value });
+
   render() {
     return (
       <Container>
@@ -237,7 +253,12 @@ class GuildJoin extends React.Component {
               {this.state.name}{' '}
             </Item.Header>
             <Item.Header as={'h3'}>Guild details</Item.Header>
-            <Item.Header style={{ marginBottom: '10px' }}>Guild leader: {this.state.leaderName.name}</Item.Header>
+            <Item.Header style={{ marginBottom: '10px' }}>Guild leader: {' '}
+            <Label as='a' image>
+                <img src={this.state.leaderName.avatar} />
+                {this.state.leaderName.name}
+              </Label>
+            </Item.Header>
             <Item.Header style={{ marginBottom: '10px' }}>Type: {this.state.guildType}</Item.Header>
             <Item.Header style={{ marginBottom: '10px' }}>Description: {this.state.guildDesc}</Item.Header>
           </Item>
@@ -271,18 +292,25 @@ class GuildJoin extends React.Component {
                     <Item.Content>
                       <Grid padded>
                         <Button
+                          animated
                           compact
+                          color={this.state.color}
                           size="mini"
-                          color="red"
                           onClick={async () => {
                             await this.ButtonClickDelate(x);
                           }}
                         >
                           <Button.Content visible>
-                            <Icon name="minus" />
+                            <Icon name="user" />
+                          </Button.Content>
+                          <Button.Content hidden>
+                            <Icon name="trash alternate outline" />
                           </Button.Content>
                         </Button>
-                        <Item.Header>{x.name}</Item.Header>
+                        <Label as='a' image>
+                          <img src={x.avatar} />
+                          {x.name}
+                        </Label>
                       </Grid>
                     </Item.Content>
                   </Item>
@@ -327,25 +355,30 @@ class GuildJoin extends React.Component {
                           <Grid padded>
                             {this.checkUser(x._id) ? (
                               <Button
+                                animated
                                 compact
                                 size="mini"
                                 color="green"
                                 onClick={async () => {
                                   await this.ButtonClick(x);
-                                }}
-                              >
+                                }}>
                                 <Button.Content visible>
+                                  <Icon name="user" />
+                                </Button.Content>
+                                <Button.Content hidden>
                                   <Icon name="plus" />
                                 </Button.Content>
                               </Button>
                             ) : (
-                                <Button compact size="mini" color="yellow">
+                                <Button compact size="mini" color="black">
                                   <Icon name="minus" />
                                 </Button>
                               )}
-                            <Item.Header>
-                              {x.name} | {x.email} | {this.checkCharacterName(x)}{' '}
-                            </Item.Header>
+                            <Label as='a' image>
+                              <img src={this.getCharacterAvatar(x)} />
+                              {this.checkCharacterName(x)}{' '}
+                              <Label.Detail>{x.name} | {x.email}</Label.Detail>
+                            </Label>
                           </Grid>
                         </Item.Content>
                       </Item>
