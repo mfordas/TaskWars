@@ -291,23 +291,36 @@ class GuildJoin extends React.Component {
                   <Item key={x._id}>
                     <Item.Content>
                       <Grid padded>
-                        <Button
+                        {(this.state.leader === x._id) ? (
+                          <Button
                           inverted
-                          animated
                           compact
                           color={this.state.color}
                           size="mini"
-                          onClick={async () => {
-                            await this.ButtonClickDelate(x);
-                          }}
                         >
                           <Button.Content visible>
                             <Icon name="user" />
                           </Button.Content>
-                          <Button.Content hidden>
-                            <Icon name="trash alternate outline" />
-                          </Button.Content>
                         </Button>
+                        ) : (
+                          <Button
+                            inverted
+                            animated
+                            compact
+                            color={this.state.color}
+                            size="mini"
+                            onClick={async () => {
+                              await this.ButtonClickDelate(x);
+                            }}
+                          >
+                            <Button.Content visible>
+                              <Icon name="user" />
+                            </Button.Content>
+                            <Button.Content hidden>
+                              <Icon name="trash alternate outline" />
+                            </Button.Content>
+                          </Button>
+                        )}
                         <Label as='a' image color='black'>
                           <img src={x.avatar} />
                           {x.name}
