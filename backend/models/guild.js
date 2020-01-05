@@ -26,7 +26,7 @@ const guildSchema = new mongoose.Schema({
     default: '',
   },
   current_fight: {
-    type: ObjectId,
+    type: Object,
     ref: 'Creature',
     default: null,
   },
@@ -38,7 +38,7 @@ const guildSchema = new mongoose.Schema({
   },
   flag: {
     type: String,
-    default: '',
+    default: 'https://icons-for-free.com/iconfiles/png/512/ebooks+g+goodreads+social+media+square+icon-1320183296513257763.png',
   },
 });
 
@@ -51,7 +51,7 @@ function validateGuild(guild) {
     leader: Joi.objectId(),
     members: Joi.array().items(Joi.objectId()),
     type: Joi.valid('Physical', 'Mental', 'Utility'),
-    current_fight: Joi.objectId(),
+    current_fight: Joi.object(),
     description: Joi.string().max(1024),
     flag: Joi.string(),
   });

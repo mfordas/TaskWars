@@ -22,7 +22,6 @@ const options = [
   { key: 'w', text: 'Weekly', value: 'Weekly' },
   { key: 'm', text: 'Monthly', value: 'Monthly' },
   { key: 'ev', text: 'Events', value: 'Events' },
-  { key: 'en', text: 'Encounters', value: 'Encounters' },
 ]
 
 class AddTask extends React.Component {

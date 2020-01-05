@@ -12,15 +12,21 @@ import axios from 'axios';
 import setHeaders from '../../utils/setHeaders';
 import ErrorMessage from '../ErrorMessage';
 import Store from '../../Store';
+import Flag from './guildFlag'
 
 class GuildCreate extends React.Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    name: '',
-    nameTaken: false,
-    leader: null,
-    description: ' ',
-    type: '',
+    this.avatarHoverRef = React.createRef();
+    this.state = {
+      name: '',
+      nameTaken: false,
+      leader: null,
+      description: ' ',
+      type: '',
+      flag: 'https://findicons.com/files/icons/2799/flat_icons/128/shield.png',
+    }
   }
 
   fetchUser = async () => {
@@ -34,6 +40,7 @@ class GuildCreate extends React.Component {
   }
 
   postGuild = async () => {
+    console.log(this.state.flag)
     try {
       const res = await axios({
         url: 'api/guilds',
@@ -43,11 +50,14 @@ class GuildCreate extends React.Component {
           leader: this.state.leader,
           type: this.state.type,
           description: this.state.description,
+          flag: this.state.flag,
+          members: [this.state.leader],
         },
         headers: setHeaders(),
       });
 
       if (res.status === 200) {
+        console.log(res)
         document.location.href = "/guild";
       } else {
         this.setState({ invalidData: true });
@@ -111,65 +121,73 @@ class GuildCreate extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
+  handleClose = (img) => {
+    this.state.flag = img;
+  }
+
   render() {
     const { type } = this.state
     return (
-        <Segment textAlign='left' inverted>
-          <Form error inverted onSubmit={this.onButtonSubmit}>
-            <Header inverted>Create a guild!</Header>
-            <Form.Input
-              error={this.nameValidate()}
-              label="Your guild's name"
-              placeholder='Name'
-              name='name'
-              type='name'
-              value={this.state.name}
-              onChange={e => this.setState({ name: e.target.value })}
+      <Segment textAlign='left' inverted>
+        <Form error inverted onSubmit={this.onButtonSubmit}>
+          <Header inverted>Create a guild!</Header>
+          <Form.Input
+            error={this.nameValidate()}
+            label="Your guild's name"
+            placeholder='Name'
+            name='name'
+            type='name'
+            value={this.state.name}
+            onChange={e => this.setState({ name: e.target.value })}
+          />
+          <Form.Field
+            error={this.descriptionValidate()}
+            control={TextArea}
+            label='Description'
+            placeholder='Write description of the guild...'
+            value={this.state.description}
+            name='description'
+            onChange={e => this.setState({ description: e.target.value })}
+          />
+
+          <Form.Group inline >
+            <label>Type</label>
+            <Form.Field
+              control={Radio}
+              label='Physical'
+              value='Physical'
+              name='type'
+              checked={type === 'Physical'}
+              onChange={this.handleChange}
             />
             <Form.Field
-              error={this.descriptionValidate()}
-              control={TextArea}
-              label='Description'
-              placeholder='Write description of the guild...'
-              value={this.state.description}
-              name='description'
-              onChange={e => this.setState({ description: e.target.value })}
+              control={Radio}
+              label='Mental'
+              value='Mental'
+              name='type'
+              checked={type === 'Mental'}
+              onChange={this.handleChange}
             />
+            <Form.Field
+              control={Radio}
+              label='Utility'
+              value='Utility'
+              name='type'
+              checked={type === 'Utility'}
+              onChange={this.handleChange}
+            />
+            <div>{this.typeValidate()}</div>
+          </Form.Group>
+          <Form>
+            <Header as='h5' inverted>Guild Flag</Header>
+            <Flag avatar={this.state.flag} handleClose={this.handleClose}/>
+          </Form>
 
-            <Form.Group inline >
-              <label>Type</label>
-              <div>{this.typeValidate()}</div>
-              <Form.Field
-                control={Radio}
-                label='Physical'
-                value='Physical'
-                name='type'
-                checked={type === 'Physical'}
-                onChange={this.handleChange}
-              />
-              <Form.Field
-                control={Radio}
-                label='Mental'
-                value='Mental'
-                name='type'
-                checked={type === 'Mental'}
-                onChange={this.handleChange}
-              />
-              <Form.Field
-                control={Radio}
-                label='Utility'
-                value='Utility'
-                name='type'
-                checked={type === 'Utility'}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-
-            <Grid textAlign='center' padded>
-              <Button color='purple' type='submit'>Submit</Button>
-            </Grid>
-          </Form >
-        </Segment>
+          <Grid textAlign='center' padded>
+            <Button color='brown' type='submit'>Submit</Button>
+          </Grid>
+        </Form>
+      </Segment>
     )
   }
 }

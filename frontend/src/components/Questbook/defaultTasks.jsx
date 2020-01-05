@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Icon, Item, Label, Segment, Step, Popup, Header } from 'semantic-ui-react';
+import { Icon, Item, Label, Segment, Step, Popup, Header, Loader } from 'semantic-ui-react';
 import setHeaders from '../../utils/setHeaders';
 import StartTask from './startTask';
 import MeasureTime from './timeMeasure';
@@ -14,7 +14,8 @@ class AllTasks extends React.Component {
     super(props);
   this.state = {
     tasks: [],
-    taskStateChange: null
+    taskStateChange: null,
+    loading: true
   }
 }
 
@@ -34,7 +35,8 @@ class AllTasks extends React.Component {
       const body = await response.json();
       this.setState(
         {
-          tasks: body
+          tasks: body,
+          loading: false
         }
       )
       }
@@ -91,7 +93,7 @@ return `${d} days ${h} hours`
 render() {
     return (
       <div>
-      {this.state.tasks.map(x => (
+      {this.state.tasks.reverse().map(x => (
         <Segment key={x._id} inverted>
             <Item>
                 <Item.Image style={{ display: 'inline-block' }}>
@@ -153,7 +155,7 @@ render() {
                         </Step.Content>
                     </Step>
                     <Step style={{ padding: '2px' }}>
-                        <Icon name='wheelchair' />
+                        <Icon name='warning circle' color='red'/>
                         <Step.Content>
                             <Step.Title>Penalty</Step.Title>
                             <Step.Description>{x.penalty}</Step.Description>
@@ -188,7 +190,11 @@ render() {
             />
 
         </Segment >
-      ))}</div>
+        
+      ))}
+      {this.state.loading && (
+        <Loader active size='huge' content='Loading...' inverted />
+)}</div>
     );
 }
 }

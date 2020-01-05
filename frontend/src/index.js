@@ -20,6 +20,7 @@ import Inventory from './views/Inventory';
 import Guild from './views/Guild';
 import PublicRoute from './components/PublicRoute';
 import Confirmed from './components/Confirmed';
+import Creature from './views/Creature';
 
 const styleLink = document.createElement("link");
 styleLink.rel = "stylesheet";
@@ -74,6 +75,7 @@ const App = () => {
           <PrivateRoute exact path="/shop" component={Shop} />
           <PrivateRoute exact path="/inventory" component={Inventory} />
           <PrivateRoute exact path="/guild" component={Guild} />
+          <PrivateRoute exact path="/creatures" component={Creature} />
           <Route exact path="/confirmed" component={Confirmed} />
           <Route render={() => <Redirect to="/" />} />
           

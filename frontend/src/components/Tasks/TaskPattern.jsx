@@ -125,7 +125,7 @@ class TaskPattern extends React.Component {
                             </Step.Content>
                         </Step>
                         <Step style={{ padding: '2px' }}>
-                            <Icon name='wheelchair' />
+                            <Icon name='warning circle' color='red' />
                             <Step.Content>
                                 <Step.Title>Penalty</Step.Title>
                                 <Step.Description>{this.props.task.penalty} hp</Step.Description>
