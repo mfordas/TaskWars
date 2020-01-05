@@ -16,7 +16,7 @@ const defaultCreatures = [
         duration: defaultDuration,
         exp: 100,
         gold: 100,
-        penalty: 10,
+        penalty: 20,
         status:""
     },
     {
@@ -36,9 +36,9 @@ const defaultCreatures = [
         type: "Physical",
         category: "Monthly",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 70,
+        exp: 1200,
+        gold: 1200,
+        penalty: 200,
         status:""
     },
     {
@@ -47,9 +47,9 @@ const defaultCreatures = [
         type: "Physical",
         category: "Daily",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 70,
+        exp: 100,
+        gold: 100,
+        penalty: 20,
         status:""
     },
     {
@@ -58,8 +58,8 @@ const defaultCreatures = [
         type: "Physical",
         category: "Weekly",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
+        exp: 300,
+        gold: 300,
         penalty: 70,
         status:""
     },
@@ -69,9 +69,9 @@ const defaultCreatures = [
         type: "Physical",
         category: "Daily",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 70,
+        exp: 100,
+        gold: 100,
+        penalty: 20,
         status:""
     },
 //----------------------------Mental-----------------------------------
@@ -83,7 +83,7 @@ const defaultCreatures = [
         duration: defaultDuration,
         exp: 100,
         gold: 100,
-        penalty: 10,
+        penalty: 20,
         status:""
     },
     {
@@ -98,14 +98,14 @@ const defaultCreatures = [
         status:""
     },
     {
-        name: "Codemancer's Wrath",
+        name: "Code Warrior",
         description: "Complete one CodeWars task.",
         type: "Mental",
         category: "Daily",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 70,
+        exp: 100,
+        gold: 100,
+        penalty: 20,
         status:""
     },
     {
@@ -114,9 +114,9 @@ const defaultCreatures = [
         type: "Mental",
         category: "Daily",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 70,
+        exp: 100,
+        gold: 100,
+        penalty: 20,
         status:""
     },
     {
@@ -125,9 +125,9 @@ const defaultCreatures = [
         type: "Mental",
         category: "Daily",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 70,
+        exp: 100,
+        gold: 100,
+        penalty: 20,
         status:""
     },
 //----------------------------Utility-----------------------------------
@@ -172,7 +172,7 @@ const defaultCreatures = [
         duration: defaultDuration,
         exp: 1200,
         gold: 1200,
-        penalty: 150,
+        penalty: 200,
         status:""
     },
     {
@@ -181,9 +181,9 @@ const defaultCreatures = [
         type: "Utility",
         category: "Weekly",
         duration: defaultDuration,
-        exp: 50,
-        gold: 50,
-        penalty: 150,
+        exp: 300,
+        gold: 300,
+        penalty: 200,
         status:""
     },
     {
@@ -194,7 +194,7 @@ const defaultCreatures = [
         duration: defaultDuration,
         exp: 1000,
         gold: 1000,
-        penalty: 200,
+        penalty: 250,
         status:""
     },
     {
@@ -205,7 +205,7 @@ const defaultCreatures = [
         duration: defaultDuration,
         exp: 1000,
         gold: 1000,
-        penalty: 200,
+        penalty: 250,
         status:""
     },
    // ------------Encounters------------
@@ -222,7 +222,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e01",
-       name: "Faster than the wind [Boss]",
+       name: "Gust of Wind [Boss]",
        description: "Run 5 kilometers.",
        type: "Physical",
        category: "Encounters",
@@ -233,7 +233,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e02",
-       name: "Pushing the Earth [Boss]",
+       name: "Pump It Up! [Boss]",
        description: "Do 10 push-ups.",
        type: "Physical",
        category: "Encounters",
@@ -244,7 +244,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e03",
-       name: "Sweet Dreams [Boss]",
+       name: "White Death [Boss]",
        description: "Cut down on sweets during boss fight.",
        type: "Physical",
        category: "Encounters",
@@ -255,7 +255,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e04",
-       name: "Suction! [Boss]",
+       name: "Sack it up! [Boss]",
        description: "Vacuum Your house.",
        type: "Utility",
        category: "Encounters",
@@ -266,7 +266,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e05",
-       name: "Calm down! [Boss]",
+       name: "Keep calm! [Boss]",
        description: "Meditate for 30 minutes.",
        type: "Mental",
        category: "Encounters",
@@ -277,7 +277,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e06",
-       name: "Page-turner [Boss]",
+       name: "Page-flipper [Boss]",
        description: "Read one chapter.",
        type: "Mental",
        category: "Encounters",
@@ -288,7 +288,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e07",
-       name: "Burner [Boss]",
+       name: "Pyromaniac [Boss]",
        description: "Burn 200 kcal.",
        type: "Physical",
        category: "Encounters",
@@ -299,7 +299,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e08",
-       name: "Runmageddon [Boss]",
+       name: "Run Boy, Run! [Boss]",
        description: "Run for 40 minutes.",
        type: "Physical",
        category: "Encounters",
@@ -310,7 +310,7 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e09",
-       name: "Bookworm [Boss]",
+       name: "Giant bookworm [Boss]",
        description: "Read a book for 40 minutes.",
        type: "Mental",
        category: "Encounters",
@@ -321,8 +321,8 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e10",
-       name: "Wunderbaum [Boss]",
-       description: "Decorate christmas tree.",
+       name: "Gifthub [Boss]",
+       description: "Open your presents AFTER Christmas Eve supper",
        type: "Utility",
        category: "Encounters",
        duration: defaultDuration,
@@ -332,8 +332,8 @@ const defaultCreatures = [
        status: ""
    }, {
        _id: "5e109897c023293410318e11",
-       name: "Jack-o'-lantern [Boss]",
-       description: "Prepare for Halloween.",
+       name: "Dia de los Muertos [Boss]",
+       description: "Survive the Day of the Dead",
        type: "Utility",
        category: "Encounters",
        duration: defaultDuration,
