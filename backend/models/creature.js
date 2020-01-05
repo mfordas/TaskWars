@@ -24,7 +24,7 @@ const creatureSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  physical_resistence: {
+  physical_resistance: {
     type: Number,
     default: 0,
   },
@@ -32,7 +32,7 @@ const creatureSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  magical_resistence: {
+  magical_resistance: {
     type: Number,
     default: 0,
   },
@@ -75,10 +75,10 @@ function validateCreature(creature) {
     level: Joi.number().min(0),
     health: Joi.number().min(0),
     physical_power: Joi.number().min(0),
-    physical_resistence: Joi.number().min(0),
+    physical_resistance: Joi.number().min(0),
     physical_power: Joi.number().min(0),
     magical_power: Joi.number().min(0),
-    magical_resistence: Joi.number().min(0),
+    magical_resistance: Joi.number().min(0),
     exp: Joi.number().min(0),
     gold: Joi.number().min(0),
     duration: Joi.number().min(0),

@@ -223,7 +223,7 @@ class CreaturePattern extends React.Component {
                   <Icon name="shield alternate" color="red" />
                   <Step.Content>
                     <Step.Title>Physical Resist</Step.Title>
-                    <Step.Description>{this.props.creature.physcical_resistance}</Step.Description>
+                    <Step.Description>{this.props.creature.physical_resistance}</Step.Description>
                   </Step.Content>
                 </Step>
                 <Step style={{ padding: '2px' }}>
