@@ -123,7 +123,7 @@ class CreaturePattern extends React.Component {
       level: this.props.creature.level,
       health: this.props.creature.health,
       physical_power: this.props.creature.physical_power,
-      physical_resistance: this.props.creature.physcical_resistance,
+      physical_resistance: this.props.creature.physical_resistance,
       magical_power: this.props.creature.magical_power,
       magical_resistance: this.props.creature.magical_resistance,
       exp: this.props.creature.exp,

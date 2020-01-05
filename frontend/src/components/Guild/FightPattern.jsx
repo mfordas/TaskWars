@@ -11,6 +11,20 @@ class FightPattern extends React.Component {
   };
   static contextType = Store;
 
+  convertToDaysAndHours(t){
+    let time = t *3600000;
+    const cd = 24 * 60 * 60 * 1000,
+        ch = 60 * 60 * 1000,
+        d = Math.floor(time / cd),
+        h = Math.floor( (time - d * cd) / ch),
+        pad = function(n){ return n < 10 ? '0' + n : n; };
+  if( h === 24 ){
+    d++;
+    h = 0;
+  }
+  return `${d} days ${h} hours`
+  }
+
   render() {
     return (
       <Segment.Group horizontal>
@@ -37,8 +51,6 @@ class FightPattern extends React.Component {
                   <Header as="h5">How to fight</Header>
                 </Segment>
                 <Segment>
-                  Complete following quest to deal damage:
-                  <br />
                   {this.state.description}
                 </Segment>
               </Segment.Group>
@@ -63,7 +75,7 @@ class FightPattern extends React.Component {
                 <Icon name="clock" color="teal" />
                 <Step.Content>
                   <Step.Title>Duration</Step.Title>
-                  <Step.Description>{this.props.creature.duration}</Step.Description>
+                  <Step.Description>{this.convertToDaysAndHours(this.props.creature.duration)}</Step.Description>
                 </Step.Content>
               </Step>
               <Step style={{ padding: '2px' }}>
@@ -87,7 +99,7 @@ class FightPattern extends React.Component {
                 <Icon name="shield alternate" color="red" />
                 <Step.Content>
                   <Step.Title>Physical Resist</Step.Title>
-                  <Step.Description>{this.props.creature.physcical_resistance}</Step.Description>
+                  <Step.Description>{this.props.creature.physical_resistance}</Step.Description>
                 </Step.Content>
               </Step>
               <Step style={{ padding: '2px' }}>
