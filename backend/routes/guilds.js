@@ -3,7 +3,9 @@ const {
 } = require('../models/guild');
 const express = require('express');
 const router = express.Router();
-const { gameOver } = require('../db/utils/gameOver');
+const {
+  gameOver
+} = require('../db/utils/gameOver');
 
 router.get('/', async (req, res) => {
   const Guild = res.locals.models.guild;
@@ -127,27 +129,28 @@ router.put('/:id/current_fight', async (req, res) => {
     new: true
   });
 
-  if(guild.current_fight.duration === -2147483647) {
+  if (guild.current_fight.duration === -2147483647) {
     downgradeMembersStats(guild, Character)
   }
-  
+
   res.send(guild);
 });
 
 downgradeMembersStats = (guild, characterModel) => {
-  const hpPenalty = guild.current_fight.health/guild.members.length;
+  const hpPenalty = guild.current_fight.health / guild.members.length;
   // console.log(hpPenalty);
   guild.members.map(async (memberID) => {
     const member = await characterModel.findById(memberID);
     const memberHP = member.health;
-    if(memberHP - hpPenalty > 0) {
-      await characterModel.findByIdAndUpdate(memberID, { health: (memberHP - hpPenalty)});
+    if (memberHP - hpPenalty > 0) {
+      await characterModel.findByIdAndUpdate(memberID, {
+        health: (memberHP - hpPenalty)
+      });
     } else {
       gameOver(characterModel, member);
     }
   })
 }
-
 
 router.put('/:id/flag', async (req, res) => {
   const Guild = res.locals.models.guild;
@@ -165,6 +168,28 @@ router.put('/:id/flag', async (req, res) => {
   }, {
     new: true
   });
+
+  res.send(guild);
+});
+
+router.delete('/:id/:member', async (req, res) => {
+  const Guild = res.locals.models.guild;
+  let guild = await Guild.findById(req.params.id);
+  if (!guild) res.status(404).send(`Guild with id ${req.params.id} not found`);
+
+
+  const array = guild.members;
+  let check = false;
+  array.forEach((elem) => {
+    if (elem.toString() === req.params.member.toString())
+      check = true;
+  })
+  if (!check) res.status(404).send(`Member with id ${req.params.member} not found`);
+  else {
+    const index = guild.members.indexOf(req.params.member);
+    guild.members.splice(index, 1);
+    await guild.save();
+  }
 
   res.send(guild);
 });
