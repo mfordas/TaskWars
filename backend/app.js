@@ -30,10 +30,11 @@ const main = async () => {
   db.register(app, connection, models);
 
   //Middlewares
+  app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(helmet());
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
 
   //Routes
   app.use('/', home);
@@ -46,11 +47,11 @@ const main = async () => {
   app.use('/api/tasks', tasks);
   app.use('/api/guilds', guilds);
   app.use('/api/questbook', questbook);
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
   // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
-      res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-    });
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '../frontend/build/index.html'));
+  });
 
   //Listening
   //const host = process.env.HOST || '127.0.0.1';
