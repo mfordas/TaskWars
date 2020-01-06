@@ -176,6 +176,10 @@ function categoryFilter(task, actDate) {
     } else if (task.category === 'Monthly') {
         const taskDate = new Date(task.creationTime);
         return actDate - taskDate > new Date(taskDate.getFullYear(), taskDate.getMonth()+1, 0).getDate() * 86400000;
+    } else if (task.category === 'Encounters') {
+        return false;
+    } else if (task.category === 'Events') {
+        return actDate - new Date(task.creationTime) > 604800000;
     }
 
     return true;
