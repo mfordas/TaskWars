@@ -1,6 +1,5 @@
 import React from 'react'
-import { Menu, Popup, Icon, Message, Grid } from 'semantic-ui-react'
-import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
+import { Message, Grid } from 'semantic-ui-react'
 
 class Confirmed extends React.Component {
   render() {
