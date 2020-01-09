@@ -5,10 +5,21 @@ import ItemDescription from './ItemDescription';
 import ItemEquipped from './ItemEquipped';
 
 class ItemView extends React.Component {
-  state = { itemDescription: null,  open: false, item: null, }
+
+  constructor(props){
+    super(props);
+
+    this.state = { itemDescription: null,  open: false, confirmName: 'Ok' }
+
+    this.setDescription = this.setDescription.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
+    this.setConfirmName = this.setConfirmName.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+  }
 
   handleConfirm = () => { 
-    this.setState({ open: false });
     if(this.props.eq === true) {
       if(this.state.item.slot === 'Usable') {
         this.props.useUsableItem(this.state.item);
@@ -21,7 +32,8 @@ class ItemView extends React.Component {
       this.props.unequippedItem(this.state.item);
       this.props.useItem(this.state.item,-1);
       console.log('Unequipped item: getback to backpack');
-    } 
+    }
+    this.setState({ open: false }); 
   }
 
   handleCancel = () => { 
@@ -35,12 +47,27 @@ class ItemView extends React.Component {
                                         unequippedThisItem={this.props.unequippedItem} 
                                         eq={this.props.eq}
                                         />;
+    this.setConfirmName(des);
     this.setState({ itemDescription: description, item: des });
+    console.log('Item name setDescription:', des.name);
   }
 
-  handleClose = () => this.setState({ open: false })
+  handleClose = () => this.setState({ open: false, item: null })
   handleOpen = () => this.setState({ open: true })
 
+
+  setConfirmName = (item) => {
+    let name;
+    if(this.props.eq === true){
+      if(item.slot == 'Usable'){
+        name = 'Use';
+      }else
+        name = 'Equipped';
+    }else if(this.props.eq === false & item.slot !== 'Usable'){
+      name = 'Unequipped';
+    }
+    this.setState({ confirmName: name });
+  }
 
   render() {
     return (
@@ -60,7 +87,7 @@ class ItemView extends React.Component {
                     content={this.state.itemDescription}
                     open={this.state.open}
                     cancelButton='Close'
-                    confirmButton={this.props.eq === true ? (item.slot == 'Usable' ? 'Use' : 'Equipped'):(item.slot == 'Usable' ? 'None' : 'Unequipped')}
+                    confirmButton={this.state.confirmName}
                     onCancel={this.handleCancel}
                     onConfirm={this.handleConfirm}
                   />
